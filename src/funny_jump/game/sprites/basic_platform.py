@@ -4,9 +4,10 @@ import pygame
 from pygame.sprite import Sprite
 
 from funny_jump.domain.entity.platform import BasicPlatform
+from funny_jump.game.sprites.platform import PlatformSprite
 
 
-class BasicPlatformSprite(Sprite):
+class BasicPlatformSprite(Sprite, PlatformSprite):
     def __init__(
         self,
         platform: BasicPlatform,
@@ -31,7 +32,5 @@ class BasicPlatformSprite(Sprite):
         self.rect.center = (x, y)
         self.platform.center_x = self.rect.centerx
         self.platform.center_y = self.rect.centery
-        self.platform.width = self.rect.width
-        self.platform.height = self.rect.height
 
     def update(self) -> None: ...
