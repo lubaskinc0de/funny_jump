@@ -2,7 +2,7 @@ import pygame
 from pygame import Surface
 
 from funny_jump.domain.entity.player import Player
-from funny_jump.domain.sevice.platform_collide import on_player_collide_platform
+from funny_jump.domain.service.platform_collide import on_player_collide_platform
 from funny_jump.engine.asset_manager import AssetManager
 from funny_jump.engine.resource_loader.base import ResourceLoader
 from funny_jump.game.path_to_assets import Asset
