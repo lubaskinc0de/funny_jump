@@ -1,11 +1,14 @@
 from collections.abc import Callable
 from pathlib import Path
-from typing import Any
+from typing import Any, Generic, TypeVar
 
 from funny_jump.engine.resource_loader.base import ResourceLoader
 
+T = TypeVar("T")
+AssetT = TypeVar("AssetT")
 
-class AssetManager[AssetT]:
+
+class AssetManager(Generic[AssetT]):
     __slots__ = ("_cache", "loader", "path_to_assets")
 
     def __init__(self, loader: ResourceLoader, path_to_assets: dict[AssetT, Path]) -> None:
@@ -13,7 +16,7 @@ class AssetManager[AssetT]:
         self.loader = loader
         self.path_to_assets = path_to_assets
 
-    def get_asset[T](self, asset: AssetT, asset_loader: Callable[[Path], T]) -> T:
+    def get_asset(self, asset: AssetT, asset_loader: Callable[[Path], T]) -> T:
         if asset in self._cache:
             return self._cache[asset]  # type: ignore  # noqa: PGH003
 
