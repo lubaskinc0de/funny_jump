@@ -29,19 +29,40 @@ class PlayerSprite(Sprite):
         self.player = player
         self.facing_right = True
         self.set_position(self.rect.centerx, self.rect.centery)
+        self.delta = 0.0
 
     def set_position(self, x: float, y: float) -> None:
         self.rect.center = (round(x), round(y))
-        self.player.center_x = self.rect.centerx
-        self.player.center_y = self.rect.centery
-        self.player.bottom = self.rect.bottom
 
-    def update(self) -> None:
+        self.player.bounds.center_x = self.rect.centerx
+        self.player.bounds.center_y = self.rect.centery
+        self.player.bounds.x = self.rect.x
+        self.player.bounds.y = self.rect.y
+        self.player.bounds.top = self.rect.top
+        self.player.bounds.bottom = self.rect.bottom
+        self.player.bounds.left = self.rect.left
+        self.player.bounds.right = self.rect.right
+
+    def set_position_by_player(self) -> None:
+        self.rect.center = (round(self.player.bounds.center_x), round(self.player.bounds.center_y))
+        self.rect.top = self.player.bounds.top
+        self.rect.bottom = self.player.bounds.bottom
+        self.rect.left = self.player.bounds.left
+        self.rect.right = self.player.bounds.right
+        self.rect.x = self.player.bounds.x
+        self.rect.y = self.player.bounds.y
+
+    def update(self, delta: float) -> None:
+        self.delta = delta
+
         keys_pressed = pygame.key.get_pressed()
         self.handle_keys_down(keys_pressed)
 
+        self.player.set_delta(delta)
         self.player.update()
-        self.set_position(self.player.center_x, self.player.center_y)
+
+        print(self.player.bounds)
+        self.set_position_by_player()
 
     def move_left(self) -> None:
         if self.facing_right:

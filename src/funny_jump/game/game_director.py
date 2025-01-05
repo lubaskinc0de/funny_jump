@@ -95,9 +95,10 @@ class GameDirector:
         if not self.screen:
             raise RuntimeError("Invoke run_game() first.")
 
+        delta = 0
         while self.is_running:
             self._dispatch_events(pygame.event.get())
-            self.sprite_manager.update()
+            self.sprite_manager.update(delta)
 
             bg_img = self.asset_manager.get_asset(Asset.BG_IMG, self.get_bg)
             self.screen.blit(bg_img, (0, 0))
@@ -105,7 +106,7 @@ class GameDirector:
             self.sprite_manager.draw()
 
             pygame.display.flip()
-            self.clock.tick(self.fps)
+            delta = self.clock.tick(self.fps) / 1000
 
         pygame.quit()
 
