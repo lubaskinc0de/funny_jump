@@ -3,9 +3,9 @@ from dataclasses import dataclass
 from funny_jump.domain.value_object.bounds import Bounds
 from funny_jump.domain.value_object.velocity import Velocity
 
-SPEED = 8*60
-JUMP_STRENGTH = 16*60
-GRAVITY = 42*60
+SPEED = 8 * 60
+JUMP_STRENGTH = 16 * 60
+GRAVITY = 42 * 60
 
 
 @dataclass(slots=True)
