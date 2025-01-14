@@ -27,21 +27,31 @@ class PlayerSprite(Sprite):
         self.rect = self.image.get_rect()
 
         self.player = player
+        self.player.bounds.height = self.rect.height
+        self.player.bounds.width = self.rect.width
+
         self.facing_right = True
         self.set_position(self.rect.centerx, self.rect.centery)
+        self.delta = 0.0
 
     def set_position(self, x: float, y: float) -> None:
         self.rect.center = (round(x), round(y))
-        self.player.center_x = self.rect.centerx
-        self.player.center_y = self.rect.centery
-        self.player.bottom = self.rect.bottom
 
-    def update(self) -> None:
+        self.player.bounds.center_x = self.rect.centerx
+        self.player.bounds.center_y = self.rect.centery
+
+    def set_position_by_player(self) -> None:
+        self.rect.center = (round(self.player.bounds.center_x), round(self.player.bounds.center_y))
+
+    def update(self, delta: float) -> None:
+        self.delta = delta
+
         keys_pressed = pygame.key.get_pressed()
         self.handle_keys_down(keys_pressed)
 
+        self.player.set_delta(delta)
         self.player.update()
-        self.set_position(self.player.center_x, self.player.center_y)
+        self.set_position_by_player()
 
     def move_left(self) -> None:
         if self.facing_right:

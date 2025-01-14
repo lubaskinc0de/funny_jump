@@ -67,10 +67,10 @@ class SpriteManager:
             self.player_sprite,
         )
 
-    def update(self) -> None:
+    def update(self, delta: float) -> None:
         self.collision_manager.check_collisions()
         self.platform_manager.update()
-        self.all_sprites.update()
+        self.all_sprites.update(delta)
 
     def draw(self) -> None:
         self.all_sprites.draw(self.screen)

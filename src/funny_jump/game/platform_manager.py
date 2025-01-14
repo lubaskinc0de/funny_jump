@@ -1,4 +1,3 @@
-
 import pygame.sprite
 
 from funny_jump.game.sprites.player import PlayerSprite
