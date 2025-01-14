@@ -95,7 +95,7 @@ class GameDirector:
         if not self.screen:
             raise RuntimeError("Invoke run_game() first.")
 
-        delta = 0
+        delta = 0.0
         while self.is_running:
             self._dispatch_events(pygame.event.get())
             self.sprite_manager.update(delta)

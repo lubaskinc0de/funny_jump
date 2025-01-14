@@ -27,6 +27,9 @@ class PlayerSprite(Sprite):
         self.rect = self.image.get_rect()
 
         self.player = player
+        self.player.bounds.height = self.rect.height
+        self.player.bounds.width = self.rect.width
+
         self.facing_right = True
         self.set_position(self.rect.centerx, self.rect.centery)
         self.delta = 0.0
@@ -36,21 +39,9 @@ class PlayerSprite(Sprite):
 
         self.player.bounds.center_x = self.rect.centerx
         self.player.bounds.center_y = self.rect.centery
-        self.player.bounds.x = self.rect.x
-        self.player.bounds.y = self.rect.y
-        self.player.bounds.top = self.rect.top
-        self.player.bounds.bottom = self.rect.bottom
-        self.player.bounds.left = self.rect.left
-        self.player.bounds.right = self.rect.right
 
     def set_position_by_player(self) -> None:
         self.rect.center = (round(self.player.bounds.center_x), round(self.player.bounds.center_y))
-        self.rect.top = self.player.bounds.top
-        self.rect.bottom = self.player.bounds.bottom
-        self.rect.left = self.player.bounds.left
-        self.rect.right = self.player.bounds.right
-        self.rect.x = self.player.bounds.x
-        self.rect.y = self.player.bounds.y
 
     def update(self, delta: float) -> None:
         self.delta = delta
@@ -60,8 +51,6 @@ class PlayerSprite(Sprite):
 
         self.player.set_delta(delta)
         self.player.update()
-
-        print(self.player.bounds)
         self.set_position_by_player()
 
     def move_left(self) -> None:

@@ -70,5 +70,7 @@ class Player:
 
         self.bounds.center_x %= self.screen_w
 
-        self.bounds.bottom = min(self.screen_h, self.bounds.bottom)
-        print(self.bounds.bottom)
+        if self.bounds.bottom >= self.screen_h:
+            self.bounds.center_y = self.screen_h - self.bounds.height // 2
+        if self.bounds.top <= 0:
+            self.bounds.center_y = self.bounds.height // 2
