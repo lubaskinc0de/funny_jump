@@ -9,12 +9,10 @@ AnimationId = NewType("AnimationId", str)
 
 class AnimatedSprite(Protocol):
     @abstractmethod
-    def set_new_image(self, new_img: pygame.Surface) -> None:
-        ...
+    def set_new_image(self, new_img: pygame.Surface) -> None: ...
 
     @abstractmethod
-    def animation_end(self) -> None:
-        ...
+    def animation_end(self) -> None: ...
 
 
 @dataclass(slots=True, frozen=True)
@@ -37,12 +35,10 @@ Animations: TypeAlias = dict[AnimationId, Animation]
 
 class AnimationManager(Protocol):
     @abstractmethod
-    def apply(self, sprite: AnimatedSprite, animation: AnimationId) -> None:
-        ...
+    def apply(self, sprite: AnimatedSprite, animation: AnimationId) -> None: ...
 
     @abstractmethod
-    def update(self, delta: float) -> None:
-        ...
+    def update(self, delta: float) -> None: ...
 
 
 class AnimationManagerDummy(AnimationManager):

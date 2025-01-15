@@ -4,8 +4,7 @@ from pathlib import Path
 import pygame
 
 
-class AnimationFrameLoadError(Exception):
-    ...
+class AnimationFrameLoadError(Exception): ...
 
 
 class IncrementalAnimationLoader:
@@ -13,7 +12,9 @@ class IncrementalAnimationLoader:
         self.path = path
 
     def load_frames(self) -> list[pygame.Surface]:
-        frames: list[Path] = [self.path.joinpath(obj) for obj in listdir(self.path) if self.path.joinpath(obj).is_file()]
+        frames: list[Path] = [
+            self.path.joinpath(obj) for obj in listdir(self.path) if self.path.joinpath(obj).is_file()
+        ]
 
         try:
             sorted_frames = sorted(frames, key=lambda path: int(path.name.split(".")[0]))
