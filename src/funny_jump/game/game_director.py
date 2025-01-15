@@ -77,6 +77,7 @@ class GameDirector:
         pygame.mixer.init()
         pygame.mixer.music.load(self.asset_manager.get_asset_path(Asset.BG_MUSIC))
         pygame.mixer.music.play(loops=-1, fade_ms=500)
+        pygame.mixer.music.set_volume(0.2)
 
         screen = pygame.display.set_mode(
             (self.width, self.height),

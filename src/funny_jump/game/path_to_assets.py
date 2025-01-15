@@ -7,6 +7,7 @@ class Asset(Enum):
     BG_IMG = auto()
     PLAYER_STATIC_SPRITE = auto()
     PLATFORM_SPRITE = auto()
+    PLAYER_HOP = auto()
 
 
 ASSET_PATH = {
@@ -14,4 +15,5 @@ ASSET_PATH = {
     Asset.BG_IMG: Path("bg.jpg"),
     Asset.PLATFORM_SPRITE: Path("sprites/platform.png"),
     Asset.PLAYER_STATIC_SPRITE: Path("sprites/frog/idle/00.png"),
+    Asset.PLAYER_HOP: Path("sprites/frog/hop/"),
 }

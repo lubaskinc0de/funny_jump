@@ -65,6 +65,10 @@ class Player:
     def left_from_ground(self) -> None:
         self.on_ground = False
 
+    @property
+    def max_jump_height(self) -> int:
+        return round((self.jump_strength**2) / (2 * GRAVITY))
+
     def update(self) -> None:
         self.process_physics()
 
