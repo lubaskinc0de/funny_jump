@@ -1,3 +1,4 @@
+from dataclasses import dataclass
 from pathlib import Path
 
 import pygame
@@ -10,6 +11,11 @@ from funny_jump.engine.animation.animation_manager import AnimationId, Animation
 HOP_ANIMATION_ID = AnimationId("PLAYER_HOP")
 
 
+@dataclass(slots=True, frozen=True)
+class PlayerSounds:
+    jump: pygame.mixer.Sound
+
+
 class PlayerSprite(Sprite):
     def __init__(
         self,
@@ -17,6 +23,7 @@ class PlayerSprite(Sprite):
         image: Path,
         size: tuple[int, int],
         animation_manager: AnimationManager,
+        sounds: PlayerSounds,
     ) -> None:
         super().__init__()
 
@@ -36,6 +43,7 @@ class PlayerSprite(Sprite):
 
         self.set_position(self.rect.centerx, self.rect.centery)
         self.delta = 0.0
+        self.sounds = sounds
 
     def animation_end(self) -> None:
         self.set_new_image(self.static_img)
@@ -97,6 +105,7 @@ class PlayerSprite(Sprite):
     def jump(self) -> None:
         self.player.jump()
         self.animation_manager.apply(self, HOP_ANIMATION_ID)
+        self.sounds.jump.play()
 
     def handle_keys_down(self, keys_pressed: ScancodeWrapper) -> None:
         if keys_pressed[pygame.K_LEFT]:

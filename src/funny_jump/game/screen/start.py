@@ -62,7 +62,7 @@ class StartScreen:
         while self.is_running:
             self._dispatch_events(pygame.event.get())
 
-            bg_img = self.asset_manager.get_asset(Asset.BG_IMG, self.get_bg)
+            bg_img = self.asset_manager.get_asset(Asset.GAME_BG_IMG, self.get_bg)
             self.screen.blit(bg_img, (0, 0))
 
             pygame.display.flip()

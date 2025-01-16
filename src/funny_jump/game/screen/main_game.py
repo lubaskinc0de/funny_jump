@@ -6,9 +6,6 @@ import pygame
 from pygame import Surface
 from pygame.event import Event
 
-from funny_jump.domain.entity.player import Player
-from funny_jump.domain.value_object.bounds import Bounds
-from funny_jump.domain.value_object.velocity import Velocity
 from funny_jump.engine.asset_manager import AssetManager
 from funny_jump.engine.resource_loader.base import ResourceLoader
 from funny_jump.game.path_to_assets import Asset
@@ -25,20 +22,15 @@ class MainGameScreen:
     __slots__ = (
         "asset_manager",
         "assets",
-        "caption",
-        "clock",
         "clock",
         "fps",
         "get_bg",
         "height",
         "is_running",
-        "player",
         "resource_loader",
-        "screen",
         "screen",
         "sprite_manager",
         "terminate",
-        "vsync",
         "width",
     )
 
@@ -59,16 +51,9 @@ class MainGameScreen:
         self.fps = fps
         self.width = width
         self.height = height
-        self.player = Player(
-            screen_h=self.height,
-            screen_w=self.width,
-            bounds=Bounds(),
-            velocity=Velocity(),
-        )
         self.resource_loader = resource_loader
         self.asset_manager = asset_manager
         self.sprite_manager = SpriteManager(
-            player=self.player,
             screen=self.screen,
             width=self.width,
             height=self.height,
@@ -84,7 +69,7 @@ class MainGameScreen:
         self._run_main_loop()
 
     def _run_main_loop(self) -> None:
-        pygame.mixer.music.load(self.asset_manager.get_asset_path(Asset.BG_MUSIC))
+        pygame.mixer.music.load(self.asset_manager.get_asset_path(Asset.GAME_BG_MUSIC))
         pygame.mixer.music.play(loops=-1, fade_ms=500)
         pygame.mixer.music.set_volume(0.2)
 
@@ -93,7 +78,7 @@ class MainGameScreen:
             self._dispatch_events(pygame.event.get())
             self.sprite_manager.update(delta)
 
-            bg_img = self.asset_manager.get_asset(Asset.BG_IMG, self.get_bg)
+            bg_img = self.asset_manager.get_asset(Asset.GAME_BG_IMG, self.get_bg)
             self.screen.blit(bg_img, (0, 0))
 
             self.sprite_manager.draw()
