@@ -27,10 +27,10 @@ class Player:
         self.delta = delta
 
     def move_left(self) -> None:
-        self.velocity.x = -self.speed
+        self.velocity.direction_x = -1
 
     def move_right(self) -> None:
-        self.velocity.x = self.speed
+        self.velocity.direction_x = 1
 
     def jump(self) -> None:
         if self.is_jumping:
@@ -50,9 +50,9 @@ class Player:
             self.is_jumping = False
 
         self.bounds.center_y += round(self.velocity.y * self.delta)
-        self.bounds.center_x += round(self.velocity.x * self.delta)
+        self.bounds.center_x += round(self.speed * self.delta * self.velocity.direction_x)
 
-        self.velocity.x = 0
+        self.velocity.direction_x = 0
 
     def death(self) -> None:
         self.bounds.center_y = self.screen_h
