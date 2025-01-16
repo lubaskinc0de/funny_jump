@@ -28,9 +28,13 @@ class BasicPlatformSprite(Sprite, PlatformSprite):
         self.rect = self.image.get_rect()
         self.platform = platform
 
-    def set_pos(self, x: int, y: int) -> None:
+    def set_position(self, x: int, y: int) -> None:
         self.rect.center = (x, y)
         self.platform.center_x = self.rect.centerx
         self.platform.center_y = self.rect.centery
-
-    def update(self) -> None: ...
+        
+    def move_down(self) -> None:
+        self.platform.move_down()
+    
+    def update(self) -> None:
+        self.platform.update()
