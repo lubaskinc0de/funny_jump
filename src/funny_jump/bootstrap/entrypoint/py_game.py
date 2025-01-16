@@ -3,6 +3,8 @@ from importlib.resources import files
 
 import funny_jump.game.assets
 from funny_jump.domain.entity.player import Player
+from funny_jump.domain.value_object.bounds import Bounds
+from funny_jump.domain.value_object.velocity import Velocity
 from funny_jump.engine.asset_manager import AssetManager
 from funny_jump.engine.resource_loader.importlib_loader import ImportLibResourceLoader
 from funny_jump.engine.screen import get_screen_size
@@ -11,14 +13,19 @@ from funny_jump.game.path_to_assets import ASSET_PATH
     
 sys_width, sys_height = get_screen_size()
 WIDTH = int(sys_width * 0.5)
-HEIGHT = sys_height
+HEIGHT = sys_height - 100
 CAPTION = "Весёлые Прыжки"
 FPS = 60
 VSYNC = True
 
 
 def pygame_main(_argv: list[str]) -> None:
-    player = Player(WIDTH, HEIGHT)
+    player = Player(
+        screen_h=HEIGHT,
+        screen_w=WIDTH,
+        bounds=Bounds(),
+        velocity=Velocity(),
+    )
     resource_loader = ImportLibResourceLoader(files(funny_jump.game.assets))
     asset_manager = AssetManager(loader=resource_loader, path_to_assets=ASSET_PATH)
 

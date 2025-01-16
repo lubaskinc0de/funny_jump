@@ -4,12 +4,14 @@ import pygame
 from pygame import Surface
 
 from funny_jump.domain.entity.player import Player
+from funny_jump.engine.animation.animation_loader import IncrementalAnimationLoader
+from funny_jump.engine.animation.animation_manager import Animation, AnimationId, AnimationManagerDummy
 from funny_jump.engine.asset_manager import AssetManager
 from funny_jump.engine.resource_loader.base import ResourceLoader
 from funny_jump.game.collision_manager import CollisionManager
 from funny_jump.game.path_to_assets import Asset
 from funny_jump.game.platform_manager import PlatformManager
-from funny_jump.game.sprites.player import PlayerSprite
+from funny_jump.game.sprites.player import HOP_ANIMATION_ID, PlayerSprite
 
 
 class SpriteManager:
@@ -43,10 +45,25 @@ class SpriteManager:
         self.resource_loader = resource_loader
         self.asset_manager = asset_manager
 
+        player_hop_anim_loader = IncrementalAnimationLoader(
+            self.asset_manager.get_asset_path(Asset.PLAYER_HOP),
+        )
+        player_hop_anim = Animation(
+            animation_id=AnimationId(HOP_ANIMATION_ID),
+            duration=1,
+            frames=player_hop_anim_loader.load_frames(),
+        )
+        player_animation_manager = AnimationManagerDummy(
+            animations={
+                HOP_ANIMATION_ID: player_hop_anim,
+            },
+        )
+
         self.player_sprite = PlayerSprite(
             self.player,
             self.asset_manager.get_asset_path(Asset.PLAYER_STATIC_SPRITE),
             (64, 64),
+            animation_manager=player_animation_manager,
         )
         player_pos = self.width // 2, self.height - self.height // 10
         self.player_sprite.set_position(*player_pos)
@@ -67,10 +84,10 @@ class SpriteManager:
             self.player_sprite,
         )
 
-    def update(self) -> None:
+    def update(self, delta: float) -> None:
         self.collision_manager.check_collisions()
         self.platform_manager.update()
-        self.all_sprites.update()
+        self.all_sprites.update(delta)
 
     def draw(self) -> None:
         self.all_sprites.draw(self.screen)

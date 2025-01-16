@@ -77,6 +77,7 @@ class GameDirector:
         pygame.mixer.init()
         pygame.mixer.music.load(self.asset_manager.get_asset_path(Asset.BG_MUSIC))
         pygame.mixer.music.play(loops=-1, fade_ms=500)
+        pygame.mixer.music.set_volume(0.2)
 
         screen = pygame.display.set_mode(
             (self.width, self.height),
@@ -95,9 +96,10 @@ class GameDirector:
         if not self.screen:
             raise RuntimeError("Invoke run_game() first.")
 
+        delta = 0.0
         while self.is_running:
             self._dispatch_events(pygame.event.get())
-            self.sprite_manager.update()
+            self.sprite_manager.update(delta)
 
             bg_img = self.asset_manager.get_asset(Asset.BG_IMG, self.get_bg)
             self.screen.blit(bg_img, (0, 0))
@@ -105,7 +107,7 @@ class GameDirector:
             self.sprite_manager.draw()
 
             pygame.display.flip()
-            self.clock.tick(self.fps)
+            delta = self.clock.tick(self.fps) / 1000
 
         pygame.quit()
 
