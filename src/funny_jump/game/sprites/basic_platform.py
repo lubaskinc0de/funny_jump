@@ -23,18 +23,27 @@ class BasicPlatformSprite(Sprite, PlatformSprite):
         img = img.subsurface(bounding_rect)
 
         img = pygame.transform.scale(img, size)
-
         self.image = img
         self.rect = self.image.get_rect()
-        self.platform = platform
+        self.platform: BasicPlatform = platform
+        self.platform.bounds.height = self.rect.height
+        self.platform.bounds.width = self.rect.width
 
+    def move_position(self) -> None:
+        self.rect.center = (round(self.platform.bounds.center_x), round(self.platform.bounds.center_y))
+    
     def set_position(self, x: int, y: int) -> None:
         self.rect.center = (x, y)
-        self.platform.center_x = self.rect.centerx
-        self.platform.center_y = self.rect.centery
         
+        self.platform.bounds.center_x = self.rect.centerx
+        self.platform.bounds.center_y = self.rect.centery
+
     def move_down(self) -> None:
         self.platform.move_down()
     
-    def update(self) -> None:
+    def update(self, delta: float) -> None:
+        self.delta = delta
+        
+        self.platform.set_delta(delta)
         self.platform.update()
+        
