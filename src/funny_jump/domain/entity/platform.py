@@ -6,7 +6,7 @@ from abc import abstractmethod
 from dataclasses import dataclass
 from typing import Protocol
 
-SPEED = 10
+SPEED = 10 * 60
 
 
 class Platform(Protocol):
@@ -45,7 +45,7 @@ class BasicPlatform(Platform):
         self.is_alive = False
         
     def move_down(self) -> None:
-        self.velocity.y += SPEED
+        self.velocity.y += SPEED * self.delta
         self.bounds.center_y += round(self.velocity.y * self.delta)
     
     def update(self) -> None:

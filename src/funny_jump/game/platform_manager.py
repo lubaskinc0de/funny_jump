@@ -31,34 +31,57 @@ class PlatformManager:
     def rand_platforms(self): 
         ...
 
+    def spawn_platform(self, center_x: int, center_y: int) -> None:
+        platform = BasicPlatform(
+            screen_h=self.screen_h,
+            velocity=Velocity(),
+            bounds=Bounds(center_x, center_y),
+        )
+        
+        platform_sprite = BasicPlatformSprite(
+            platform=platform,
+            image=self.asset_manager.get_asset_path(Asset.PLATFORM_SPRITE),
+            size=BASIC_PLATFORM_SIZE
+        )
+        platform_sprite.set_position(center_x, center_y)
+        self.platforms.add(platform_sprite)
+
     def spawn_platforms(self) -> None:
-        ...
+        if len(self.platforms) == 0:
+            center_y = self.screen_h - 1000 # Временно
+            # count_platoforms = self.rand_platforms()
+            for y in range(self.screen_h // BASIC_PLATFORM_SIZE[1]):
+                # count_of_x_platforms = randint(self.screen_w // BASIC_PLATFORM_SIZE[0])
+                minimum_spawn_distance = 20 + BASIC_PLATFORM_SIZE[0] // 2
+                for _ in range(self.screen_w // BASIC_PLATFORM_SIZE[1]):
+                    self.spawn_platform(minimum_spawn_distance, center_y)
+                    minimum_spawn_distance *= minimum_spawn_distance  # !!!!!!! ДОРАБОТАТЬ!
+                    # minimum_spawn_distance += randint(minimum_spawn_distance, self.screen_w - 50)
+                    if minimum_spawn_distance > self.screen_w:
+                        break
+                
+            # center_x = 350 # |
+            # for n in range(5): # |  Временный тест код (потом будет заменен на генерацию)
+            #     center_y = 1000 / 5 * n # |
+            #     center_x += n * 30 # |
+            #     platform = BasicPlatform(
+            #         screen_h=self.screen_h,
+            #         velocity=Velocity(),
+            #         bounds=Bounds(center_x, center_y),
+            #     )
+                
+            #     platform_sprite = BasicPlatformSprite(
+            #         platform=platform,
+            #         image=self.asset_manager.get_asset_path(Asset.PLATFORM_SPRITE),
+            #         size=BASIC_PLATFORM_SIZE
+            #     )
+            #     platform_sprite.set_position(center_x, center_y)
+            #     self.platforms.add(platform_sprite)
 
     def update(self) -> None:
-        if len(self.platforms) == 0:
-            center_x = 350 # |
-            for n in range(5): # |  Временный тест код (потом будет заменен на генерацию)
-                center_y = 1000 / 5 * n # |
-                center_x += n * 30 # |
-                platform = BasicPlatform(
-                    screen_h=self.screen_h,
-                    velocity=Velocity(),
-                    bounds=Bounds(center_x, center_y),
-                )
-                
-                platform_sprite = BasicPlatformSprite(
-                    platform=platform,
-                    image=self.asset_manager.get_asset_path(Asset.PLATFORM_SPRITE),
-                    size=BASIC_PLATFORM_SIZE
-                )
-                platform_sprite.set_position(center_x, center_y)
-                self.platforms.add(platform_sprite)
-
-                
-        screen_middle = self.screen_h // 2
-        if self.player_sprite.rect.centery <= screen_middle:
-            free_space = screen_middle - self.player_sprite.rect.centery
+        self.spawn_platforms()
+        
+        if self.player_sprite.rect.centery <= self.screen_h // 2:
             for platform_sprite in self.platforms:
                 platform_sprite: BasicPlatformSprite
                 platform_sprite.move_down()
-                platform_sprite.move_position()

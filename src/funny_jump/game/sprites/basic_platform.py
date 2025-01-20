@@ -29,7 +29,7 @@ class BasicPlatformSprite(Sprite, PlatformSprite):
         self.platform.bounds.height = self.rect.height
         self.platform.bounds.width = self.rect.width
 
-    def move_position(self) -> None:
+    def set_position_by_platform(self) -> None:
         self.rect.center = (round(self.platform.bounds.center_x), round(self.platform.bounds.center_y))
     
     def set_position(self, x: int, y: int) -> None:
@@ -37,7 +37,7 @@ class BasicPlatformSprite(Sprite, PlatformSprite):
         
         self.platform.bounds.center_x = self.rect.centerx
         self.platform.bounds.center_y = self.rect.centery
-
+        
     def move_down(self) -> None:
         self.platform.move_down()
     
@@ -46,4 +46,5 @@ class BasicPlatformSprite(Sprite, PlatformSprite):
         
         self.platform.set_delta(delta)
         self.platform.update()
+        self.set_position_by_platform()
         
