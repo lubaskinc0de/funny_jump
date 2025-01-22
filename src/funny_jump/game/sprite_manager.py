@@ -87,10 +87,11 @@ class SpriteManager:
 
     def update(self, delta: float) -> None:
         self.collision_manager.check_collisions()
-        self.platform_manager.update()
+        self.platform_manager.update(delta)
         for platform_sprite in self.platforms:
             if not platform_sprite.platform.is_alive:
                 self.all_sprites.remove(platform_sprite)
+                self.platforms.remove(platform_sprite)
             elif platform_sprite not in self.all_sprites:
                 self.all_sprites.add(platform_sprite)
         self.all_sprites.update(delta)

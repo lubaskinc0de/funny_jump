@@ -38,8 +38,8 @@ class BasicPlatformSprite(Sprite, PlatformSprite):
         self.platform.bounds.center_x = self.rect.centerx
         self.platform.bounds.center_y = self.rect.centery
         
-    def move_down(self) -> None:
-        self.platform.move_down()
+    def move_down(self, speed_mult) -> None:
+        self.platform.move_down(speed_mult=1)
     
     def update(self, delta: float) -> None:
         self.delta = delta
