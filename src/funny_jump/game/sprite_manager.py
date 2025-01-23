@@ -95,7 +95,7 @@ class SpriteManager:
             elif platform_sprite not in self.all_sprites:
                 self.all_sprites.add(platform_sprite)
         self.all_sprites.update(delta)
-        print(self.all_sprites)
+        # print(self.all_sprites)
         
     def draw(self) -> None:
         self.all_sprites.draw(self.screen)

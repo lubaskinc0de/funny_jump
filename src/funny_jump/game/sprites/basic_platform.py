@@ -1,3 +1,4 @@
+from __future__ import annotations
 from pathlib import Path
 
 import pygame
@@ -39,7 +40,7 @@ class BasicPlatformSprite(Sprite, PlatformSprite):
         self.platform.bounds.center_y = self.rect.centery
         
     def move_down(self, speed_mult) -> None:
-        self.platform.move_down(speed_mult=1)
+        self.platform.move_down(speed_mult=speed_mult)
     
     def update(self, delta: float) -> None:
         self.delta = delta
