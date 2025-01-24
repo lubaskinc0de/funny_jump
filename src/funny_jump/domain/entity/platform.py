@@ -49,7 +49,5 @@ class BasicPlatform(Platform):
         self.bounds.center_y += round(self.velocity.y * self.delta * 0.6)
     
     def update(self) -> None:
-        self.bounds.center_y = self.bounds.center_y
-        
         if self.bounds.center_y > (self.screen_h + 100):
             self.death()

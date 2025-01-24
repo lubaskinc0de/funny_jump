@@ -35,7 +35,8 @@ class BasicPlatformSprite(Sprite, PlatformSprite):
     
     def set_position(self, x: int, y: int) -> None:
         self.rect.center = (x, y)
-        
+        if self.rect.centery != y:
+            print(":!!!:")
         self.platform.bounds.center_x = self.rect.centerx
         self.platform.bounds.center_y = self.rect.centery
         
