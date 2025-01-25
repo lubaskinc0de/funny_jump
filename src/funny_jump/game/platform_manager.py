@@ -29,7 +29,7 @@ class PlatformManager:
         self.asset_manager = asset_manager
         self.last_spawn_time = 0
         self.spawn_interval = 0.2
-        self.platform_spawn_height = self.screen_h // 2 - 150
+        self.platform_spawn_height = self.screen_h // 2
         self.last_center_y: int = 0
         self.spawn_initial_platforms()
 
@@ -87,7 +87,7 @@ class PlatformManager:
                     if center_x < self.screen_w - BASIC_PLATFORM_SIZE[0] // 2:
                         break
             
-        next_platform_interval_y = self.player_sprite.player.max_jump_height // 5# randint(1, 2)
+        next_platform_interval_y = self.player_sprite.player.max_jump_height // randint(1, 2)
         center_y = highest_platform.platform.bounds.center_y - next_platform_interval_y
         # print("----->", highest_platform.rect.centery)
         # print(center_x, center_y)
@@ -98,40 +98,21 @@ class PlatformManager:
         return center_x, center_y
 
     def spawn_initial_platforms(self) -> None:
-        center_y = self.screen_h - 100
+        # center_y = self.screen_h - 100
+        
+        #     center_x = randint(50, self.screen_w - 50)
+        #     if not self.is_overlapping(center_x, center_y):
+        #         self.spawn_platform(center_x, center_y)
+        #         center_y -= self.player_sprite.player.max_jump_height + randint(0, 50)
+        center_x = self.screen_w // 2
+        center_y = self.screen_h - 200
+        self.spawn_platform(center_x, center_y)
         for _ in range(7):
-            center_x = randint(50, self.screen_w - 50)
-            if not self.is_overlapping(center_x, center_y):
-                self.spawn_platform(center_x, center_y)
-                center_y -= self.player_sprite.player.max_jump_height + randint(0, 50)
+            while center_x == 0 or center_y == 0 or self.is_overlapping(center_x, center_y):
+                center_x, center_y = self.calculate_new_platform_position()
+            self.spawn_platform(center_x, center_y)
     
-    def spawn_new_platforms(self, delta: float) -> None:
-        # self.last_spawn_time += delta
-        # c = 0
-        # if self.player_sprite.rect.centery <= self.platform_spawn_heigth and self.last_spawn_time >= self.spawn_interval:
-        #     self.last_spawn_time = 0
-            
-        #     number_of_platforms_to_spawn = randint(3, 6)
-
-            
-        #     for _ in range(number_of_platforms_to_spawn):
-        #         if len(self.platforms) <= 42:
-        #             center_x = randint(50, self.screen_w - 50)
-        #             center_y = -(self.get_highest_platform_y() + randint(self.player_sprite.player.max_jump_height - 50, self.player_sprite.player.max_jump_height))
-
-        #             if not self.is_overlapping(center_x, center_y):
-        #                 c += 1
-        #                 self.spawn_platform(center_x, center_y)
-        # if c > 0:
-        #     print(c)
-
-        # number_of_platforms_to_spawn = randint(3, 6)
-        # number_of_platforms_to_spawn = 1
-        # for _ in range(number_of_platforms_to_spawn):
-    # if len(self.platforms) <= 42:
-        self.last_spawn_time += delta
-        # if self.last_spawn_time >= self.spawn_interval:
-        self.last_spawn_time = 0
+    def spawn_new_platforms(self) -> None:
         center_x = 0
         center_y = 0
         while center_x == 0 or center_y == 0 or self.is_overlapping(center_x, center_y):
@@ -143,10 +124,11 @@ class PlatformManager:
         if self.player_sprite.rect.centery <= self.platform_spawn_height:
             for platform_sprite in self.platforms:
                 platform_sprite: BasicPlatformSprite
-                speed_mult = (self.screen_h - self.player_sprite.rect.centery) * delta  * 0.2
-                platform_sprite.move_down(speed_mult)
+                speed_mult = (self.screen_h - self.player_sprite.rect.centery) * delta  * 0.15
+                if self.player_sprite.player.velocity.y < 0:
+                    platform_sprite.move_down(speed_mult)
             if self.get_highest_platform().rect.centery > -5000:
-                self.spawn_new_platforms(delta)
+                self.spawn_new_platforms()
             # if self.get_highest_platform().platform.bounds.center_y < -4700:
             #     for platform_sprite in self.platforms:
             #         platform_sprite: BasicPlatformSprite
