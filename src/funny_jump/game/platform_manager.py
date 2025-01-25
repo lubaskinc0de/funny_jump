@@ -104,10 +104,10 @@ class PlatformManager:
         center_y = highest_platform.platform.bounds.center_y - next_platform_interval_y
         # print("----->", highest_platform.rect.centery)
         # print(center_x, center_y)
-        print("----->", abs(center_y - highest_platform.rect.centery))
-        if abs(center_y - highest_platform.rect.centery) > self.player_sprite.player.max_jump_height: exit()
-        else: print(self.player_sprite.player.max_jump_height)
-        print()
+        # print("----->", abs(center_y - highest_platform.rect.centery))
+        # if abs(center_y - highest_platform.rect.centery) > self.player_sprite.player.max_jump_height: exit()
+        # else: print(self.player_sprite.player.max_jump_height)
+        # print()
         return center_x, center_y
 
     def spawn_initial_platforms(self) -> None:
