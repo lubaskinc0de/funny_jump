@@ -45,7 +45,7 @@ class BasicPlatform(Platform):
         self.is_alive = False
         
     def move_down(self, speed_mult: float) -> None:
-        self.velocity.y += SPEED * self.delta * speed_mult
+        self.velocity.y += SPEED * self.delta #* speed_mult
         self.bounds.center_y += round(self.velocity.y * self.delta * 0.6)
     
     def update(self) -> None:

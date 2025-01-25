@@ -137,9 +137,10 @@ class PlatformManager:
         if self.player_sprite.rect.centery <= self.platform_spawn_height:
             for platform_sprite in self.platforms:
                 platform_sprite: BasicPlatformSprite
-                speed_mult = (self.screen_h - self.player_sprite.rect.centery) * delta  * 0.15
-                if self.player_sprite.player.velocity.y < 0:
-                    platform_sprite.move_down(speed_mult)
+                speed_mult = (self.screen_h - self.player_sprite.rect.centery) * delta  * 0.05
+                # if self.player_sprite.player.velocity.y < 0:
+                # platform_sprite.move_down(speed_mult)
+                platform_sprite.set_position(platform_sprite.rect.centerx, platform_sprite.rect.centery + 5)
             if self.get_highest_platform().rect.centery > -5000:
                 self.spawn_new_platform()
             # if self.get_highest_platform().platform.bounds.center_y < -4700:
