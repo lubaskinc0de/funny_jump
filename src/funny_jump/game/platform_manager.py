@@ -1,4 +1,5 @@
 import pygame.sprite
+from random import randint
 
 from funny_jump.domain.value_object.velocity import Velocity
 from funny_jump.domain.value_object.bounds import Bounds
@@ -6,7 +7,6 @@ from funny_jump.game.sprites.player import PlayerSprite
 from funny_jump.game.sprites.platform import PlatformSprite
 from funny_jump.game.sprites.basic_platform import BasicPlatformSprite
 from funny_jump.domain.entity.platform import BasicPlatform
-from random import randint, randrange
 from funny_jump.game.path_to_assets import Asset
 from funny_jump.engine.asset_manager import AssetManager
 
@@ -27,13 +27,14 @@ class PlatformManager:
         self.screen_w = screen_w
         self.screen_h = screen_h
         self.asset_manager = asset_manager
-        self.last_spawn_time = 0
-        self.spawn_interval = 0.2
         self.platform_spawn_height = self.screen_h // 2
-        self.last_center_y: int = 0
         self.spawn_initial_platforms()
 
     def get_highest_platform(self) -> BasicPlatformSprite:
+        """
+        Возвращает объект самой высокой платформы
+        """
+        
         highest_platform_sprite: BasicPlatformSprite = None
         for platform_sprite in self.platforms:
             if not highest_platform_sprite:
@@ -45,6 +46,10 @@ class PlatformManager:
         return highest_platform_sprite
     
     def spawn_platform(self, center_x: int, center_y: int) -> None:
+        """
+        Создает спрайт платформы и добавляет его в группу всех платформ
+        """
+        
         platform = BasicPlatform(
             screen_h=self.screen_h,
             velocity=Velocity(),
@@ -60,6 +65,10 @@ class PlatformManager:
         self.platforms.add(platform_sprite)
         
     def is_overlapping(self, center_x: int, center_y: int) -> bool:
+        """
+        Проверяет не соприкасается ли платформа с уже существующими
+        """
+        
         new_bounds = Bounds(center_x, center_y)
 
         for platform_sprite in self.platforms:
@@ -76,6 +85,10 @@ class PlatformManager:
         return False
     
     def calculate_new_platform_position(self) -> tuple[int, int]:
+        """
+        Вычисляет подходящую позицию для спавга платформы
+        """
+        
         highest_platform = self.get_highest_platform()
         next_platform_interval_x = 0
         center_x = highest_platform.platform.bounds.center_x
@@ -98,12 +111,9 @@ class PlatformManager:
         return center_x, center_y
 
     def spawn_initial_platforms(self) -> None:
-        # center_y = self.screen_h - 100
-        
-        #     center_x = randint(50, self.screen_w - 50)
-        #     if not self.is_overlapping(center_x, center_y):
-        #         self.spawn_platform(center_x, center_y)
-        #         center_y -= self.player_sprite.player.max_jump_height + randint(0, 50)
+        """
+        Спавнит начальные платформы. Исполняется при инициализации PlatformManager
+        """
         center_x = self.screen_w // 2
         center_y = self.screen_h - 200
         self.spawn_platform(center_x, center_y)
@@ -112,7 +122,10 @@ class PlatformManager:
                 center_x, center_y = self.calculate_new_platform_position()
             self.spawn_platform(center_x, center_y)
     
-    def spawn_new_platforms(self) -> None:
+    def spawn_new_platform(self) -> None:
+        """
+        Используется для спавна новой платформы
+        """
         center_x = 0
         center_y = 0
         while center_x == 0 or center_y == 0 or self.is_overlapping(center_x, center_y):
@@ -128,7 +141,7 @@ class PlatformManager:
                 if self.player_sprite.player.velocity.y < 0:
                     platform_sprite.move_down(speed_mult)
             if self.get_highest_platform().rect.centery > -5000:
-                self.spawn_new_platforms()
+                self.spawn_new_platform()
             # if self.get_highest_platform().platform.bounds.center_y < -4700:
             #     for platform_sprite in self.platforms:
             #         platform_sprite: BasicPlatformSprite
