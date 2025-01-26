@@ -51,7 +51,7 @@ class Player:
 
         self.bounds.center_y += round(self.velocity.y * self.delta)
         self.bounds.center_x += round(self.velocity.x * self.delta)
-        
+
         self.velocity.x = 0
 
     def death(self) -> None:

@@ -10,7 +10,7 @@ from funny_jump.engine.resource_loader.importlib_loader import ImportLibResource
 from funny_jump.engine.screen import get_screen_size
 from funny_jump.game.game_director import GameDirector
 from funny_jump.game.path_to_assets import ASSET_PATH
-    
+
 sys_width, sys_height = get_screen_size()
 WIDTH = int(sys_width * 0.5)
 HEIGHT = sys_height - 100
