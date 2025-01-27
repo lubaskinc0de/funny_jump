@@ -8,6 +8,7 @@ class Asset(Enum):
     PLAYER_STATIC_SPRITE = auto()
     PLATFORM_SPRITE = auto()
     PLAYER_HOP = auto()
+    LINE_SPRITE = auto()
 
 
 ASSET_PATH = {
@@ -16,4 +17,5 @@ ASSET_PATH = {
     Asset.PLATFORM_SPRITE: Path("sprites/platform.png"),
     Asset.PLAYER_STATIC_SPRITE: Path("sprites/frog/idle/00.png"),
     Asset.PLAYER_HOP: Path("sprites/frog/hop/"),
+    Asset.LINE_SPRITE: Path("sprites/line.png")
 }
