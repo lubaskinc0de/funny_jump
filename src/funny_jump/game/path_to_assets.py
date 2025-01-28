@@ -17,5 +17,5 @@ ASSET_PATH = {
     Asset.PLATFORM_SPRITE: Path("sprites/platform.png"),
     Asset.PLAYER_STATIC_SPRITE: Path("sprites/frog/idle/00.png"),
     Asset.PLAYER_HOP: Path("sprites/frog/hop/"),
-    Asset.LINE_SPRITE: Path("sprites/line.png")
+    Asset.LINE_SPRITE: Path("sprites/line.png"),
 }

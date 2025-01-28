@@ -74,8 +74,9 @@ ignore = [
   # Does not work correctly
   'TC002',
   'TC001',
-  # Does not important for now
+  # Not important now
   'S311',
+  'SIM103',
 ]
 
 [[project.authors]]

@@ -13,8 +13,6 @@ from funny_jump.game.path_to_assets import Asset
 from funny_jump.game.platform_manager import PlatformManager
 from funny_jump.game.sprites.player import HOP_ANIMATION_ID, PlayerSprite
 
-from .collision_manager import LN
-
 
 class SpriteManager:
     __slots__ = (
@@ -78,7 +76,7 @@ class SpriteManager:
             self.player_sprite,
             self.platforms,
             self.player,
-            self.screen
+            self.screen,
         )
         self.platform_manager = PlatformManager(
             self.platforms,
@@ -100,14 +98,4 @@ class SpriteManager:
         self.all_sprites.update(delta)
 
     def draw(self) -> None:
-        # print(LN)
-        # if LN is not None:
-        #     pygame.draw.rect(self.screen, "Red", LN, width=21)
-        # pygame.draw.line(
-        #     self.screen,
-        #     (255, 255, 255, 128),
-        #     self.player_sprite.rect.center,
-        #     (500, 500),
-        #     0
-        # )
         self.all_sprites.draw(self.screen)
