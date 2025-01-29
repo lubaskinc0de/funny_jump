@@ -18,7 +18,7 @@ class AssetManager(Generic[AssetT]):
 
     def get_asset(self, asset: AssetT, asset_loader: Callable[[Path], T]) -> T:
         if asset in self._cache:
-            return self._cache[asset]  # type: ignore  # noqa: PGH003
+            return self._cache[asset]  # type: ignore
 
         full_path = self.loader.get_full_path(self.path_to_assets[asset])
         resource: T = asset_loader(full_path)

@@ -6,7 +6,7 @@ from funny_jump.game.sprites.player import PlayerSprite
 class PlatformManager:
     def __init__(
         self,
-        platforms: pygame.sprite.Group,  # type: ignore  # noqa: PGH003
+        platforms: pygame.sprite.Group,  # type: ignore
         screen_w: int,
         screen_h: int,
         player_sprite: PlayerSprite,

@@ -16,7 +16,7 @@ class CollisionManager:
     def __init__(
         self,
         player_sprite: PlayerSprite,
-        platforms: pygame.sprite.Group,  # type: ignore  # noqa: PGH003
+        platforms: pygame.sprite.Group,  # type: ignore
         player: Player,
     ) -> None:
         self.player_sprite = player_sprite

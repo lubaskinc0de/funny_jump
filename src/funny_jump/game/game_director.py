@@ -8,6 +8,7 @@ from funny_jump.engine.resource_loader.base import ResourceLoader
 from funny_jump.game.path_to_assets import Asset
 from funny_jump.game.screen.main_game import MainGameScreen
 from funny_jump.game.screen.start import StartScreen
+from funny_jump.game.screen.end import EndScreen
 
 
 class GameDirector:
@@ -22,6 +23,7 @@ class GameDirector:
         "resource_loader",
         "screen",
         "start_screen",
+        "end_screen",
         "vsync",
         "width",
     )
@@ -85,6 +87,28 @@ class GameDirector:
             clock=self.clock,
         )
 
+        self.main_game_screen = MainGameScreen(
+            resource_loader=self.resource_loader,
+            asset_manager=self.asset_manager,
+            screen=self.screen,
+            width=self.width,
+            height=self.height,
+            terminate=self.terminate,
+            fps=self.fps,
+            clock=self.clock,
+        )
+        
+        self.end_screen = EndScreen(
+            resource_loader=self.resource_loader,
+            asset_manager=self.asset_manager,
+            screen=self.screen,
+            width=self.width,
+            height=self.height,
+            terminate=self.terminate,
+            fps=self.fps,
+            clock=self.clock,
+        )
+        
         self.is_running = True
         self._run_main_loop()
 
@@ -99,5 +123,6 @@ class GameDirector:
 
         self.start_screen.run()
         self.main_game_screen.run()
+        self.end_screen.run()
 
         self.terminate()

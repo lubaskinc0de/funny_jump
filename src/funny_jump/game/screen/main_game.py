@@ -1,24 +1,16 @@
 from collections.abc import Callable
-from functools import partial
-from pathlib import Path
 
 import pygame
-from pygame import Surface
 from pygame.event import Event
 
 from funny_jump.engine.asset_manager import AssetManager
 from funny_jump.engine.resource_loader.base import ResourceLoader
 from funny_jump.game.path_to_assets import Asset
 from funny_jump.game.sprite_manager import SpriteManager
+from funny_jump.game.screen.base import BaseScreen
 
 
-def get_bg(width: int, height: int, path: Path) -> Surface:
-    bg = pygame.image.load(path)
-    bg = pygame.transform.scale(bg, (width, height))
-    return bg
-
-
-class MainGameScreen:
+class MainGameScreen(BaseScreen):
     __slots__ = (
         "asset_manager",
         "assets",
@@ -46,13 +38,16 @@ class MainGameScreen:
         clock: pygame.time.Clock,
         terminate: Callable[[], None],
     ) -> None:
-        self.clock = clock
-        self.screen = screen
-        self.fps = fps
-        self.width = width
-        self.height = height
-        self.resource_loader = resource_loader
-        self.asset_manager = asset_manager
+        super().__init__(
+            resource_loader=resource_loader,
+            asset_manager=asset_manager,
+            screen=screen,
+            width=width,
+            height=height,
+            terminate=terminate,
+            fps=fps,
+            clock=clock,
+        )
         self.sprite_manager = SpriteManager(
             screen=self.screen,
             width=self.width,
@@ -61,13 +56,7 @@ class MainGameScreen:
             asset_manager=asset_manager,
         )
         self.is_running = False
-        self.terminate = terminate
-        self.get_bg: Callable[[Path], Surface] = partial(get_bg, self.width, self.height)
-
-    def run(self) -> None:
-        self.is_running = True
-        self._run_main_loop()
-
+        
     def _run_main_loop(self) -> None:
         pygame.mixer.music.load(self.asset_manager.get_asset_path(Asset.GAME_BG_MUSIC))
         pygame.mixer.music.play(loops=-1, fade_ms=500)
@@ -78,8 +67,7 @@ class MainGameScreen:
             self._dispatch_events(pygame.event.get())
             self.sprite_manager.update(delta)
 
-            bg_img = self.asset_manager.get_asset(Asset.GAME_BG_IMG, self.get_bg)
-            self.screen.blit(bg_img, (0, 0))
+            self.load_bg()
 
             self.sprite_manager.draw()
 
