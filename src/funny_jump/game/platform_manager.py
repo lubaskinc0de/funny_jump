@@ -33,13 +33,13 @@ class PlatformManager:
 
     def get_highest_platform(self) -> BasicPlatformSprite:
         """Возвращает объект самой высокой платформы."""
-        highest_platform_sprite: BasicPlatformSprite = None # type: ignore  # noqa: PGH003
-        for platform_sprite in self.platforms:
-            if not highest_platform_sprite:
-                highest_platform_sprite = platform_sprite
-                continue
+        sprites: list[BasicPlatformSprite] = self.platforms.sprites()
+        highest_platform_sprite = sprites[0]
+
+        for platform_sprite in sprites[1:]:
             if platform_sprite.platform.bounds.center_y < highest_platform_sprite.platform.bounds.center_y:
                 highest_platform_sprite = platform_sprite
+
         return highest_platform_sprite
 
     def spawn_platform(self, center_x: int, center_y: int) -> None:
@@ -112,9 +112,10 @@ class PlatformManager:
         self.spawn_platform(center_x, center_y)
 
     def update(self) -> None:
-        if self.player_sprite.rect.centery <= self.platform_spawn_height:
+        if (self.player_sprite.rect.centery <= self.platform_spawn_height):
             for platform_sprite in self.platforms:
-                platform_sprite.set_position(platform_sprite.rect.centerx, platform_sprite.rect.centery + 8)
+                offset = (self.platform_spawn_height - self.player_sprite.rect.centery) * 0.05
+                platform_sprite.set_position(platform_sprite.rect.centerx, platform_sprite.rect.centery + offset)
             if self.get_highest_platform().rect.centery > MAX_PLATFORM_HEIGHT:
                 self.spawn_new_platform()
         else:

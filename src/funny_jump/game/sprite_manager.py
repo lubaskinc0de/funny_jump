@@ -76,7 +76,6 @@ class SpriteManager:
             self.player_sprite,
             self.platforms,
             self.player,
-            self.screen,
         )
         self.platform_manager = PlatformManager(
             self.platforms,
