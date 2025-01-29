@@ -78,13 +78,13 @@ class SpriteManager:
             animation_manager=player_animation_manager,
             sounds=player_sounds,
         )
+
         player_pos = self.width // 2, self.height - self.height // 10
         self.player_sprite.set_position(*player_pos)
 
         self.all_sprites: pygame.sprite.Group[Any] = pygame.sprite.Group()
         self.platforms: pygame.sprite.Group[Any] = pygame.sprite.Group()
         self.all_sprites.add(self.player_sprite)
-
         self.collision_manager = CollisionManager(
             self.player_sprite,
             self.platforms,
@@ -95,11 +95,18 @@ class SpriteManager:
             self.width,
             self.height,
             self.player_sprite,
+            self.asset_manager,
         )
 
     def update(self, delta: float) -> None:
         self.collision_manager.check_collisions()
         self.platform_manager.update()
+        for platform_sprite in self.platforms:
+            if not platform_sprite.platform.is_alive:
+                self.all_sprites.remove(platform_sprite)
+                self.platforms.remove(platform_sprite)
+            elif platform_sprite not in self.all_sprites:
+                self.all_sprites.add(platform_sprite)
         self.all_sprites.update(delta)
 
     def draw(self) -> None:
