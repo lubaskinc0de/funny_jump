@@ -45,6 +45,9 @@ class CollisionManager:
             return
 
         for platform_sprite in collide:
+            if self.player.velocity.y < 0:
+                continue
+
             platform_rect = platform_sprite.rect
             prev_bottom = player_rect.bottom - self.player.velocity.y
 
