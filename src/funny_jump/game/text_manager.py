@@ -1,4 +1,3 @@
-
 import pygame
 
 
@@ -10,7 +9,7 @@ class TextManager:
         screen_width: int,
         screen: pygame.Surface,
         text_coord: int = 50,
-        ) -> None:
+    ) -> None:
         self.text_font = text_font
         self.logo_font = logo_font
         self.screen_width = screen_width
@@ -41,7 +40,7 @@ class TextManager:
             self.text_coord += self.text_font.get_height()
 
         space_width = self.text_font.render(" ", 1, pygame.Color(color)).get_width()
-        splited_text_with_length: list[list[str, int]] = [["", 0]] # type: ignore
+        splited_text_with_length: list[list[str, int]] = [["", 0]]  # type: ignore
         counter = 0
 
         for _word in text.split():

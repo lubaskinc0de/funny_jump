@@ -42,18 +42,22 @@ class CollisionManager:
             return
 
         if self.player.on_ground:
+            if self.player.staying_at is not None and any(
+                self.player.staying_at.bounds == collided.platform.bounds for collided in collide
+            ):
+                return
+            self.player.left_from_ground()
             return
 
         for platform_sprite in collide:
             if self.player.velocity.y < 0:
                 continue
 
-            print(self.player_sprite.prev_pos.bottom, player_rect.bottom)
             platform_rect = platform_sprite.rect
             if (self.player_sprite.prev_pos.bottom <= platform_rect.top) and (platform_rect.top < player_rect.bottom):
                 self.player_sprite.set_position(
                     player_rect.centerx,
-                    (platform_rect.top - player_rect.height // 2) + 2,
+                    (platform_rect.top - player_rect.height // 2),
                 )
                 on_player_collide_platform(platform_sprite.platform, self.player)
                 return

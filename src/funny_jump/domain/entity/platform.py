@@ -13,13 +13,14 @@ class Platform(Protocol):
     is_alive: bool
 
     @abstractmethod
-    def on_collide(self) -> None:...
+    def on_collide(self) -> None: ...
 
     @abstractmethod
     def update(self) -> None: ...
 
     @abstractmethod
     def death(self) -> None: ...
+
 
 @dataclass(slots=True)
 class BasicPlatform(Platform):

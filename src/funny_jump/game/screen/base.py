@@ -77,5 +77,4 @@ class BaseScreen:
         bg_img = self.asset_manager.get_asset(Asset.GAME_BG_IMG, self.get_bg)
         self.screen.blit(bg_img, (0, 0))
 
-    def render_all(self) -> None:
-        ...
+    def render_all(self) -> None: ...

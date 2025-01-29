@@ -1,4 +1,4 @@
-from random import randint
+from random import randint, random
 
 import pygame.sprite
 
@@ -66,11 +66,11 @@ class PlatformManager:
             existing_bounds = platform_sprite.platform.bounds
 
             if (
-                new_bounds.center_x < existing_bounds.center_x + existing_bounds.width + randint(50, 200) and
-                new_bounds.center_x + BASIC_PLATFORM_SIZE[0] > existing_bounds.center_x and
-                new_bounds.center_y < existing_bounds.center_y + existing_bounds.height + randint(30, 70) and
-                new_bounds.center_y + BASIC_PLATFORM_SIZE[1] > existing_bounds.center_y
-                ):
+                new_bounds.center_x < existing_bounds.center_x + existing_bounds.width + randint(50, 200)
+                and new_bounds.center_x + BASIC_PLATFORM_SIZE[0] > existing_bounds.center_x
+                and new_bounds.center_y < existing_bounds.center_y + existing_bounds.height + randint(30, 70)
+                and new_bounds.center_y + BASIC_PLATFORM_SIZE[1] > existing_bounds.center_y
+            ):
                 return True
 
         return False
@@ -83,12 +83,14 @@ class PlatformManager:
         while True:
             next_platform_interval_x = BASIC_PLATFORM_SIZE[0] * randint(-3, 3)
             center_x = highest_platform.platform.bounds.center_x + next_platform_interval_x
-            if next_platform_interval_x != 0 and\
-                BASIC_PLATFORM_SIZE[0] < center_x and\
-                    center_x < self.screen_w - BASIC_PLATFORM_SIZE[0] // 2:
-                        break
+            if (
+                next_platform_interval_x != 0
+                and BASIC_PLATFORM_SIZE[0] < center_x
+                and center_x < self.screen_w - BASIC_PLATFORM_SIZE[0] // 2
+            ):
+                break
 
-        next_platform_interval_y = self.player_sprite.player.max_jump_height // randint(1, 2)
+        next_platform_interval_y = self.player_sprite.player.max_jump_height
         center_y = highest_platform.platform.bounds.center_y - next_platform_interval_y
         return center_x, center_y
 
@@ -112,9 +114,9 @@ class PlatformManager:
         self.spawn_platform(center_x, center_y)
 
     def update(self) -> None:
-        if (self.player_sprite.rect.centery <= self.platform_spawn_height):
+        if self.player_sprite.rect.centery <= self.platform_spawn_height:
             for platform_sprite in self.platforms:
-                offset = (self.platform_spawn_height - self.player_sprite.rect.centery) * 0.03
+                offset = (self.platform_spawn_height - self.player_sprite.rect.centery) * 0.045
                 platform_sprite.set_position(platform_sprite.rect.centerx, platform_sprite.rect.centery + offset)
             if self.get_highest_platform().rect.centery > MAX_PLATFORM_HEIGHT:
                 self.spawn_new_platform()

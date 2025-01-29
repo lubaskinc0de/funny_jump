@@ -1,5 +1,6 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
+from funny_jump.domain.entity.platform import Platform
 from funny_jump.domain.value_object.bounds import Bounds
 from funny_jump.domain.value_object.velocity import Velocity
 
@@ -21,6 +22,7 @@ class Player:
     is_jumping: bool = False
     delta: float = 0.0
     gravity: float = GRAVITY
+    staying_at: Platform | None = field(init=False)
 
     def set_delta(self, delta: float) -> None:
         """Must be called on every frame."""
@@ -58,12 +60,14 @@ class Player:
         self.bounds.center_y = self.screen_h
         self.health = 0
 
-    def get_on_ground(self) -> None:
+    def get_on_ground(self, platform: Platform) -> None:
         self.velocity.y = 0
         self.on_ground = True
+        self.staying_at = platform
 
     def left_from_ground(self) -> None:
         self.on_ground = False
+        self.staying_at = None
 
     @property
     def max_jump_height(self) -> int:
