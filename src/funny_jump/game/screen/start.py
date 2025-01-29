@@ -1,72 +1,29 @@
-from collections.abc import Callable
-from functools import partial
-from pathlib import Path
-
 import pygame
-from pygame import Surface
 from pygame.event import Event
 
-from funny_jump.engine.asset_manager import AssetManager
-from funny_jump.engine.resource_loader.base import ResourceLoader
-from funny_jump.game.path_to_assets import Asset
+
+from funny_jump.game.text_manager import TextManager
+from funny_jump.game.screen.base import BaseScreen
 
 
-def get_bg(width: int, height: int, path: Path) -> Surface:
-    bg = pygame.image.load(path)
-    bg = pygame.transform.scale(bg, (width, height))
-    return bg
+class StartScreen(BaseScreen):
+    def render_all(self) -> None:
+        logo_text = "FUNNY JUMP"
+        logo_font = pygame.font.Font(None, 160)
+        logo_font.bold = True
 
+        intro_text = "Нажмите на любую клавишу мыши, чтобы начать"
+        text_font = pygame.font.Font(None, 70)
 
-class StartScreen:
-    __slots__ = (
-        "asset_manager",
-        "clock",
-        "fps",
-        "get_bg",
-        "height",
-        "is_running",
-        "resource_loader",
-        "screen",
-        "terminate",
-        "width",
-    )
+        text_render_manager = TextManager(
+            text_font=text_font,
+            logo_font=logo_font,
+            screen_width=self.width,
+            screen=self.screen,
+        )
 
-    def __init__(
-        self,
-        *,
-        resource_loader: ResourceLoader,
-        asset_manager: AssetManager[Asset],
-        screen: pygame.Surface,
-        width: int,
-        height: int,
-        terminate: Callable[[], None],
-        fps: int,
-        clock: pygame.time.Clock,
-    ) -> None:
-        self.resource_loader = resource_loader
-        self.asset_manager = asset_manager
-        self.is_running = False
-        self.screen = screen
-        self.width = width
-        self.height = height
-        self.get_bg: Callable[[Path], Surface] = partial(get_bg, self.width, self.height)
-        self.terminate = terminate
-        self.clock = clock
-        self.fps = fps
-
-    def run(self) -> None:
-        self.is_running = True
-        self._run_main_loop()
-
-    def _run_main_loop(self) -> None:
-        while self.is_running:
-            self._dispatch_events(pygame.event.get())
-
-            bg_img = self.asset_manager.get_asset(Asset.GAME_BG_IMG, self.get_bg)
-            self.screen.blit(bg_img, (0, 0))
-
-            pygame.display.flip()
-            self.clock.tick(self.fps)
+        text_render_manager.render_as_logo(logo_text)
+        text_render_manager.render_as_text(intro_text, has_vertical_indent=True)
 
     def _dispatch_events(self, events: list[Event]) -> None:
         for event in events:
