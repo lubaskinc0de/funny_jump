@@ -1,4 +1,4 @@
-from random import randint, random
+from random import randint
 
 import pygame.sprite
 
