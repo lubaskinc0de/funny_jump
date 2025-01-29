@@ -9,7 +9,7 @@ from funny_jump.game.game_director import GameDirector
 from funny_jump.game.path_to_assets import ASSET_PATH
 
 sys_width, sys_height = get_screen_size()
-WIDTH = int(sys_width * 0.5)
+WIDTH = int(sys_width * 0.3)
 HEIGHT = sys_height - 200
 CAPTION = "Весёлые Прыжки"
 FPS = 60
