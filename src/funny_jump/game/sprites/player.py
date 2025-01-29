@@ -36,6 +36,7 @@ class PlayerSprite(Sprite):
         self.static_img = self.original_image
 
         self.rect = self.image.get_rect()
+        self.prev_pos = self.rect
 
         self.player = player
         self.player.bounds.height = self.rect.height
@@ -76,6 +77,7 @@ class PlayerSprite(Sprite):
         self.rect.center = (round(self.player.bounds.center_x), round(self.player.bounds.center_y))
 
     def update(self, delta: float) -> None:
+        self.prev_pos = self.rect.copy()
         self.delta = delta
 
         keys_pressed = pygame.key.get_pressed()

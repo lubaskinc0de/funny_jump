@@ -114,7 +114,7 @@ class PlatformManager:
     def update(self) -> None:
         if (self.player_sprite.rect.centery <= self.platform_spawn_height):
             for platform_sprite in self.platforms:
-                offset = (self.platform_spawn_height - self.player_sprite.rect.centery) * 0.05
+                offset = (self.platform_spawn_height - self.player_sprite.rect.centery) * 0.03
                 platform_sprite.set_position(platform_sprite.rect.centerx, platform_sprite.rect.centery + offset)
             if self.get_highest_platform().rect.centery > MAX_PLATFORM_HEIGHT:
                 self.spawn_new_platform()
