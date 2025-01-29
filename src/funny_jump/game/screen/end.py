@@ -1,15 +1,12 @@
 from collections.abc import Callable
-from functools import partial
-from pathlib import Path
 
 import pygame
-from pygame import Surface
 
 from funny_jump.engine.asset_manager import AssetManager
 from funny_jump.engine.resource_loader.base import ResourceLoader
 from funny_jump.game.path_to_assets import Asset
-from funny_jump.game.text_manager import TextManager
 from funny_jump.game.screen.base import BaseScreen
+from funny_jump.game.text_manager import TextManager
 
 
 class EndScreen(BaseScreen):
@@ -22,13 +19,13 @@ class EndScreen(BaseScreen):
         "is_running",
         "logo_font_size",
         "resource_loader",
+        "score",
         "screen",
         "terminate",
         "text_coord",
         "text_font_size",
         "text_render_manager",
         "width",
-        "score",
     )
 
     def __init__(
@@ -71,7 +68,7 @@ class EndScreen(BaseScreen):
         text_font = pygame.font.Font(None, 70)
 
         offer_text = "Сыграйте еще раз, чтобы изменить свой результат!"
-        
+
         text_render_manager = TextManager(
             text_font=text_font,
             logo_font=logo_font,

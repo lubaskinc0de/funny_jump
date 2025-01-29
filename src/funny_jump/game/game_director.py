@@ -6,9 +6,9 @@ from pygame import Surface
 from funny_jump.engine.asset_manager import AssetManager
 from funny_jump.engine.resource_loader.base import ResourceLoader
 from funny_jump.game.path_to_assets import Asset
+from funny_jump.game.screen.end import EndScreen
 from funny_jump.game.screen.main_game import MainGameScreen
 from funny_jump.game.screen.start import StartScreen
-from funny_jump.game.screen.end import EndScreen
 
 
 class GameDirector:
@@ -16,6 +16,7 @@ class GameDirector:
         "asset_manager",
         "caption",
         "clock",
+        "end_screen",
         "fps",
         "height",
         "is_running",
@@ -23,7 +24,6 @@ class GameDirector:
         "resource_loader",
         "screen",
         "start_screen",
-        "end_screen",
         "vsync",
         "width",
     )
@@ -97,7 +97,7 @@ class GameDirector:
             fps=self.fps,
             clock=self.clock,
         )
-        
+
         self.end_screen = EndScreen(
             resource_loader=self.resource_loader,
             asset_manager=self.asset_manager,
@@ -108,7 +108,7 @@ class GameDirector:
             fps=self.fps,
             clock=self.clock,
         )
-        
+
         self.is_running = True
         self._run_main_loop()
 

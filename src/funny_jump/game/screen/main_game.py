@@ -6,8 +6,8 @@ from pygame.event import Event
 from funny_jump.engine.asset_manager import AssetManager
 from funny_jump.engine.resource_loader.base import ResourceLoader
 from funny_jump.game.path_to_assets import Asset
-from funny_jump.game.sprite_manager import SpriteManager
 from funny_jump.game.screen.base import BaseScreen
+from funny_jump.game.sprite_manager import SpriteManager
 
 
 class MainGameScreen(BaseScreen):
@@ -56,7 +56,7 @@ class MainGameScreen(BaseScreen):
             asset_manager=asset_manager,
         )
         self.is_running = False
-        
+
     def _run_main_loop(self) -> None:
         pygame.mixer.music.load(self.asset_manager.get_asset_path(Asset.GAME_BG_MUSIC))
         pygame.mixer.music.play(loops=-1, fade_ms=500)

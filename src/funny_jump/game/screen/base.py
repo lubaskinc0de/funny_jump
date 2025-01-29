@@ -1,5 +1,3 @@
-from abc import abstractmethod
-from typing import Protocol
 from collections.abc import Callable
 from functools import partial
 from pathlib import Path
@@ -19,7 +17,7 @@ def get_bg(width: int, height: int, path: Path) -> Surface:
     return bg
 
 
-class BaseScreen(Protocol):
+class BaseScreen:
     __slots__ = (
         "asset_manager",
         "clock",
@@ -55,7 +53,7 @@ class BaseScreen(Protocol):
         self.terminate = terminate
         self.clock = clock
         self.fps = fps
-    
+
     def run(self) -> None:
         self.is_running = True
         self._run_main_loop()
@@ -74,7 +72,10 @@ class BaseScreen(Protocol):
                 case pygame.QUIT:
                     self.is_running = False
                     self.terminate()
-    
+
     def load_bg(self) -> None:
         bg_img = self.asset_manager.get_asset(Asset.GAME_BG_IMG, self.get_bg)
         self.screen.blit(bg_img, (0, 0))
+
+    def render_all(self) -> None:
+        ...

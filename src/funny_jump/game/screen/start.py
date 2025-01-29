@@ -1,9 +1,8 @@
 import pygame
 from pygame.event import Event
 
-
-from funny_jump.game.text_manager import TextManager
 from funny_jump.game.screen.base import BaseScreen
+from funny_jump.game.text_manager import TextManager
 
 
 class StartScreen(BaseScreen):
