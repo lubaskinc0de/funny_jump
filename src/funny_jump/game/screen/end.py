@@ -55,7 +55,7 @@ class EndScreen(BaseScreen):
 
     def render_all(self) -> None:
         logo_text = "КОНЕЦ"
-        logo_font = pygame.font.Font(None, 160)
+        logo_font = pygame.font.Font(None, self.width // 3)
         logo_font.bold = True
 
         score_text = f"Ваш результат - {self.score} очков"
@@ -65,7 +65,7 @@ class EndScreen(BaseScreen):
             final_text = "Ваш результат очень неплох!"
         else:
             final_text = "Вы достигли отличного результата!"
-        text_font = pygame.font.Font(None, 70)
+        text_font = pygame.font.Font(None, self.width // 11)
 
         offer_text = "Сыграйте еще раз, чтобы изменить свой результат!"
 

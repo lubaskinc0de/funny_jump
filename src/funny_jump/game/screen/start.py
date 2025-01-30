@@ -8,11 +8,11 @@ from funny_jump.game.text_manager import TextManager
 class StartScreen(BaseScreen):
     def render_all(self) -> None:
         logo_text = "FUNNY JUMP"
-        logo_font = pygame.font.Font(None, 160)
+        logo_font = pygame.font.Font(None, self.width // 5)
         logo_font.bold = True
 
         intro_text = "Нажмите на любую клавишу мыши, чтобы начать"
-        text_font = pygame.font.Font(None, 70)
+        text_font = pygame.font.Font(None, self.width // 11)
 
         text_render_manager = TextManager(
             text_font=text_font,
