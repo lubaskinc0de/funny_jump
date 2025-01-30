@@ -14,6 +14,7 @@ from funny_jump.game.collision_manager import CollisionManager
 from funny_jump.game.path_to_assets import Asset
 from funny_jump.game.platform_manager import PlatformManager
 from funny_jump.game.sprites.player import HOP_ANIMATION_ID, PlayerSounds, PlayerSprite
+from funny_jump.game.platform_manager import BASIC_PLATFORM_SIZE
 
 
 class SpriteManager:
@@ -79,9 +80,8 @@ class SpriteManager:
             sounds=player_sounds,
         )
 
-        player_pos = self.width // 2, self.height - self.height // 10
+        player_pos = self.width // 2, self.height - 200 - BASIC_PLATFORM_SIZE[1] * 1.6
         self.player_sprite.set_position(*player_pos)
-
         self.all_sprites: pygame.sprite.Group[Any] = pygame.sprite.Group()
         self.platforms: pygame.sprite.Group[Any] = pygame.sprite.Group()
         self.all_sprites.add(self.player_sprite)
