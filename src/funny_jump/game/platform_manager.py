@@ -22,6 +22,7 @@ class PlatformManager:
         screen_h: int,
         player_sprite: PlayerSprite,
         asset_manager: AssetManager[Asset],
+        platform_moving_speed: int = 0
     ) -> None:
         self.player_sprite = player_sprite
         self.platforms = platforms
@@ -29,6 +30,7 @@ class PlatformManager:
         self.screen_h = screen_h
         self.asset_manager = asset_manager
         self.platform_spawn_height = self.screen_h // 2
+        self.platform_moving_speed = platform_moving_speed
         self.spawn_initial_platforms()
 
     def get_highest_platform(self) -> BasicPlatformSprite:
@@ -42,14 +44,14 @@ class PlatformManager:
 
         return highest_platform_sprite
 
-    def spawn_platform(self, center_x: int, center_y: int) -> None:
+    def spawn_platform(self, center_x: int, center_y: int, platform_moves: bool) -> None:
         """Создает спрайт платформы и добавляет его в группу всех платформ."""
         platform = BasicPlatform(
             screen_h=self.screen_h,
             velocity=Velocity(),
             bounds=Bounds(center_x, center_y),
         )
-
+        
         platform_sprite = BasicPlatformSprite(
             platform=platform,
             image=self.asset_manager.get_asset_path(Asset.PLATFORM_SPRITE),
@@ -110,8 +112,12 @@ class PlatformManager:
         center_y = 0
         while center_x == 0 or center_y == 0 or self.is_overlapping(center_x, center_y):
             center_x, center_y = self.calculate_new_platform_position()
-
-        self.spawn_platform(center_x, center_y)
+            
+        platform_moves = False
+        if self.platform_moving_speed:
+            platform_moves = True if randint(1, 100) <= 10 else False
+            
+        self.spawn_platform(center_x, center_y, platform_moves)
 
     def update(self) -> None:
         if self.player_sprite.rect.centery <= self.platform_spawn_height:

@@ -15,6 +15,7 @@ from funny_jump.game.path_to_assets import Asset
 from funny_jump.game.platform_manager import PlatformManager
 from funny_jump.game.sprites.player import HOP_ANIMATION_ID, PlayerSounds, PlayerSprite
 from funny_jump.game.platform_manager import BASIC_PLATFORM_SIZE
+from funny_jump.domain.level_manager import LevelManager
 
 
 class SpriteManager:
@@ -90,12 +91,17 @@ class SpriteManager:
             self.platforms,
             self.player,
         )
+        
+        level_manager = LevelManager()
+        current_level = level_manager.get_current_level()
+        
         self.platform_manager = PlatformManager(
             self.platforms,
             self.width,
             self.height,
             self.player_sprite,
             self.asset_manager,
+            has_moving_platforms=bool(current_level.difficulty)
         )
 
     def update(self, delta: float) -> None:
