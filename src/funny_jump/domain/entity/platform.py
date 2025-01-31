@@ -46,7 +46,7 @@ class MobilePlatform(Platform):
         "velocity",
         "bounds",
         "is_alive",
-        "default_center_x"
+        "default_center_x",
     )
     def __init__(
         self,
@@ -54,7 +54,7 @@ class MobilePlatform(Platform):
         screen_w: int,
         velocity: Velocity,
         bounds: Bounds,
-        is_alive: bool = True
+        is_alive: bool = True,
         ) -> None:
         self.screen_h = screen_h
         self.screen_w = screen_w
@@ -62,10 +62,10 @@ class MobilePlatform(Platform):
         self.bounds = bounds
         self.is_alive = is_alive
         self.default_center_x: int = bounds.center_x
-    
+
     def side_move(self) -> None:
-        platform_shift = self.velocity.x * self.velocity.direction_x
-        
+        platform_shift = round(self.velocity.x * self.velocity.direction_x)
+
         if (
             abs(self.bounds.center_x - self.default_center_x + platform_shift) >= self.screen_w // 2
             or self.screen_w * 0.1 > self.bounds.center_x + platform_shift
@@ -73,9 +73,9 @@ class MobilePlatform(Platform):
             ):
             self.velocity.direction_x = -self.velocity.direction_x
             platform_shift = -platform_shift
-            
+
         self.bounds.center_x += platform_shift
-        
+
     def on_collide(self) -> None:
         return None
 
@@ -84,6 +84,6 @@ class MobilePlatform(Platform):
 
     def update(self) -> None:
         self.side_move()
-        
+
         if self.bounds.center_y > (self.screen_h + 100):
             self.death()

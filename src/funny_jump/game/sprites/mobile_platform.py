@@ -12,8 +12,8 @@ class MobilePlatformSprite(BasicPlatformSprite):
         size: tuple[int, int],
     ) -> None:
         super().__init__(
-            platform=platform, 
-            image=image, 
+            platform=platform,
+            image=image,
             size=size,
             )
         self.platform: MobilePlatform = platform

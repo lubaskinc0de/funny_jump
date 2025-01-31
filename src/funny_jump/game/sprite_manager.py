@@ -4,6 +4,7 @@ import pygame
 from pygame import Surface
 
 from funny_jump.domain.entity.player import Player
+from funny_jump.domain.level_manager import LevelManager
 from funny_jump.domain.value_object.bounds import Bounds
 from funny_jump.domain.value_object.velocity import Velocity
 from funny_jump.engine.animation.animation_loader import IncrementalAnimationLoader
@@ -12,10 +13,8 @@ from funny_jump.engine.asset_manager import AssetManager
 from funny_jump.engine.resource_loader.base import ResourceLoader
 from funny_jump.game.collision_manager import CollisionManager
 from funny_jump.game.path_to_assets import Asset
-from funny_jump.game.platform_manager import PlatformManager
+from funny_jump.game.platform_manager import BASIC_PLATFORM_SIZE, PlatformManager
 from funny_jump.game.sprites.player import HOP_ANIMATION_ID, PlayerSounds, PlayerSprite
-from funny_jump.game.platform_manager import BASIC_PLATFORM_SIZE
-from funny_jump.domain.level_manager import LevelManager
 
 
 class SpriteManager:
@@ -91,20 +90,20 @@ class SpriteManager:
             self.platforms,
             self.player,
         )
-        
+
         level_manager = LevelManager()
         current_level = level_manager.get_current_level()
         platform_moving_speed = 1 if current_level.difficulty == 1 else 0
 
         platform_moving_speed = 1 # !!!!!!!! TEMP
-        
+
         self.platform_manager = PlatformManager(
             self.platforms,
             self.width,
             self.height,
             self.player_sprite,
             self.asset_manager,
-            platform_moving_speed=platform_moving_speed
+            platform_moving_speed=platform_moving_speed,
         )
 
     def update(self, delta: float) -> None:

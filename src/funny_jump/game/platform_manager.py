@@ -1,9 +1,9 @@
 from random import randint
+from typing import Literal
 
 import pygame.sprite
 
-from funny_jump.domain.entity.platform import BasicPlatform
-from funny_jump.domain.entity.platform import MobilePlatform
+from funny_jump.domain.entity.platform import BasicPlatform, MobilePlatform
 from funny_jump.domain.value_object.bounds import Bounds
 from funny_jump.domain.value_object.velocity import Velocity
 from funny_jump.engine.asset_manager import AssetManager
@@ -24,7 +24,7 @@ class PlatformManager:
         screen_h: int,
         player_sprite: PlayerSprite,
         asset_manager: AssetManager[Asset],
-        platform_moving_speed: int = 0
+        platform_moving_speed: int = 0,
     ) -> None:
         self.player_sprite = player_sprite
         self.platforms = platforms
@@ -49,35 +49,35 @@ class PlatformManager:
     def spawn_platform(self, center_x: int, center_y: int, can_move: bool = False) -> None:
         """Создает спрайт платформы и добавляет его в группу всех платформ."""
         if not can_move:
-            platform = BasicPlatform(
+            basic_platform = BasicPlatform(
                 screen_h=self.screen_h,
                 velocity=Velocity(),
                 bounds=Bounds(center_x, center_y),
             )
             platform_sprite = BasicPlatformSprite(
-                platform=platform,
+                platform=basic_platform,
                 image=self.asset_manager.get_asset_path(Asset.PLATFORM_SPRITE),
                 size=BASIC_PLATFORM_SIZE,
             )
         else:
             platform_x_speed = BASIC_PLATFORM_SIZE[0] * self.platform_moving_speed * 0.025
-            platform_x_direction = 1 if randint(-2, 1) >= 0 else -1
-            platform = MobilePlatform(
+            platform_x_direction: Literal[-1, 1] = 1 if randint(-2, 1) >= 0 else -1
+            moving_platform = MobilePlatform(
                 screen_h=self.screen_h,
                 screen_w=self.screen_w,
                 velocity=Velocity(
                     x=platform_x_speed,
-                    direction_x=platform_x_direction
+                    direction_x=platform_x_direction,
                     ),
                 bounds=Bounds(center_x, center_y),
             )
-            
+
             platform_sprite = MobilePlatformSprite(
-                platform=platform,
+                platform=moving_platform,
                 image=self.asset_manager.get_asset_path(Asset.MOBILE_PLATFORM_SPRITE),
                 size=BASIC_PLATFORM_SIZE,
             )
-            
+
         platform_sprite.set_position(center_x, center_y)
         self.platforms.add(platform_sprite)
 
@@ -119,7 +119,7 @@ class PlatformManager:
 
     def spawn_initial_platforms(self) -> None:
         """Спавнит начальные платформы. Исполняется при инициализации PlatformManager."""
-        center_x = self.screen_w // 2 
+        center_x = self.screen_w // 2
         center_y = self.screen_h - 200
         self.spawn_platform(center_x, center_y)
         for _ in range(7):
@@ -133,17 +133,15 @@ class PlatformManager:
         center_y = 0
         while center_x == 0 or center_y == 0 or self.is_overlapping(center_x, center_y):
             center_x, center_y = self.calculate_new_platform_position()
-            
+
         platform_moves = False
         if self.platform_moving_speed:
-            platform_moves = True if randint(1, 100) - self.platform_moving_speed * 5 <= 10 else False
-        # platform_moves = True # !!!!!!!!!!!!! TEMP !!!!!!!!!!!!!
-            
+            platform_moves = randint(1, 100) - self.platform_moving_speed * 5 <= 10
+
         self.spawn_platform(center_x, center_y, platform_moves)
 
     def update(self) -> None:
         for platform_sprite in self.platforms:
-            platform_sprite: BasicPlatformSprite
             if self.player_sprite.rect.centery <= self.platform_spawn_height:
                 offset = (self.platform_spawn_height - self.player_sprite.rect.centery) * 0.045
                 platform_sprite.set_position(platform_sprite.rect.centerx, platform_sprite.rect.centery + offset)
