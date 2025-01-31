@@ -3,11 +3,13 @@ from random import randint
 import pygame.sprite
 
 from funny_jump.domain.entity.platform import BasicPlatform
+from funny_jump.domain.entity.platform import MobilePlatform
 from funny_jump.domain.value_object.bounds import Bounds
 from funny_jump.domain.value_object.velocity import Velocity
 from funny_jump.engine.asset_manager import AssetManager
 from funny_jump.game.path_to_assets import Asset
 from funny_jump.game.sprites.basic_platform import BasicPlatformSprite
+from funny_jump.game.sprites.mobile_platform import MobilePlatformSprite
 from funny_jump.game.sprites.player import PlayerSprite
 
 BASIC_PLATFORM_SIZE = (100, 30)
@@ -44,19 +46,38 @@ class PlatformManager:
 
         return highest_platform_sprite
 
-    def spawn_platform(self, center_x: int, center_y: int, platform_moves: bool) -> None:
+    def spawn_platform(self, center_x: int, center_y: int, can_move: bool = False) -> None:
         """Создает спрайт платформы и добавляет его в группу всех платформ."""
-        platform = BasicPlatform(
-            screen_h=self.screen_h,
-            velocity=Velocity(),
-            bounds=Bounds(center_x, center_y),
-        )
-        
-        platform_sprite = BasicPlatformSprite(
-            platform=platform,
-            image=self.asset_manager.get_asset_path(Asset.PLATFORM_SPRITE),
-            size=BASIC_PLATFORM_SIZE,
-        )
+        if not can_move:
+            platform = BasicPlatform(
+                screen_h=self.screen_h,
+                velocity=Velocity(),
+                bounds=Bounds(center_x, center_y),
+            )
+            platform_sprite = BasicPlatformSprite(
+                platform=platform,
+                image=self.asset_manager.get_asset_path(Asset.PLATFORM_SPRITE),
+                size=BASIC_PLATFORM_SIZE,
+            )
+        else:
+            platform_x_speed = BASIC_PLATFORM_SIZE[0] * self.platform_moving_speed * 0.025
+            platform_x_direction = 1 if randint(-2, 1) >= 0 else -1
+            platform = MobilePlatform(
+                screen_h=self.screen_h,
+                screen_w=self.screen_w,
+                velocity=Velocity(
+                    x=platform_x_speed,
+                    direction_x=platform_x_direction
+                    ),
+                bounds=Bounds(center_x, center_y),
+            )
+            
+            platform_sprite = MobilePlatformSprite(
+                platform=platform,
+                image=self.asset_manager.get_asset_path(Asset.MOBILE_PLATFORM_SPRITE),
+                size=BASIC_PLATFORM_SIZE,
+            )
+            
         platform_sprite.set_position(center_x, center_y)
         self.platforms.add(platform_sprite)
 
@@ -88,7 +109,7 @@ class PlatformManager:
             if (
                 next_platform_interval_x != 0
                 and BASIC_PLATFORM_SIZE[0] < center_x
-                and center_x < self.screen_w - BASIC_PLATFORM_SIZE[0] // 2
+                and center_x < self.screen_w * 0.9 - BASIC_PLATFORM_SIZE[0] // 2
             ):
                 break
 
@@ -98,7 +119,7 @@ class PlatformManager:
 
     def spawn_initial_platforms(self) -> None:
         """Спавнит начальные платформы. Исполняется при инициализации PlatformManager."""
-        center_x = self.screen_w // 2
+        center_x = self.screen_w // 2 
         center_y = self.screen_h - 200
         self.spawn_platform(center_x, center_y)
         for _ in range(7):
@@ -115,17 +136,19 @@ class PlatformManager:
             
         platform_moves = False
         if self.platform_moving_speed:
-            platform_moves = True if randint(1, 100) <= 10 else False
+            platform_moves = True if randint(1, 100) - self.platform_moving_speed * 5 <= 10 else False
+        # platform_moves = True # !!!!!!!!!!!!! TEMP !!!!!!!!!!!!!
             
         self.spawn_platform(center_x, center_y, platform_moves)
 
     def update(self) -> None:
-        if self.player_sprite.rect.centery <= self.platform_spawn_height:
-            for platform_sprite in self.platforms:
+        for platform_sprite in self.platforms:
+            platform_sprite: BasicPlatformSprite
+            if self.player_sprite.rect.centery <= self.platform_spawn_height:
                 offset = (self.platform_spawn_height - self.player_sprite.rect.centery) * 0.045
                 platform_sprite.set_position(platform_sprite.rect.centerx, platform_sprite.rect.centery + offset)
-            if self.get_highest_platform().rect.centery > MAX_PLATFORM_HEIGHT:
-                self.spawn_new_platform()
-        else:
-            for platform_sprite in self.platforms:
-                platform_sprite.platform.velocity.y = 0
+                if self.get_highest_platform().rect.centery > MAX_PLATFORM_HEIGHT:
+                    self.spawn_new_platform()
+            platform_sprite.platform.velocity.y = 0
+            if isinstance(platform_sprite.platform, MobilePlatform):
+                platform_sprite.platform.side_move()

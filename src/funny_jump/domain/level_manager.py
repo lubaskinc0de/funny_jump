@@ -3,18 +3,17 @@ from funny_jump.domain.entity.level import Level
 
 class LevelManager:
     __slots__ = (
-        "current_level",
+        "current_level_index",
         "levels",
     )
 
     def __init__(
         self,
     ) -> None:
-        
         self.current_level_index: int = 0
         self.levels: list[Level] = self._init_levels()
         
-    def _init_levels() -> list[Level]:
+    def _init_levels(self) -> list[Level]:
         first_level = Level(name="Trial", difficulty=0)
         second_level = Level(name="Base", difficulty=1)
         third_level = Level(name="Hard", difficulty=2)

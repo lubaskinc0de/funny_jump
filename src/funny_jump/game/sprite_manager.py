@@ -94,6 +94,9 @@ class SpriteManager:
         
         level_manager = LevelManager()
         current_level = level_manager.get_current_level()
+        platform_moving_speed = 1 if current_level.difficulty == 1 else 0
+
+        platform_moving_speed = 1 # !!!!!!!! TEMP
         
         self.platform_manager = PlatformManager(
             self.platforms,
@@ -101,7 +104,7 @@ class SpriteManager:
             self.height,
             self.player_sprite,
             self.asset_manager,
-            has_moving_platforms=bool(current_level.difficulty)
+            platform_moving_speed=platform_moving_speed
         )
 
     def update(self, delta: float) -> None:
