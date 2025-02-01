@@ -1,4 +1,4 @@
-from funny_jump.domain.entity.level import Level
+from funny_jump.game.level import Level
 
 
 class LevelManager:

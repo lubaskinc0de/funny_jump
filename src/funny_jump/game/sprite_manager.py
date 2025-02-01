@@ -4,7 +4,7 @@ import pygame
 from pygame import Surface
 
 from funny_jump.domain.entity.player import Player
-from funny_jump.domain.level_manager import LevelManager
+from funny_jump.game.level_manager import LevelManager
 from funny_jump.domain.value_object.bounds import Bounds
 from funny_jump.domain.value_object.velocity import Velocity
 from funny_jump.engine.animation.animation_loader import IncrementalAnimationLoader
