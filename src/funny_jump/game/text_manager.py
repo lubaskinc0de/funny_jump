@@ -34,7 +34,7 @@ class TextManager:
         text: str,
         color: str = "White",
         indent: int = 10,
-        has_vertical_indent: bool = False,
+        has_vertical_indent: bool = True,
     ) -> None:
         if has_vertical_indent:
             self.text_coord += self.text_font.get_height()

@@ -4,7 +4,6 @@ import pygame
 from pygame import Surface
 
 from funny_jump.domain.entity.player import Player
-from funny_jump.game.level_manager import LevelManager
 from funny_jump.domain.value_object.bounds import Bounds
 from funny_jump.domain.value_object.velocity import Velocity
 from funny_jump.engine.animation.animation_loader import IncrementalAnimationLoader
@@ -12,6 +11,7 @@ from funny_jump.engine.animation.animation_manager import Animation, AnimationId
 from funny_jump.engine.asset_manager import AssetManager
 from funny_jump.engine.resource_loader.base import ResourceLoader
 from funny_jump.game.collision_manager import CollisionManager
+from funny_jump.game.level_manager import LevelManager
 from funny_jump.game.path_to_assets import Asset
 from funny_jump.game.platform_manager import BASIC_PLATFORM_SIZE, PlatformManager
 from funny_jump.game.sprites.player import HOP_ANIMATION_ID, PlayerSounds, PlayerSprite
@@ -23,6 +23,7 @@ class SpriteManager:
         "asset_manager",
         "collision_manager",
         "height",
+        "level_manager",
         "platform_manager",
         "platforms",
         "player",
@@ -39,12 +40,14 @@ class SpriteManager:
         height: int,
         resource_loader: ResourceLoader,
         asset_manager: AssetManager[Asset],
+        level_manager: LevelManager,
     ) -> None:
         self.resource_loader = resource_loader
         self.asset_manager = asset_manager
         self.screen = screen
         self.width = width
         self.height = height
+        self.level_manager = level_manager
 
         sound_loader = pygame.mixer.Sound
         player_jump_sound = self.asset_manager.get_asset(Asset.PLAYER_JUMP_SOUND, sound_loader)
@@ -82,20 +85,24 @@ class SpriteManager:
 
         player_pos = self.width // 2, self.height - 200 - BASIC_PLATFORM_SIZE[1] * 1.6
         self.player_sprite.set_position(*player_pos)
+
         self.all_sprites: pygame.sprite.Group[Any] = pygame.sprite.Group()
-        self.platforms: pygame.sprite.Group[Any] = pygame.sprite.Group()
         self.all_sprites.add(self.player_sprite)
+
+        self.platforms: pygame.sprite.Group[Any] = pygame.sprite.Group()
+
         self.collision_manager = CollisionManager(
             self.player_sprite,
             self.platforms,
             self.player,
         )
 
-        level_manager = LevelManager()
-        current_level = level_manager.get_current_level()
-        platform_moving_speed = 1 if current_level.difficulty == 1 else 0
-
-        platform_moving_speed = 1 # !!!!!!!! TEMP
+        current_level = self.level_manager.get_current_level()
+        platform_moving_speed = 0.0
+        if current_level.difficulty == 1:
+            platform_moving_speed = 1.0
+        elif current_level.difficulty >= 2:
+            platform_moving_speed = 1.5
 
         self.platform_manager = PlatformManager(
             self.platforms,

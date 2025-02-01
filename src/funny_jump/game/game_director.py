@@ -5,8 +5,10 @@ from pygame import Surface
 
 from funny_jump.engine.asset_manager import AssetManager
 from funny_jump.engine.resource_loader.base import ResourceLoader
+from funny_jump.game.level_manager import LevelManager
 from funny_jump.game.path_to_assets import Asset
 from funny_jump.game.screen.end import EndScreen
+from funny_jump.game.screen.intermediate import IntermediateScreen
 from funny_jump.game.screen.main_game import MainGameScreen
 from funny_jump.game.screen.start import StartScreen
 
@@ -19,7 +21,9 @@ class GameDirector:
         "end_screen",
         "fps",
         "height",
+        "intermediate_screen",
         "is_running",
+        "level_manager",
         "main_game_screen",
         "resource_loader",
         "screen",
@@ -48,6 +52,7 @@ class GameDirector:
         self.vsync = vsync
         self.clock = pygame.time.Clock()
         self.is_running = False
+        self.level_manager = LevelManager()
 
     def _init_pygame(self) -> Surface:
         pygame.init()
@@ -85,9 +90,10 @@ class GameDirector:
             terminate=self.terminate,
             fps=self.fps,
             clock=self.clock,
+            level_manager=self.level_manager,
         )
 
-        self.main_game_screen = MainGameScreen(
+        self.intermediate_screen = IntermediateScreen(
             resource_loader=self.resource_loader,
             asset_manager=self.asset_manager,
             screen=self.screen,
@@ -121,8 +127,15 @@ class GameDirector:
         if not self.screen:
             raise RuntimeError("Invoke run_game() first.")
 
+        count_of_levels = len(self.level_manager.levels)
+
         self.start_screen.run()
         self.main_game_screen.run()
+
+        for _ in range(count_of_levels - 1):
+            self.intermediate_screen.run()
+            self.main_game_screen.run()
+
         self.end_screen.run()
 
         self.terminate()

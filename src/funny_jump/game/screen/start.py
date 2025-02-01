@@ -22,7 +22,7 @@ class StartScreen(BaseScreen):
         )
 
         text_render_manager.render_as_logo(logo_text)
-        text_render_manager.render_as_text(intro_text, has_vertical_indent=True)
+        text_render_manager.render_as_text(intro_text)
 
     def _dispatch_events(self, events: list[Event]) -> None:
         for event in events:

@@ -24,7 +24,7 @@ class PlatformManager:
         screen_h: int,
         player_sprite: PlayerSprite,
         asset_manager: AssetManager[Asset],
-        platform_moving_speed: int = 0,
+        platform_moving_speed: float = 0,
     ) -> None:
         self.player_sprite = player_sprite
         self.platforms = platforms
@@ -145,7 +145,7 @@ class PlatformManager:
         self.delta = delta
         for platform_sprite in self.platforms:
             if self.player_sprite.rect.centery <= self.platform_spawn_height:
-                offset = (self.platform_spawn_height - self.player_sprite.rect.centery) * 0.045
+                offset = (self.platform_spawn_height - self.player_sprite.rect.centery) * delta * 3
                 platform_sprite.set_position(platform_sprite.rect.centerx, platform_sprite.rect.centery + offset)
                 if self.get_highest_platform().rect.centery > MAX_PLATFORM_HEIGHT:
                     self.spawn_new_platform()

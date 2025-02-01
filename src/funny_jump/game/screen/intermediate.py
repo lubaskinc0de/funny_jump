@@ -1,6 +1,7 @@
 from collections.abc import Callable
 
 import pygame
+from pygame.event import Event
 
 from funny_jump.engine.asset_manager import AssetManager
 from funny_jump.engine.resource_loader.base import ResourceLoader
@@ -9,7 +10,7 @@ from funny_jump.game.screen.base import BaseScreen
 from funny_jump.game.text_manager import TextManager
 
 
-class EndScreen(BaseScreen):
+class IntermediateScreen(BaseScreen):
     __slots__ = (
         "asset_manager",
         "clock",
@@ -54,20 +55,16 @@ class EndScreen(BaseScreen):
         self.score = score
 
     def render_all(self) -> None:
-        logo_text = "КОНЕЦ"
-        logo_font = pygame.font.Font(None, self.width // 3)
+        logo_text = "Поздравляем!"
+        logo_font = pygame.font.Font(None, self.width // 6)
         logo_font.bold = True
 
-        score_text = f"Ваш результат - {self.score} очков"
-        if self.score == 0:
-            final_text = "Не все получается с первого раза"
-        elif self.score < 50:
-            final_text = "Ваш результат очень неплох!"
-        else:
-            final_text = "Вы достигли отличного результата!"
+        score_text = f"Уровень пройден! Ваш результат - {self.score} очков"
+
         text_font = pygame.font.Font(None, self.width // 11)
 
-        offer_text = "Сыграйте еще раз, чтобы изменить свой результат!"
+        offer_text = "Пора начать следующий уровень!"
+        mouse_text = "Нажмите на любую клавишу мыши, чтобы продолжить"
 
         text_render_manager = TextManager(
             text_font=text_font,
@@ -76,7 +73,16 @@ class EndScreen(BaseScreen):
             screen=self.screen,
         )
 
-        text_render_manager.render_as_logo(logo_text, color="RED")
+        text_render_manager.render_as_logo(logo_text)
         text_render_manager.render_as_text(score_text)
-        text_render_manager.render_as_text(final_text)
         text_render_manager.render_as_text(offer_text)
+        text_render_manager.render_as_text(mouse_text)
+
+    def _dispatch_events(self, events: list[Event]) -> None:
+        for event in events:
+            match event.type:
+                case pygame.QUIT:
+                    self.is_running = False
+                    self.terminate()
+                case pygame.MOUSEBUTTONDOWN:
+                    self.is_running = False
