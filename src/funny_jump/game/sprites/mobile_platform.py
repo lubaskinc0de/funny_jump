@@ -15,7 +15,7 @@ class MobilePlatformSprite(BasicPlatformSprite):
             platform=platform,
             image=image,
             size=size,
-            )
+        )
         self.platform: MobilePlatform = platform
 
     def update(self, delta: float) -> None:

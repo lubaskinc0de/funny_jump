@@ -19,12 +19,12 @@ VSYNC = True
 def pygame_main(_argv: list[str]) -> None:
     resource_loader = ImportLibResourceLoader(files(funny_jump.game.assets))
     asset_manager = AssetManager(loader=resource_loader, path_to_assets=ASSET_PATH)
-    
+
     game_fps = FPS
-    
-    if _argv[0].isdigit():
+
+    if _argv and _argv[0] and _argv[0].isdigit():
         game_fps = int(_argv[0])
-        
+
     director = GameDirector(
         fps=game_fps,
         width=WIDTH,

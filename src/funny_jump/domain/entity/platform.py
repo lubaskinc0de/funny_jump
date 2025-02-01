@@ -48,6 +48,7 @@ class MobilePlatform(Platform):
         "is_alive",
         "default_center_x",
     )
+
     def __init__(
         self,
         screen_h: int,
@@ -55,10 +56,10 @@ class MobilePlatform(Platform):
         velocity: Velocity,
         bounds: Bounds,
         is_alive: bool = True,
-        ) -> None:
+    ) -> None:
         self.screen_h = screen_h
         self.screen_w = screen_w
-        self.velocity= velocity
+        self.velocity = velocity
         self.bounds = bounds
         self.is_alive = is_alive
         self.default_center_x: int = bounds.center_x
@@ -71,7 +72,7 @@ class MobilePlatform(Platform):
             abs(self.bounds.center_x - self.default_center_x + platform_shift) >= self.screen_w // 2
             or self.screen_w * 0.1 > self.bounds.center_x + platform_shift
             or self.bounds.center_x + platform_shift > self.screen_w * 0.9
-            ):
+        ):
             self.velocity.direction_x = -self.velocity.direction_x
             platform_shift = -platform_shift
 
