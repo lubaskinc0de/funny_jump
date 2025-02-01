@@ -5,14 +5,14 @@ from pathlib import Path
 import pygame
 from pygame.sprite import Sprite
 
-from funny_jump.domain.entity.platform import BasicPlatform
+from funny_jump.domain.entity.platform import Platform
 from funny_jump.game.sprites.platform import PlatformSprite
 
 
 class BasicPlatformSprite(Sprite, PlatformSprite):
     def __init__(
         self,
-        platform: BasicPlatform,
+        platform: Platform,
         image: Path,
         size: tuple[int, int],
     ) -> None:
@@ -27,7 +27,7 @@ class BasicPlatformSprite(Sprite, PlatformSprite):
         img = pygame.transform.scale(img, size)
         self.image = img
         self.rect = self.image.get_rect()
-        self.platform: BasicPlatform = platform
+        self.platform: Platform = platform
         self.platform.bounds.height = self.rect.height
         self.platform.bounds.width = self.rect.width
         self.delta: float
