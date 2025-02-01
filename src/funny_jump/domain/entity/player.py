@@ -5,7 +5,7 @@ from funny_jump.domain.value_object.bounds import Bounds
 from funny_jump.domain.value_object.velocity import Velocity
 
 SPEED = 8 * 60
-JUMP_STRENGTH = 16 * 60
+JUMP_STRENGTH = 14 * 60
 GRAVITY = 42 * 60
 
 
@@ -35,7 +35,7 @@ class Player:
         self.velocity.direction_x = 1
 
     def jump(self) -> None:
-        if self.is_jumping:
+        if self.is_jumping or not self.on_ground:
             return
 
         self.velocity.y = -self.jump_strength

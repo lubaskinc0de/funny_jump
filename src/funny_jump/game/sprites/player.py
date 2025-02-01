@@ -83,6 +83,7 @@ class PlayerSprite(Sprite):
         keys_pressed = pygame.key.get_pressed()
         self.handle_keys_down(keys_pressed)
 
+        self.player.jump()
         self.player.set_delta(delta)
         self.player.update()
         self.set_position_by_player()
@@ -114,6 +115,3 @@ class PlayerSprite(Sprite):
             self.move_left()
         elif keys_pressed[pygame.K_RIGHT]:
             self.move_right()
-
-        if keys_pressed[pygame.K_SPACE]:
-            self.jump()

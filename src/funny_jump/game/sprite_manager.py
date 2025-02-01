@@ -78,7 +78,7 @@ class SpriteManager:
         self.player_sprite = PlayerSprite(
             self.player,
             self.asset_manager.get_asset_path(Asset.PLAYER_STATIC_SPRITE),
-            (64, 64),
+            (54, 54),
             animation_manager=player_animation_manager,
             sounds=player_sounds,
         )
