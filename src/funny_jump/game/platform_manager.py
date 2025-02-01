@@ -104,6 +104,7 @@ class PlatformManager:
         highest_platform = self.get_highest_platform()
         next_platform_interval_x = 0
         center_x = highest_platform.platform.bounds.center_x
+
         while True:
             next_platform_interval_x = BASIC_PLATFORM_SIZE[0] * randint(-3, 3)
             center_x = highest_platform.platform.bounds.center_x + next_platform_interval_x
@@ -115,7 +116,7 @@ class PlatformManager:
                 break
 
         next_platform_interval_y = self.player_sprite.player.max_jump_height
-        center_y = highest_platform.platform.bounds.center_y - next_platform_interval_y
+        center_y = highest_platform.platform.bounds.center_y - next_platform_interval_y - randint(-100, 0)
         return center_x, center_y
 
     def spawn_initial_platforms(self) -> None:
