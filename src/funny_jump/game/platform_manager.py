@@ -150,7 +150,7 @@ class PlatformManager:
                 if (self.player_sprite.player.on_ground is True) or self.player_sprite.player.velocity.y > 0:
                     break
 
-                offset = (self.platform_spawn_height - self.player_sprite.rect.centery) * delta * 3
+                offset = (self.platform_spawn_height - self.player_sprite.rect.centery) * delta * 2
                 platform_sprite.set_position(platform_sprite.rect.centerx, platform_sprite.rect.centery + offset)
 
                 if self.get_highest_platform().rect.centery > MAX_PLATFORM_HEIGHT:
