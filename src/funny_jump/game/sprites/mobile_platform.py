@@ -17,3 +17,9 @@ class MobilePlatformSprite(BasicPlatformSprite):
             size=size,
             )
         self.platform: MobilePlatform = platform
+
+    def update(self, delta: float) -> None:
+        self.delta = delta
+        self.platform.set_delta(delta)
+        self.platform.update()
+        self.set_position_by_platform()

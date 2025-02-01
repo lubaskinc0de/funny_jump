@@ -62,9 +62,10 @@ class MobilePlatform(Platform):
         self.bounds = bounds
         self.is_alive = is_alive
         self.default_center_x: int = bounds.center_x
+        self.delta: float = 0.0
 
     def side_move(self) -> None:
-        platform_shift = round(self.velocity.x * self.velocity.direction_x)
+        platform_shift = round(self.velocity.x * self.velocity.direction_x * self.delta)
 
         if (
             abs(self.bounds.center_x - self.default_center_x + platform_shift) >= self.screen_w // 2
@@ -81,6 +82,9 @@ class MobilePlatform(Platform):
 
     def death(self) -> None:
         self.is_alive = False
+
+    def set_delta(self, delta: float) -> None:
+        self.delta = delta
 
     def update(self) -> None:
         self.side_move()
