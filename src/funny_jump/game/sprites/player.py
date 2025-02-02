@@ -3,10 +3,10 @@ from pathlib import Path
 
 import pygame
 from pygame.key import ScancodeWrapper
-from pygame.sprite import Sprite
 
 from funny_jump.domain.entity.player import Player
 from funny_jump.engine.animation.animation_manager import AnimationId, AnimationManager
+from funny_jump.engine.sprite import BoundedSprite
 
 HOP_ANIMATION_ID = AnimationId("PLAYER_HOP")
 
@@ -16,7 +16,7 @@ class PlayerSounds:
     jump: pygame.mixer.Sound
 
 
-class PlayerSprite(Sprite):
+class PlayerSprite(BoundedSprite):
     def __init__(
         self,
         player: Player,

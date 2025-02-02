@@ -3,13 +3,13 @@ from __future__ import annotations
 from pathlib import Path
 
 import pygame
-from pygame.sprite import Sprite
 
 from funny_jump.domain.entity.platform import Platform
+from funny_jump.engine.sprite import BoundedSprite
 from funny_jump.game.sprites.platform import PlatformSprite
 
 
-class BasicPlatformSprite(Sprite, PlatformSprite):
+class BasicPlatformSprite(BoundedSprite, PlatformSprite):
     def __init__(
         self,
         platform: Platform,

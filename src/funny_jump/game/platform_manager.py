@@ -148,7 +148,7 @@ class PlatformManager:
 
         for platform_sprite in self.platforms:
             if self.player_sprite.rect.centery <= self.platform_spawn_height:
-                offset = (self.platform_spawn_height - self.player_sprite.rect.centery) * 0.0345 # delta * 2
+                offset = (self.platform_spawn_height - self.player_sprite.rect.centery) * delta * 2
                 platform_sprite.set_position(platform_sprite.rect.centerx, platform_sprite.rect.centery + offset)
 
                 if self.get_highest_platform().rect.centery > MAX_PLATFORM_HEIGHT:
