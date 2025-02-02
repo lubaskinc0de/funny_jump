@@ -1,3 +1,4 @@
+import random
 from random import randint
 from typing import Literal
 
@@ -31,7 +32,7 @@ class PlatformManager:
         self.screen_w = screen_w
         self.screen_h = screen_h
         self.asset_manager = asset_manager
-        self.platform_spawn_height = self.screen_h // 2
+        self.platform_spawn_height = (self.screen_h // 2)
         self.platform_moving_speed = platform_moving_speed
         self.delta: float = 0.0
         self.spawn_initial_platforms()
@@ -61,7 +62,7 @@ class PlatformManager:
                 size=BASIC_PLATFORM_SIZE,
             )
         else:
-            platform_x_speed = BASIC_PLATFORM_SIZE[0] * self.platform_moving_speed * 3.5
+            platform_x_speed = BASIC_PLATFORM_SIZE[0] * self.platform_moving_speed * 2.5
             platform_x_direction: Literal[-1, 1] = 1 if randint(-2, 1) >= 0 else -1
             moving_platform = MobilePlatform(
                 screen_h=self.screen_h,
@@ -116,7 +117,7 @@ class PlatformManager:
                 break
 
         next_platform_interval_y = self.player_sprite.player.max_jump_height
-        center_y = highest_platform.platform.bounds.center_y - next_platform_interval_y - randint(-100, 0)
+        center_y = highest_platform.platform.bounds.center_y - next_platform_interval_y - randint(-100, -10)
         return center_x, center_y
 
     def spawn_initial_platforms(self) -> None:
@@ -139,7 +140,7 @@ class PlatformManager:
 
         platform_moves = False
         if self.platform_moving_speed:
-            platform_moves = randint(1, 100) <= 25
+            platform_moves = random.random() < 0.1
 
         self.spawn_platform(center_x, center_y, platform_moves)
 
@@ -147,9 +148,15 @@ class PlatformManager:
         self.delta = delta
 
         for platform_sprite in self.platforms:
-            if self.player_sprite.rect.centery <= self.platform_spawn_height:
-                offset = (self.platform_spawn_height - self.player_sprite.rect.centery) * delta * 2
-                platform_sprite.set_position(platform_sprite.rect.centerx, platform_sprite.rect.centery + offset)
+            border = self.platform_spawn_height - self.player_sprite.player.max_jump_height
+            if self.player_sprite.rect.centery <= border:
+                offset_y = (self.platform_spawn_height - self.player_sprite.rect.centery) * delta * 1.5
+                new_position = (
+                    platform_sprite.rect.centerx,
+                    platform_sprite.rect.centery + offset_y,
+                )
+
+                platform_sprite.set_position(*new_position)
 
                 if self.get_highest_platform().rect.centery > MAX_PLATFORM_HEIGHT:
                     self.spawn_new_platform()
