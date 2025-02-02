@@ -34,12 +34,13 @@ class Player:
     def move_right(self) -> None:
         self.velocity.direction_x = 1
 
-    def jump(self) -> None:
+    def jump(self) -> bool:
         if self.is_jumping or not self.on_ground:
-            return
+            return False
 
         self.velocity.y = -self.jump_strength
         self.is_jumping = True
+        return True
 
     def _process_gravity(self) -> None:
         self.velocity.y += self.gravity * self.delta

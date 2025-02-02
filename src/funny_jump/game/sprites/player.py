@@ -83,7 +83,7 @@ class PlayerSprite(BoundedSprite):
         keys_pressed = pygame.key.get_pressed()
         self.handle_keys_down(keys_pressed)
 
-        self.player.jump()
+        self.jump()
         self.player.set_delta(delta)
         self.player.update()
         self.set_position_by_player()
@@ -106,9 +106,9 @@ class PlayerSprite(BoundedSprite):
         self.player.move_right()
 
     def jump(self) -> None:
-        self.player.jump()
-        self.animation_manager.apply(self, HOP_ANIMATION_ID)
-        self.sounds.jump.play()
+        if self.player.jump():
+            self.animation_manager.apply(self, HOP_ANIMATION_ID)
+            self.sounds.jump.play()
 
     def handle_keys_down(self, keys_pressed: ScancodeWrapper) -> None:
         if keys_pressed[pygame.K_LEFT]:

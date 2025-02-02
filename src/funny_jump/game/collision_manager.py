@@ -51,8 +51,8 @@ class CollisionManager:
 
         for platform_sprite in collide:
             platform_rect = platform_sprite.rect
-            if (self.player_sprite.prev_pos.bottom - 1 <= platform_rect.top) and (
-                platform_rect.top - 1 < player_rect.bottom
+            if (self.player_sprite.prev_pos.bottom <= platform_rect.top) and (
+                platform_rect.top < player_rect.bottom
             ):
                 self.player_sprite.set_position(
                     player_rect.centerx,

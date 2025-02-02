@@ -114,7 +114,6 @@ class SpriteManager:
         )
 
     def update(self, delta: float) -> None:
-        self.collision_manager.check_collisions()
         self.platform_manager.update(delta=delta)
 
         for platform_sprite in self.platforms:
@@ -125,6 +124,7 @@ class SpriteManager:
                 self.all_sprites.add(platform_sprite)
 
         self.all_sprites.update(delta)
+        self.collision_manager.check_collisions()
 
     def draw(self) -> None:
         self.all_sprites.draw(self.screen)

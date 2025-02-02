@@ -5,11 +5,10 @@ from pathlib import Path
 import pygame
 
 from funny_jump.domain.entity.platform import Platform
-from funny_jump.engine.sprite import BoundedSprite
 from funny_jump.game.sprites.platform import PlatformSprite
 
 
-class BasicPlatformSprite(BoundedSprite, PlatformSprite):
+class BasicPlatformSprite(PlatformSprite):
     def __init__(
         self,
         platform: Platform,
