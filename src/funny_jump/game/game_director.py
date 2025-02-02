@@ -1,6 +1,7 @@
 import sys
 
 import pygame
+import pygame_gui
 from pygame import Surface
 
 from funny_jump.engine.asset_manager import AssetManager
@@ -28,6 +29,7 @@ class GameDirector:
         "resource_loader",
         "screen",
         "start_screen",
+        "ui_manager",
         "vsync",
         "width",
     )
@@ -70,6 +72,11 @@ class GameDirector:
     def run_game(self) -> None:
         self.screen = self._init_pygame()
 
+        self.ui_manager = pygame_gui.UIManager(
+            (self.height, self.width),
+            theme_path="src/funny_jump/game/assets/gui_theme.json",
+            )
+
         self.start_screen = StartScreen(
             resource_loader=self.resource_loader,
             asset_manager=self.asset_manager,
@@ -79,6 +86,7 @@ class GameDirector:
             terminate=self.terminate,
             fps=self.fps,
             clock=self.clock,
+            ui_manager=self.ui_manager,
         )
 
         self.main_game_screen = MainGameScreen(
@@ -102,6 +110,8 @@ class GameDirector:
             terminate=self.terminate,
             fps=self.fps,
             clock=self.clock,
+            ui_manager=self.ui_manager,
+            level_manager=self.level_manager,
         )
 
         self.end_screen = EndScreen(
@@ -130,12 +140,8 @@ class GameDirector:
         count_of_levels = len(self.level_manager.levels)
 
         self.start_screen.run()
+        self.intermediate_screen.run()
         self.main_game_screen.run()
-
-        for _ in range(count_of_levels - 1):
-            self.intermediate_screen.run()
-            self.main_game_screen.run()
-
         self.end_screen.run()
 
         self.terminate()

@@ -2,6 +2,13 @@ import pygame
 
 
 class TextManager:
+    __slots__ = (
+        "logo_font",
+        "screen",
+        "screen_width",
+        "text_coord",
+        "text_font",
+    )
     def __init__(
         self,
         text_font: pygame.font.Font,

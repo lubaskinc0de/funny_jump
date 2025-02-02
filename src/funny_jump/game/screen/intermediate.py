@@ -1,16 +1,20 @@
 from collections.abc import Callable
 
 import pygame
+import pygame_gui
 from pygame.event import Event
 
 from funny_jump.engine.asset_manager import AssetManager
 from funny_jump.engine.resource_loader.base import ResourceLoader
+from funny_jump.game.button import Button
+from funny_jump.game.button_manager import ButtonManager
+from funny_jump.game.level_manager import LevelManager
 from funny_jump.game.path_to_assets import Asset
-from funny_jump.game.screen.base import BaseScreen
+from funny_jump.game.screen.base import ButtonScreen
 from funny_jump.game.text_manager import TextManager
 
 
-class IntermediateScreen(BaseScreen):
+class IntermediateScreen(ButtonScreen):
     __slots__ = (
         "asset_manager",
         "clock",
@@ -18,6 +22,8 @@ class IntermediateScreen(BaseScreen):
         "get_bg",
         "height",
         "is_running",
+        "level_buttons",
+        "level_manager",
         "logo_font_size",
         "resource_loader",
         "score",
@@ -26,6 +32,7 @@ class IntermediateScreen(BaseScreen):
         "text_coord",
         "text_font_size",
         "text_render_manager",
+        "ui_manager",
         "width",
     )
 
@@ -41,6 +48,8 @@ class IntermediateScreen(BaseScreen):
         fps: int,
         clock: pygame.time.Clock,
         score: int = 0,
+        ui_manager: pygame_gui.UIManager,
+        level_manager: LevelManager,
     ) -> None:
         super().__init__(
             resource_loader=resource_loader,
@@ -51,20 +60,32 @@ class IntermediateScreen(BaseScreen):
             terminate=terminate,
             fps=fps,
             clock=clock,
+            ui_manager=ui_manager,
         )
         self.score = score
+        self.menu_buttons: tuple[str, pygame_gui.elements.UIButton]
+        self.level_manager = level_manager
 
     def render_all(self) -> None:
-        logo_text = "Поздравляем!"
+        buttons = [
+            Button(str(level_number), f"Уровень {level_number}")
+            for level_number in range(len(self.level_manager.levels))
+            ]
+
+        button_manager = ButtonManager(
+            width=self.width,
+            height=self.height,
+            ui_manager=self.ui_manager,
+        )
+
+        self.level_buttons = button_manager.create_button_menu(buttons=buttons, size=1.5)
+        logo_text = "Выбор уровня"
         logo_font = pygame.font.Font(None, self.width // 6)
         logo_font.bold = True
 
-        score_text = f"Уровень пройден! Ваш результат - {self.score} очков"
+        score_text = f"Уровень пройден! Ваш результат - {self.score} очков" # зарезервировано под score
 
         text_font = pygame.font.Font(None, self.width // 11)
-
-        offer_text = "Пора начать следующий уровень!"
-        mouse_text = "Нажмите на любую клавишу мыши, чтобы продолжить"
 
         text_render_manager = TextManager(
             text_font=text_font,
@@ -74,9 +95,6 @@ class IntermediateScreen(BaseScreen):
         )
 
         text_render_manager.render_as_logo(logo_text)
-        text_render_manager.render_as_text(score_text)
-        text_render_manager.render_as_text(offer_text)
-        text_render_manager.render_as_text(mouse_text)
 
     def _dispatch_events(self, events: list[Event]) -> None:
         for event in events:
@@ -84,5 +102,7 @@ class IntermediateScreen(BaseScreen):
                 case pygame.QUIT:
                     self.is_running = False
                     self.terminate()
-                case pygame.MOUSEBUTTONDOWN:
+                case pygame_gui.UI_BUTTON_PRESSED:
+                    self.level_manager.change_level(int(self.level_buttons[event.ui_element]))
                     self.is_running = False
+            self.ui_manager.process_events(event)

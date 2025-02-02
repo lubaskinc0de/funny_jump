@@ -15,13 +15,11 @@ class LevelManager:
     def _init_levels(self) -> None:
         first_level = Level(name="Trial", difficulty=0)
         second_level = Level(name="Base", difficulty=1)
-        third_level = Level(name="Hard", difficulty=2)
 
-        self.levels = [first_level, second_level, third_level]
+        self.levels = [first_level, second_level]
 
-    def finish_level(self) -> None:
-        self.levels[self.current_level_index].passed = True
-        self.current_level_index += 1
+    def change_level(self, level_index: int) -> None:
+        self.current_level_index = level_index
 
     def get_current_level(self) -> Level:
         return self.levels[self.current_level_index]

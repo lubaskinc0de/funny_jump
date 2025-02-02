@@ -98,7 +98,7 @@ class SpriteManager:
         )
 
         current_level = self.level_manager.get_current_level()
-        platform_moving_speed = 0.0
+        platform_moving_speed = 0.0 + 1
         if current_level.difficulty == 1:
             platform_moving_speed = 1.0
         elif current_level.difficulty >= 2:

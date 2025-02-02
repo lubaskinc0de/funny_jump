@@ -124,7 +124,8 @@ class PlatformManager:
         center_x = self.screen_w // 2
         center_y = self.screen_h - 200
         self.spawn_platform(center_x, center_y)
-        for _ in range(7):
+        count_of_platforms = self.screen_h // self.player_sprite.player.max_jump_height * 2
+        for _ in range(count_of_platforms):
             while center_x == 0 or center_y == 0 or self.is_overlapping(center_x, center_y):
                 center_x, center_y = self.calculate_new_platform_position()
             self.spawn_platform(center_x, center_y)
@@ -138,7 +139,7 @@ class PlatformManager:
 
         platform_moves = False
         if self.platform_moving_speed:
-            platform_moves = randint(1, 100) - self.platform_moving_speed * 5 <= 10
+            platform_moves = randint(1, 100) <= 25
 
         self.spawn_platform(center_x, center_y, platform_moves)
 
@@ -147,10 +148,7 @@ class PlatformManager:
 
         for platform_sprite in self.platforms:
             if self.player_sprite.rect.centery <= self.platform_spawn_height:
-                # if (self.player_sprite.player.on_ground is True) or self.player_sprite.player.velocity.y > 0:
-                #     break
-
-                offset = (self.platform_spawn_height - self.player_sprite.rect.centery) * delta * 2
+                offset = (self.platform_spawn_height - self.player_sprite.rect.centery) * 0.0345 # delta * 2
                 platform_sprite.set_position(platform_sprite.rect.centerx, platform_sprite.rect.centery + offset)
 
                 if self.get_highest_platform().rect.centery > MAX_PLATFORM_HEIGHT:
