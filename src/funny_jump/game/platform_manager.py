@@ -167,7 +167,7 @@ class PlatformManager:
             difficulty_check = self.difficulty_params.all_platforms_y_moving_speed and\
                 self.removed_platforms >= MAX_REMOVED_PLATFORMS_FOR_MOVING_OTHERS
 
-            if (border_check or difficulty_check):
+            if border_check or difficulty_check:
                 if difficulty_check:
                     offset_y = (0.9 * (abs(self.player_sprite.rect.centery - self.screen_h))\
                         + (0.03 * self.screen_h)) * delta * self.difficulty_params.all_platforms_y_moving_speed
