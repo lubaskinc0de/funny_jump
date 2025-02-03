@@ -67,11 +67,10 @@ class IntermediateScreen(ButtonScreen):
         self.level_manager = level_manager
         self.launch_maingame: bool = True
 
-    def render_all(self) -> None:
         buttons = [
             Button(str(level_id), f"Уровень {level.name}")
             for level_id, level in enumerate(self.level_manager.levels)
-            ]
+        ]
 
         button_manager = ButtonManager(
             width=self.width,
@@ -79,8 +78,10 @@ class IntermediateScreen(ButtonScreen):
             ui_manager=self.ui_manager,
         )
 
-        self.level_buttons = button_manager.create_button_menu(buttons=buttons, size=1.5)
+        self.level_buttons = button_manager.create_button_menu(
+            buttons=buttons, size=1.5)
 
+    def render_all(self) -> None:
         logo_text = "Выбор уровня"
         logo_font = pygame.font.Font(None, self.width // 6)
         logo_font.bold = True
@@ -103,6 +104,7 @@ class IntermediateScreen(ButtonScreen):
                     self.is_running = False
                     self.terminate()
                 case pygame_gui.UI_BUTTON_PRESSED:
+                    self.render_all()
                     self.level_manager.change_level(int(self.level_buttons[event.ui_element]))
                     self.is_running = False
                 case pygame.KEYDOWN:

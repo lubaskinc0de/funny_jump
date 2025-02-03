@@ -137,7 +137,6 @@ class GameDirector:
         if not self.screen:
             raise RuntimeError("Invoke run_game() first.")
 
-        self.start_screen.run()
         while True:
             self.intermediate_screen.run()
             if not self.intermediate_screen.launch_maingame:
