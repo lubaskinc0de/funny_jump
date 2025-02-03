@@ -56,7 +56,7 @@ class StartScreen(ButtonScreen):
         )
         self.game_run_button_name = "game_run_button"
         self.quit_button_name = "quit_button"
-        self.menu_buttons: tuple[str, pygame_gui.elements.UIButton]
+        self.menu_buttons: dict[pygame_gui.elements.UIButton, str]
 
     def render_all(self) -> None:
         buttons = [
@@ -97,7 +97,8 @@ class StartScreen(ButtonScreen):
                 case pygame_gui.UI_BUTTON_PRESSED:
                     if self.menu_buttons[event.ui_element] == self.game_run_button_name:
                         self.is_running = False
-                        self.ui_manager.clear_and_reset()
+                        # Библиотека содержит неаннотированную функцию, на что ругается mypy
+                        self.ui_manager.clear_and_reset() # type: ignore
                     elif self.menu_buttons[event.ui_element] == self.quit_button_name:
                         self.is_running = False
                         self.terminate()

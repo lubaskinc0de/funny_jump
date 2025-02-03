@@ -28,7 +28,11 @@ class TextManager:
         text: str,
         color: str = "White",
     ) -> None:
-        string_rendered = self.logo_font.render(text, 1, pygame.Color(color))
+        string_rendered = self.logo_font.render(
+            text,
+            antialias=True,
+            color=pygame.Color(color),
+            )
         intro_rect = string_rendered.get_rect()
         self.text_coord += 10
         intro_rect.top = self.text_coord
@@ -46,13 +50,21 @@ class TextManager:
         if has_vertical_indent:
             self.text_coord += self.text_font.get_height()
 
-        space_width = self.text_font.render(" ", 1, pygame.Color(color)).get_width()
+        space_width = self.text_font.render(
+            " ",
+            antialias=True,
+            color=pygame.Color(color),
+            ).get_width()
         splited_text_with_length: list[list[str, int]] = [["", 0]]  # type: ignore
         counter = 0
 
         for _word in text.split():
             word = " " + _word
-            string_rendered = self.text_font.render(word, 1, pygame.Color(color))
+            string_rendered = self.text_font.render(
+                word,
+                antialias=True,
+                color=pygame.Color(color),
+                )
             word_width = string_rendered.get_width()
 
             if splited_text_with_length[counter][1] + word_width < self.screen_width - indent * 2:
@@ -69,7 +81,11 @@ class TextManager:
         splited_text = [txt[0] for txt in splited_text_with_length]
 
         for text_line in splited_text:
-            string_rendered = self.text_font.render(text_line, 1, pygame.Color(color))
+            string_rendered = self.text_font.render(
+                text_line,
+                antialias=True,
+                color=pygame.Color(color),
+                )
             intro_rect = string_rendered.get_rect()
             self.text_coord += 10
             intro_rect.top = self.text_coord

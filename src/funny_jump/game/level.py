@@ -7,4 +7,4 @@ class Level:
     difficulty: int
 
     def __str__(self) -> str:
-        return f"{self.name=} | {self.difficulty=} {self.passed=}"
+        return f"{self.name=} | {self.difficulty=}"

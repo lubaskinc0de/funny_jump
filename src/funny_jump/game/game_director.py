@@ -137,8 +137,6 @@ class GameDirector:
         if not self.screen:
             raise RuntimeError("Invoke run_game() first.")
 
-        count_of_levels = len(self.level_manager.levels)
-
         self.start_screen.run()
         self.intermediate_screen.run()
         self.main_game_screen.run()

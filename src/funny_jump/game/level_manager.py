@@ -18,8 +18,8 @@ class LevelManager:
 
         self.levels = [first_level, second_level]
 
-    def change_level(self, level_index: int) -> None:
-        self.current_level_index = level_index
+    def change_level(self, level_index: int | None = None) -> None:
+        self.current_level_index = level_index or self.current_level_index + 1
 
     def get_current_level(self) -> Level:
         return self.levels[self.current_level_index]

@@ -88,4 +88,4 @@ class MainGameScreen(BaseScreen):
                 case pygame.QUIT:
                     self.is_running = False
                     # След блок кода нужно будет изменить после добавления механики прохождения уровня
-                    self.level_manager.finish_level()
+                    self.level_manager.change_level()

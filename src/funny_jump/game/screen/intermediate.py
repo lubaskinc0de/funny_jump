@@ -63,7 +63,6 @@ class IntermediateScreen(ButtonScreen):
             ui_manager=ui_manager,
         )
         self.score = score
-        self.menu_buttons: tuple[str, pygame_gui.elements.UIButton]
         self.level_manager = level_manager
 
     def render_all(self) -> None:
@@ -82,8 +81,6 @@ class IntermediateScreen(ButtonScreen):
         logo_text = "Выбор уровня"
         logo_font = pygame.font.Font(None, self.width // 6)
         logo_font.bold = True
-
-        score_text = f"Уровень пройден! Ваш результат - {self.score} очков" # зарезервировано под score
 
         text_font = pygame.font.Font(None, self.width // 11)
 
