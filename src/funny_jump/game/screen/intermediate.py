@@ -69,8 +69,8 @@ class IntermediateScreen(ButtonScreen):
 
     def render_all(self) -> None:
         buttons = [
-            Button(str(level_number), f"Уровень {level_number}")
-            for level_number in range(len(self.level_manager.levels))
+            Button(str(level_id), f"Уровень {level.name}")
+            for level_id, level in enumerate(self.level_manager.levels)
             ]
 
         button_manager = ButtonManager(
