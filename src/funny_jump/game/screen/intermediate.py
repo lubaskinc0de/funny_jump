@@ -65,7 +65,6 @@ class IntermediateScreen(ButtonScreen):
         )
         self.score = score
         self.level_manager = level_manager
-        self.launch_maingame: bool = True
 
         buttons = [
             Button(str(level_id), f"Уровень {level.name}")
@@ -107,8 +106,4 @@ class IntermediateScreen(ButtonScreen):
                     self.render_all()
                     self.level_manager.change_level(int(self.level_buttons[event.ui_element]))
                     self.is_running = False
-                case pygame.KEYDOWN:
-                    if event.key == pygame.K_ESCAPE:
-                        self.is_running = False
-                        self.launch_maingame = False
             self.ui_manager.process_events(event)

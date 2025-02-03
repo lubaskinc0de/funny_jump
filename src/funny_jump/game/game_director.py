@@ -11,7 +11,6 @@ from funny_jump.game.path_to_assets import Asset
 from funny_jump.game.screen.end import EndScreen
 from funny_jump.game.screen.intermediate import IntermediateScreen
 from funny_jump.game.screen.main_game import MainGameScreen
-from funny_jump.game.screen.start import StartScreen
 
 
 class GameDirector:
@@ -77,18 +76,6 @@ class GameDirector:
             theme_path="src/funny_jump/game/assets/gui_theme.json",
             )
 
-        self.start_screen = StartScreen(
-            resource_loader=self.resource_loader,
-            asset_manager=self.asset_manager,
-            screen=self.screen,
-            width=self.width,
-            height=self.height,
-            terminate=self.terminate,
-            fps=self.fps,
-            clock=self.clock,
-            ui_manager=self.ui_manager,
-        )
-
         self.main_game_screen = MainGameScreen(
             resource_loader=self.resource_loader,
             asset_manager=self.asset_manager,
@@ -139,9 +126,4 @@ class GameDirector:
 
         while True:
             self.intermediate_screen.run()
-            if not self.intermediate_screen.launch_maingame:
-                break
             self.main_game_screen.run()
-        self.end_screen.run()
-
-        self.terminate()
