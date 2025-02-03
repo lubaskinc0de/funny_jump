@@ -9,6 +9,7 @@ from funny_jump.game.level_manager import LevelManager
 from funny_jump.game.path_to_assets import Asset
 from funny_jump.game.screen.base import BaseScreen
 from funny_jump.game.sprite_manager import SpriteManager
+from funny_jump.game.text_manager import TextManager
 
 
 class MainGameScreen(BaseScreen):
@@ -65,10 +66,27 @@ class MainGameScreen(BaseScreen):
             level_manager=self.level_manager,
         )
 
+    def render_all(self) -> None:
+        escape_text = "Нажмите Escape для выхода"
+        text_font = pygame.font.Font(None, self.width // 50)
+
+        text_render_manager = TextManager(
+            text_font=text_font,
+            screen_width=self.width,
+            screen=self.screen,
+            text_coord=0,
+        )
+
+        text_render_manager.render_as_text(
+            escape_text,
+            color="Gray10",
+            has_vertical_indent=False)
+
     def _run_main_loop(self) -> None:
         pygame.mixer.music.load(self.asset_manager.get_asset_path(Asset.GAME_BG_MUSIC))
         pygame.mixer.music.play(loops=-1, fade_ms=500)
         pygame.mixer.music.set_volume(0.2)
+
         self.refresh_all_sprites()
         delta = 0.0
         while self.is_running:
@@ -78,6 +96,7 @@ class MainGameScreen(BaseScreen):
             self.load_bg()
 
             self.sprite_manager.draw()
+            self.render_all()
 
             pygame.display.flip()
             delta = self.clock.tick(self.fps) / 1000
@@ -89,3 +108,6 @@ class MainGameScreen(BaseScreen):
                     self.is_running = False
                     # След блок кода нужно будет изменить после добавления механики прохождения уровня
                     self.level_manager.change_level()
+                case pygame.KEYDOWN:
+                    if event.key == pygame.K_ESCAPE:
+                        self.is_running = False

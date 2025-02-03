@@ -98,31 +98,19 @@ class SpriteManager:
         )
 
         current_level = self.level_manager.get_current_level()
-        platform_moving_speed = 1.0
-        if current_level.difficulty == 1:
-            platform_moving_speed = 1.0
-        elif current_level.difficulty >= 2:
-            platform_moving_speed = 1.5
 
         self.platform_manager = PlatformManager(
+            self.all_sprites,
             self.platforms,
             self.width,
             self.height,
             self.player_sprite,
             self.asset_manager,
-            platform_moving_speed=platform_moving_speed,
+            current_level.difficulty_parameters,
         )
 
     def update(self, delta: float) -> None:
         self.platform_manager.update(delta=delta)
-
-        for platform_sprite in self.platforms:
-            if not platform_sprite.platform.is_alive:
-                self.all_sprites.remove(platform_sprite)
-                self.platforms.remove(platform_sprite)
-            elif platform_sprite not in self.all_sprites:
-                self.all_sprites.add(platform_sprite)
-
         self.all_sprites.update(delta)
         self.collision_manager.check_collisions()
 

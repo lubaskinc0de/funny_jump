@@ -1,3 +1,4 @@
+from funny_jump.game.difficulty_parameters import DifficultyParameters
 from funny_jump.game.level import Level
 
 
@@ -13,13 +14,28 @@ class LevelManager:
         self._init_levels()
 
     def _init_levels(self) -> None:
-        first_level = Level(name="Trial", difficulty=0)
-        second_level = Level(name="Base", difficulty=1)
+        first_level = Level(
+            name="Trial",
+            difficulty_parameters=DifficultyParameters(platform_x_moving_chance=0.0),
+            )
+        second_level = Level(
+            name="Base",
+            difficulty_parameters=DifficultyParameters(),
+            )
+        third_level = Level(
+            name="Max",
+            difficulty_parameters=DifficultyParameters(
+                all_platforms_y_moving_speed=0.75,
+                ),
+        )
 
-        self.levels = [first_level, second_level]
+        self.levels = [first_level, second_level, third_level]
 
     def change_level(self, level_index: int | None = None) -> None:
-        self.current_level_index = level_index or self.current_level_index + 1
+        if level_index is None:
+            self.current_level_index = self.current_level_index + 1
+        else:
+            self.current_level_index = level_index
 
     def get_current_level(self) -> Level:
         return self.levels[self.current_level_index]

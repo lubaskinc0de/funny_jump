@@ -22,6 +22,7 @@ class IntermediateScreen(ButtonScreen):
         "get_bg",
         "height",
         "is_running",
+        "launch_maingame",
         "level_buttons",
         "level_manager",
         "logo_font_size",
@@ -64,6 +65,7 @@ class IntermediateScreen(ButtonScreen):
         )
         self.score = score
         self.level_manager = level_manager
+        self.launch_maingame: bool = True
 
     def render_all(self) -> None:
         buttons = [
@@ -78,6 +80,7 @@ class IntermediateScreen(ButtonScreen):
         )
 
         self.level_buttons = button_manager.create_button_menu(buttons=buttons, size=1.5)
+
         logo_text = "Выбор уровня"
         logo_font = pygame.font.Font(None, self.width // 6)
         logo_font.bold = True
@@ -102,4 +105,8 @@ class IntermediateScreen(ButtonScreen):
                 case pygame_gui.UI_BUTTON_PRESSED:
                     self.level_manager.change_level(int(self.level_buttons[event.ui_element]))
                     self.is_running = False
+                case pygame.KEYDOWN:
+                    if event.key == pygame.K_ESCAPE:
+                        self.is_running = False
+                        self.launch_maingame = False
             self.ui_manager.process_events(event)

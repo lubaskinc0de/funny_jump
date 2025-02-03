@@ -1,6 +1,13 @@
 import pygame
 
 
+class LogoFontMissingError(Exception):
+    ...
+
+class TextFontMissingError(Exception):
+    ...
+
+
 class TextManager:
     __slots__ = (
         "logo_font",
@@ -11,11 +18,11 @@ class TextManager:
     )
     def __init__(
         self,
-        text_font: pygame.font.Font,
-        logo_font: pygame.font.Font,
         screen_width: int,
         screen: pygame.Surface,
         text_coord: int = 50,
+        text_font: pygame.font.Font | None = None,
+        logo_font: pygame.font.Font | None = None,
     ) -> None:
         self.text_font = text_font
         self.logo_font = logo_font
@@ -28,6 +35,9 @@ class TextManager:
         text: str,
         color: str = "White",
     ) -> None:
+        if not self.logo_font:
+            raise LogoFontMissingError
+
         string_rendered = self.logo_font.render(
             text,
             antialias=True,
@@ -47,6 +57,9 @@ class TextManager:
         indent: int = 10,
         has_vertical_indent: bool = True,
     ) -> None:
+        if not self.text_font:
+            raise TextFontMissingError
+
         if has_vertical_indent:
             self.text_coord += self.text_font.get_height()
 

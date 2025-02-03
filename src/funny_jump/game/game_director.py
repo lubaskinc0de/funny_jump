@@ -138,8 +138,11 @@ class GameDirector:
             raise RuntimeError("Invoke run_game() first.")
 
         self.start_screen.run()
-        self.intermediate_screen.run()
-        self.main_game_screen.run()
+        while True:
+            self.intermediate_screen.run()
+            if not self.intermediate_screen.launch_maingame:
+                break
+            self.main_game_screen.run()
         self.end_screen.run()
 
         self.terminate()

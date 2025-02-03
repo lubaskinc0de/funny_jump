@@ -8,6 +8,7 @@ from funny_jump.domain.entity.platform import BasicPlatform, MobilePlatform
 from funny_jump.domain.value_object.bounds import Bounds
 from funny_jump.domain.value_object.velocity import Velocity
 from funny_jump.engine.asset_manager import AssetManager
+from funny_jump.game.difficulty_parameters import DifficultyParameters
 from funny_jump.game.path_to_assets import Asset
 from funny_jump.game.sprites.basic_platform import BasicPlatformSprite
 from funny_jump.game.sprites.mobile_platform import MobilePlatformSprite
@@ -15,26 +16,31 @@ from funny_jump.game.sprites.player import PlayerSprite
 
 BASIC_PLATFORM_SIZE = (100, 30)
 MAX_PLATFORM_HEIGHT = -200
+MAX_REMOVED_PLATFORMS_FOR_MOVING_OTHERS = 10
+PLATFROM_Y_MOVE_MULTIPLIER = 1.5
 
 
 class PlatformManager:
     def __init__(
         self,
+        all_sprites: pygame.sprite.Group,  # type: ignore
         platforms: pygame.sprite.Group,  # type: ignore
         screen_w: int,
         screen_h: int,
         player_sprite: PlayerSprite,
         asset_manager: AssetManager[Asset],
-        platform_moving_speed: float = 0,
+        difficulty_params: DifficultyParameters,
     ) -> None:
         self.player_sprite = player_sprite
+        self.all_sprites = all_sprites
         self.platforms = platforms
         self.screen_w = screen_w
         self.screen_h = screen_h
         self.asset_manager = asset_manager
         self.platform_spawn_height = (self.screen_h // 2)
-        self.platform_moving_speed = platform_moving_speed
+        self.difficulty_params = difficulty_params
         self.delta: float = 0.0
+        self.removed_platforms: int = 0
         self.spawn_initial_platforms()
 
     def get_highest_platform(self) -> BasicPlatformSprite:
@@ -62,7 +68,7 @@ class PlatformManager:
                 size=BASIC_PLATFORM_SIZE,
             )
         else:
-            platform_x_speed = BASIC_PLATFORM_SIZE[0] * self.platform_moving_speed * 2.5
+            platform_x_speed = BASIC_PLATFORM_SIZE[0] * self.difficulty_params.platform_x_moving_speed
             platform_x_direction: Literal[-1, 1] = 1 if randint(-2, 1) >= 0 else -1
             moving_platform = MobilePlatform(
                 screen_h=self.screen_h,
@@ -138,19 +144,37 @@ class PlatformManager:
         while center_x == 0 or center_y == 0 or self.is_overlapping(center_x, center_y):
             center_x, center_y = self.calculate_new_platform_position()
 
-        platform_moves = False
-        if self.platform_moving_speed:
-            platform_moves = random.random() < 0.1
+        platform_moves = random.random() < self.difficulty_params.platform_x_moving_chance
 
         self.spawn_platform(center_x, center_y, platform_moves)
 
-    def update(self, delta: float) -> None:
-        self.delta = delta
+    def sync_sprite_groups(self) -> None:
+        for platform_sprite in self.platforms:
+            if not platform_sprite.platform.is_alive:
+                self.all_sprites.remove(platform_sprite)
+                self.platforms.remove(platform_sprite)
+                self.removed_platforms += 1
+            elif platform_sprite not in self.all_sprites:
+                self.all_sprites.add(platform_sprite)
 
+    def update(self, delta: float) -> None:
+        self.sync_sprite_groups()
+        self.delta = delta
         for platform_sprite in self.platforms:
             border = self.platform_spawn_height - self.player_sprite.player.max_jump_height
-            if self.player_sprite.rect.centery <= border:
-                offset_y = (self.platform_spawn_height - self.player_sprite.rect.centery) * delta * 1.5
+            border_check = self.player_sprite.rect.centery <= border
+
+            difficulty_check = self.difficulty_params.all_platforms_y_moving_speed and\
+                self.removed_platforms >= MAX_REMOVED_PLATFORMS_FOR_MOVING_OTHERS
+
+            if (border_check or difficulty_check):
+                if difficulty_check:
+                    offset_y = (0.9 * (abs(self.player_sprite.rect.centery - self.screen_h))\
+                        + (0.03 * self.screen_h)) * delta * self.difficulty_params.all_platforms_y_moving_speed
+                else:
+                    offset_y = (self.platform_spawn_height - self.player_sprite.rect.centery)\
+                        * delta * PLATFROM_Y_MOVE_MULTIPLIER
+
                 new_position = (
                     platform_sprite.rect.centerx,
                     platform_sprite.rect.centery + offset_y,

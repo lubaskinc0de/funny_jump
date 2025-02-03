@@ -1,10 +1,9 @@
 from dataclasses import dataclass
 
+from funny_jump.game.difficulty_parameters import DifficultyParameters
+
 
 @dataclass(slots=True)
 class Level:
     name: str
-    difficulty: int
-
-    def __str__(self) -> str:
-        return f"{self.name=} | {self.difficulty=}"
+    difficulty_parameters: DifficultyParameters
