@@ -14,7 +14,7 @@ from funny_jump.game.screen.base import ButtonScreen
 from funny_jump.game.text_manager import TextManager
 
 
-class IntermediateScreen(ButtonScreen):
+class LevelChoiceScreen(ButtonScreen):
     __slots__ = (
         "asset_manager",
         "clock",
@@ -78,7 +78,8 @@ class IntermediateScreen(ButtonScreen):
         )
 
         self.level_buttons = button_manager.create_button_menu(
-            buttons=buttons, size=1.5)
+            buttons=buttons, size=1.5
+            )
 
     def render_all(self) -> None:
         logo_text = "Выбор уровня"
