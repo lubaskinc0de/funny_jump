@@ -109,3 +109,29 @@ class TextManager:
             intro_rect.x = indent
             self.text_coord += intro_rect.height
             self.screen.blit(string_rendered, intro_rect)
+
+    def render_as_score(
+        self,
+        score: int | float | str,
+        color: str = "White",
+        horizontal_indent: int = 10,
+        vertical_indent: int = 10,
+        font: pygame.font.Font | None = None,
+    ) -> None:
+        if not self.text_font and not font:
+            raise TextFontMissingError
+
+        # Выше есть проверка на существовании хотя-бы одного шрифта. Но mypy не видит её
+        usable_font: pygame.Font = self.text_font if not font else font # type: ignore
+
+        rendered_score = usable_font.render(
+            str(score),
+            antialias=True,
+            color=pygame.Color(color),
+            )
+        
+        intro_rect = rendered_score.get_rect()
+        intro_rect.top = vertical_indent
+        intro_rect.x = self.screen_width - rendered_score.get_width() - horizontal_indent
+        self.text_coord += intro_rect.height
+        self.screen.blit(rendered_score, intro_rect)
