@@ -21,7 +21,7 @@ class GameDirector:
         "end_screen",
         "fps",
         "height",
-        "intermediate_screen",
+        "level_choice_screen",
         "is_running",
         "level_manager",
         "main_game_screen",
@@ -88,7 +88,7 @@ class GameDirector:
             level_manager=self.level_manager,
         )
 
-        self.intermediate_screen = LevelChoiceScreen(
+        self.level_choice_screen = LevelChoiceScreen(
             resource_loader=self.resource_loader,
             asset_manager=self.asset_manager,
             screen=self.screen,
@@ -125,5 +125,6 @@ class GameDirector:
             raise RuntimeError("Invoke run_game() first.")
 
         while True:
-            self.intermediate_screen.run()
+            self.level_choice_screen.run()
             self.main_game_screen.run()
+            self.end_screen.run()

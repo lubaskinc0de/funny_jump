@@ -4,8 +4,6 @@ import pygame
 from pygame import Surface
 
 from funny_jump.domain.entity.player import Player
-from funny_jump.domain.value_object.bounds import Bounds
-from funny_jump.domain.value_object.velocity import Velocity
 from funny_jump.engine.animation.animation_loader import IncrementalAnimationLoader
 from funny_jump.engine.animation.animation_manager import Animation, AnimationId, AnimationManagerDummy
 from funny_jump.engine.asset_manager import AssetManager
@@ -31,6 +29,7 @@ class SpriteManager:
         "resource_loader",
         "screen",
         "width",
+        "player",
     )
 
     def __init__(
@@ -41,6 +40,7 @@ class SpriteManager:
         resource_loader: ResourceLoader,
         asset_manager: AssetManager[Asset],
         level_manager: LevelManager,
+        player: Player,
     ) -> None:
         self.resource_loader = resource_loader
         self.asset_manager = asset_manager
@@ -48,19 +48,14 @@ class SpriteManager:
         self.width = width
         self.height = height
         self.level_manager = level_manager
-
+        self.player = player
+        
         sound_loader = pygame.mixer.Sound
         player_jump_sound = self.asset_manager.get_asset(Asset.PLAYER_JUMP_SOUND, sound_loader)
         player_jump_sound.set_volume(0.2)
 
         player_sounds = PlayerSounds(
             jump=player_jump_sound,
-        )
-        self.player = Player(
-            screen_h=self.height,
-            screen_w=self.width,
-            bounds=Bounds(),
-            velocity=Velocity(),
         )
         player_hop_anim_loader = IncrementalAnimationLoader(
             self.asset_manager.get_asset_path(Asset.PLAYER_JUMP_FRAMES),

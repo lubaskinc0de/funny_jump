@@ -3,6 +3,8 @@ from collections.abc import Callable
 import pygame
 from pygame.event import Event
 
+from funny_jump.domain.value_object.bounds import Bounds
+from funny_jump.domain.value_object.velocity import Velocity
 from funny_jump.engine.asset_manager import AssetManager
 from funny_jump.engine.resource_loader.base import ResourceLoader
 from funny_jump.game.level_manager import LevelManager
@@ -10,6 +12,7 @@ from funny_jump.game.path_to_assets import Asset
 from funny_jump.game.screen.base import BaseScreen
 from funny_jump.game.sprite_manager import SpriteManager
 from funny_jump.game.text_manager import TextManager
+from funny_jump.domain.entity.player import Player
 
 
 class MainGameScreen(BaseScreen):
@@ -27,6 +30,7 @@ class MainGameScreen(BaseScreen):
         "sprite_manager",
         "terminate",
         "width",
+        "player"
     )
 
     def __init__(
@@ -55,8 +59,15 @@ class MainGameScreen(BaseScreen):
         self.sprite_manager: SpriteManager
         self.level_manager = level_manager
         self.is_running = False
+        self.player: Player
 
     def refresh_all_sprites(self) -> None:
+        self.player = Player(
+            screen_h=self.height,
+            screen_w=self.width,
+            bounds=Bounds(),
+            velocity=Velocity(),
+        )
         self.sprite_manager = SpriteManager(
             screen=self.screen,
             width=self.width,
@@ -64,6 +75,7 @@ class MainGameScreen(BaseScreen):
             resource_loader=self.resource_loader,
             asset_manager=self.asset_manager,
             level_manager=self.level_manager,
+            player=self.player,
         )
 
     def render_all(self) -> None:
@@ -88,11 +100,17 @@ class MainGameScreen(BaseScreen):
         pygame.mixer.music.set_volume(0.2)
 
         self.refresh_all_sprites()
+        
         delta = 0.0
         while self.is_running:
             self._dispatch_events(pygame.event.get())
             self.sprite_manager.update(delta)
 
+            print(self.player.health)
+            
+            if self.player.health <= 0:
+                break
+            
             self.load_bg()
 
             self.sprite_manager.draw()
@@ -106,8 +124,7 @@ class MainGameScreen(BaseScreen):
             match event.type:
                 case pygame.QUIT:
                     self.is_running = False
-                    # След блок кода нужно будет изменить после добавления механики прохождения уровня
-                    self.level_manager.change_level()
+                    self.terminate()
                 case pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
                         self.is_running = False

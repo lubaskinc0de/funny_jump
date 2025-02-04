@@ -1,6 +1,7 @@
 from collections.abc import Callable
 
 import pygame
+import pygame_gui
 
 from funny_jump.engine.asset_manager import AssetManager
 from funny_jump.engine.resource_loader.base import ResourceLoader
@@ -80,3 +81,14 @@ class EndScreen(BaseScreen):
         text_render_manager.render_as_text(score_text)
         text_render_manager.render_as_text(final_text)
         text_render_manager.render_as_text(offer_text)
+
+    def _dispatch_events(self, events: list[pygame.Event]) -> None:
+        for event in events:
+            match event.type:
+                case pygame.QUIT:
+                    self.is_running = False
+                    # След блок кода нужно будет изменить после добавления механики прохождения уровня
+                    self.terminate()
+                case pygame.KEYDOWN:
+                    if event.key == pygame.K_ESCAPE:
+                        self.is_running = False
