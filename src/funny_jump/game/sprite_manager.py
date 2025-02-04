@@ -104,6 +104,10 @@ class SpriteManager:
             current_level.difficulty_parameters,
         )
 
+    @property
+    def player_score(self) -> int:
+        return self.platform_manager.score
+
     def update(self, delta: float) -> None:
         self.platform_manager.update(delta=delta)
         self.all_sprites.update(delta)

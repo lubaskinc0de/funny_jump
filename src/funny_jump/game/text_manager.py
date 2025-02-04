@@ -1,11 +1,14 @@
 import pygame
 
+from funny_jump.game.exception.base import BaseError
 
-class LogoFontMissingError(Exception):
-    ...
 
-class TextFontMissingError(Exception):
-    ...
+class LogoFontMissingError(BaseError):
+    MESSAGE = "Не найден шрифт лого"
+
+
+class TextFontMissingError(BaseError):
+    MESSAGE = "Не найден шрифт"
 
 
 class TextManager:
@@ -16,6 +19,7 @@ class TextManager:
         "text_coord",
         "text_font",
     )
+
     def __init__(
         self,
         screen_width: int,
@@ -42,7 +46,7 @@ class TextManager:
             text,
             antialias=True,
             color=pygame.Color(color),
-            )
+        )
         intro_rect = string_rendered.get_rect()
         self.text_coord += 10
         intro_rect.top = self.text_coord
@@ -62,7 +66,7 @@ class TextManager:
             raise TextFontMissingError
 
         # Выше есть проверка на существовании хотя-бы одного шрифта. Но mypy не видит её
-        usable_font: pygame.Font = self.text_font if not font else font # type: ignore
+        usable_font: pygame.Font = self.text_font if not font else font  # type: ignore
 
         if has_vertical_indent:
             self.text_coord += usable_font.get_height()
@@ -71,7 +75,7 @@ class TextManager:
             " ",
             antialias=True,
             color=pygame.Color(color),
-            ).get_width()
+        ).get_width()
         splited_text_with_length: list[list[str, int]] = [["", 0]]  # type: ignore
         counter = 0
 
@@ -81,7 +85,7 @@ class TextManager:
                 word,
                 antialias=True,
                 color=pygame.Color(color),
-                )
+            )
             word_width = string_rendered.get_width()
 
             if splited_text_with_length[counter][1] + word_width < self.screen_width - indent * 2:
@@ -102,7 +106,7 @@ class TextManager:
                 text_line,
                 antialias=True,
                 color=pygame.Color(color),
-                )
+            )
             intro_rect = string_rendered.get_rect()
             self.text_coord += 10
             intro_rect.top = self.text_coord
@@ -113,7 +117,7 @@ class TextManager:
     def render_as_score(
         self,
         score: float | str,
-        color: str = "White",
+        color: str = "green",
         horizontal_indent: int = 10,
         vertical_indent: int = 10,
         font: pygame.font.Font | None = None,
@@ -122,13 +126,13 @@ class TextManager:
             raise TextFontMissingError
 
         # Выше есть проверка на существовании хотя-бы одного шрифта. Но mypy не видит её
-        usable_font: pygame.Font = self.text_font if not font else font # type: ignore
+        usable_font: pygame.Font = self.text_font if not font else font  # type: ignore
 
         rendered_score = usable_font.render(
             str(score),
             antialias=True,
             color=pygame.Color(color),
-            )
+        )
 
         intro_rect = rendered_score.get_rect()
         intro_rect.top = vertical_indent

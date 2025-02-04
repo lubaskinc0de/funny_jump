@@ -10,6 +10,7 @@ from funny_jump.engine.asset_manager import AssetManager
 from funny_jump.engine.resource_loader.base import ResourceLoader
 from funny_jump.game.level_manager import LevelManager
 from funny_jump.game.path_to_assets import Asset
+from funny_jump.game.score.score_storage import ScoreStorage
 from funny_jump.game.screen.base import BaseScreen
 from funny_jump.game.sprite_manager import SpriteManager
 from funny_jump.game.text_manager import TextManager
@@ -28,6 +29,7 @@ class MainGameScreen(BaseScreen):
         "player",
         "resource_loader",
         "score",
+        "score_storage",
         "screen",
         "sprite_manager",
         "terminate",
@@ -46,7 +48,7 @@ class MainGameScreen(BaseScreen):
         clock: pygame.time.Clock,
         terminate: Callable[[], None],
         level_manager: LevelManager,
-        score: int = 0,
+        score_storage: ScoreStorage,
     ) -> None:
         super().__init__(
             resource_loader=resource_loader,
@@ -62,7 +64,8 @@ class MainGameScreen(BaseScreen):
         self.level_manager = level_manager
         self.is_running = False
         self.player: Player
-        self.score = score
+        self.score_storage = score_storage
+        self.score = 0
 
     def refresh_all_sprites(self) -> None:
         self.player = Player(
@@ -94,14 +97,14 @@ class MainGameScreen(BaseScreen):
 
         text_render_manager.render_as_text(
             escape_text,
-            color="Gray10",
+            color="white",
             has_vertical_indent=False,
-            )
+        )
 
         text_render_manager.render_as_score(
-            self.score,
-            font=pygame.font.Font(None, self.width // 10),
-            )
+            score=f"Счёт: {self.score}",
+            font=pygame.font.Font(None, self.width // 15),
+        )
 
     def _run_main_loop(self) -> None:
         pygame.mixer.music.load(self.asset_manager.get_asset_path(Asset.GAME_BG_MUSIC))
@@ -121,10 +124,15 @@ class MainGameScreen(BaseScreen):
             self.load_bg()
 
             self.sprite_manager.draw()
+            self.score = self.sprite_manager.player_score
             self.render_all()
 
             pygame.display.flip()
             delta = self.clock.tick(self.fps) / 1000
+
+        level = self.level_manager.get_current_level()
+        if self.score > self.score_storage.get_best_score(level):
+            self.score_storage.save_best_score(level, self.score)
 
     def _dispatch_events(self, events: list[Event]) -> None:
         for event in events:

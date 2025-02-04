@@ -1,3 +1,4 @@
+import logging
 import sys
 
 import pygame
@@ -6,8 +7,10 @@ from pygame import Surface
 
 from funny_jump.engine.asset_manager import AssetManager
 from funny_jump.engine.resource_loader.base import ResourceLoader
+from funny_jump.game.exception.base import BaseError
 from funny_jump.game.level_manager import LevelManager
 from funny_jump.game.path_to_assets import Asset
+from funny_jump.game.score.score_storage import ScoreStorage
 from funny_jump.game.screen.end import EndScreen
 from funny_jump.game.screen.level_choice import LevelChoiceScreen
 from funny_jump.game.screen.main_game import MainGameScreen
@@ -26,6 +29,7 @@ class GameDirector:
         "level_manager",
         "main_game_screen",
         "resource_loader",
+        "score_storage",
         "screen",
         "start_screen",
         "ui_manager",
@@ -43,6 +47,7 @@ class GameDirector:
         vsync: bool,
         resource_loader: ResourceLoader,
         asset_manager: AssetManager[Asset],
+        score_storage: ScoreStorage,
     ) -> None:
         self.asset_manager = asset_manager
         self.resource_loader = resource_loader
@@ -54,6 +59,7 @@ class GameDirector:
         self.clock = pygame.time.Clock()
         self.is_running = False
         self.level_manager = LevelManager()
+        self.score_storage = score_storage
 
     def _init_pygame(self) -> Surface:
         pygame.init()
@@ -74,7 +80,7 @@ class GameDirector:
         self.ui_manager = pygame_gui.UIManager(
             (self.height, self.width),
             theme_path=self.asset_manager.get_asset_path(Asset.GUI_TEMPLATE),
-            )
+        )
 
         self.main_game_screen = MainGameScreen(
             resource_loader=self.resource_loader,
@@ -86,6 +92,7 @@ class GameDirector:
             fps=self.fps,
             clock=self.clock,
             level_manager=self.level_manager,
+            score_storage=self.score_storage,
         )
 
         self.level_choice_screen = LevelChoiceScreen(
@@ -125,6 +132,19 @@ class GameDirector:
             raise RuntimeError("Invoke run_game() first.")
 
         while True:
-            self.level_choice_screen.run()
-            self.main_game_screen.run()
-            self.end_screen.run()
+            try:
+                self.level_choice_screen.run()
+                self.main_game_screen.run()
+                level = self.level_manager.get_current_level()
+                self.end_screen.score = self.main_game_screen.score
+                self.end_screen.best_score = self.score_storage.get_best_score(level)
+            except BaseError as exc:
+                self.end_screen.error_text = exc.MESSAGE
+            else:
+                self.end_screen.error_text = None
+
+            try:
+                self.end_screen.run()
+            except BaseError:
+                logging.exception("While running end screen:")
+                self.terminate()

@@ -67,8 +67,7 @@ class LevelChoiceScreen(ButtonScreen):
         self.level_manager = level_manager
 
         buttons = [
-            Button(str(level_id), f"Уровень {level.name}")
-            for level_id, level in enumerate(self.level_manager.levels)
+            Button(str(level_id), f"Уровень {level.name}") for level_id, level in enumerate(self.level_manager.levels)
         ]
 
         button_manager = ButtonManager(
@@ -78,8 +77,9 @@ class LevelChoiceScreen(ButtonScreen):
         )
 
         self.level_buttons = button_manager.create_button_menu(
-            buttons=buttons, size=1.5,
-            )
+            buttons=buttons,
+            size=1.5,
+        )
 
     def render_all(self) -> None:
         logo_text = "Выбор уровня"
