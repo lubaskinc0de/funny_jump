@@ -57,7 +57,7 @@ class EndScreen(BaseScreen):
         logo_text = "КОНЕЦ"
         logo_font = pygame.font.Font(None, self.width // 3)
         logo_font.bold = True
-        
+
         escape_text = "Нажмите Escape для выхода"
 
         score_text = f"Ваш результат - {self.score} очков"
@@ -76,18 +76,18 @@ class EndScreen(BaseScreen):
             logo_font=logo_font,
             screen_width=self.width,
             screen=self.screen,
-            text_coord=0
+            text_coord=0,
         )
-        
+
         text_render_manager.render_as_text(
             escape_text,
             color="Gray10",
             has_vertical_indent=False,
-            font=pygame.font.Font(None, self.width // 50)
+            font=pygame.font.Font(None, self.width // 50),
             )
 
         text_render_manager.render_as_logo(logo_text, color="RED")
-        
+
         text_render_manager.render_as_text(score_text)
         text_render_manager.render_as_text(final_text)
         text_render_manager.render_as_text(offer_text)

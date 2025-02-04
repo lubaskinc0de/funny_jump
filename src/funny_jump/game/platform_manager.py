@@ -15,7 +15,7 @@ from funny_jump.game.sprites.mobile_platform import MobilePlatformSprite
 from funny_jump.game.sprites.player import PlayerSprite
 
 BASIC_PLATFORM_SIZE = (100, 30)
-MAX_PLATFORM_HEIGHT = -200
+MAX_PLATFORM_HEIGHT = -350
 MAX_REMOVED_PLATFORMS_FOR_MOVING_OTHERS = 10
 PLATFROM_Y_MOVE_MULTIPLIER = 1.5
 PLATFORMS_COUNT_MULTIPLIER = 2
@@ -26,6 +26,7 @@ PLATFORM_Y_MIN_SPAWN_INTERVAL = -10
 FIRST_PLATFORM_SPAWN_Y = 200
 Y_OFFSET_COEFFICIENT = 0.9
 ADDITIONAL_Y_OFFSET = 0.03
+MAX_LAST_PLATFORMS_LENGTH = 3
 
 
 class PlatformManager:
@@ -49,6 +50,7 @@ class PlatformManager:
         self.difficulty_params = difficulty_params
         self.delta: float = 0.0
         self.removed_platforms: int = 0
+        self.last_platforms: list[BasicPlatformSprite | MobilePlatformSprite] = []
         self.spawn_initial_platforms()
 
     def get_highest_platform(self) -> BasicPlatformSprite:
@@ -97,6 +99,11 @@ class PlatformManager:
         platform_sprite.set_position(center_x, center_y)
         self.platforms.add(platform_sprite)
 
+        if len(self.last_platforms) >= MAX_LAST_PLATFORMS_LENGTH:
+            self.last_platforms.pop()
+
+        self.last_platforms.insert(0, platform_sprite)
+
     def is_overlapping(self, center_x: int, center_y: int) -> bool:
         """Проверяет не соприкасается ли платформа с уже существующими."""
         new_bounds = Bounds(center_x, center_y)
@@ -114,6 +121,12 @@ class PlatformManager:
 
         return False
 
+    def is_platform_pillar(self, center_x: int) -> bool:
+        for platform_sprite in self.last_platforms:
+            if center_x == platform_sprite.platform.bounds.center_x:
+                return True
+        return False
+
     def calculate_new_platform_position(self) -> tuple[int, int]:
         """Вычисляет подходящую позицию для спавга платформы."""
         highest_platform = self.get_highest_platform()
@@ -123,16 +136,18 @@ class PlatformManager:
         while True:
             next_platform_interval_x = BASIC_PLATFORM_SIZE[0]\
                 * randint(-PLATFORM_SPAWN_DISTANCE_MULTIPLIER, PLATFORM_SPAWN_DISTANCE_MULTIPLIER)
-            
+
             center_x = highest_platform.platform.bounds.center_x + next_platform_interval_x
-            
+
+            if self.is_platform_pillar(center_x):
+                continue
+
             if (
                 next_platform_interval_x != 0
                 and BASIC_PLATFORM_SIZE[0] < center_x
                 and center_x < self.screen_w * MINIMAL_SCREEN_DISTANCE - BASIC_PLATFORM_SIZE[0] // 2
             ):
                 break
-
         next_platform_interval_y = self.player_sprite.player.max_jump_height
         center_y = highest_platform.platform.bounds.center_y\
             - next_platform_interval_y - randint(PLATFORM_Y_MAX_SPAWN_INTERVAL, PLATFORM_Y_MIN_SPAWN_INTERVAL)

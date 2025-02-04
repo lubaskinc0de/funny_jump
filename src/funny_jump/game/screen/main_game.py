@@ -3,6 +3,7 @@ from collections.abc import Callable
 import pygame
 from pygame.event import Event
 
+from funny_jump.domain.entity.player import Player
 from funny_jump.domain.value_object.bounds import Bounds
 from funny_jump.domain.value_object.velocity import Velocity
 from funny_jump.engine.asset_manager import AssetManager
@@ -12,7 +13,6 @@ from funny_jump.game.path_to_assets import Asset
 from funny_jump.game.screen.base import BaseScreen
 from funny_jump.game.sprite_manager import SpriteManager
 from funny_jump.game.text_manager import TextManager
-from funny_jump.domain.entity.player import Player
 
 
 class MainGameScreen(BaseScreen):
@@ -25,12 +25,12 @@ class MainGameScreen(BaseScreen):
         "height",
         "is_running",
         "level_manager",
+        "player",
         "resource_loader",
         "screen",
         "sprite_manager",
         "terminate",
         "width",
-        "player"
     )
 
     def __init__(
@@ -92,7 +92,7 @@ class MainGameScreen(BaseScreen):
         text_render_manager.render_as_text(
             escape_text,
             color="Gray10",
-            has_vertical_indent=False
+            has_vertical_indent=False,
             )
 
     def _run_main_loop(self) -> None:
@@ -101,7 +101,7 @@ class MainGameScreen(BaseScreen):
         pygame.mixer.music.set_volume(0.2)
 
         self.refresh_all_sprites()
-        
+
         delta = 0.0
         while self.is_running:
             self._dispatch_events(pygame.event.get())
@@ -109,7 +109,7 @@ class MainGameScreen(BaseScreen):
 
             if self.player.health <= 0:
                 break
-            
+
             self.load_bg()
 
             self.sprite_manager.draw()

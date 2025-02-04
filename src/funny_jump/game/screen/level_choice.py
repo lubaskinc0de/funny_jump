@@ -78,7 +78,7 @@ class LevelChoiceScreen(ButtonScreen):
         )
 
         self.level_buttons = button_manager.create_button_menu(
-            buttons=buttons, size=1.5
+            buttons=buttons, size=1.5,
             )
 
     def render_all(self) -> None:

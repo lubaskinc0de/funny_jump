@@ -25,11 +25,11 @@ class SpriteManager:
         "platform_manager",
         "platforms",
         "player",
+        "player",
         "player_sprite",
         "resource_loader",
         "screen",
         "width",
-        "player",
     )
 
     def __init__(
@@ -49,7 +49,7 @@ class SpriteManager:
         self.height = height
         self.level_manager = level_manager
         self.player = player
-        
+
         sound_loader = pygame.mixer.Sound
         player_jump_sound = self.asset_manager.get_asset(Asset.PLAYER_JUMP_SOUND, sound_loader)
         player_jump_sound.set_volume(0.2)

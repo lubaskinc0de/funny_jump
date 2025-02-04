@@ -56,13 +56,14 @@ class TextManager:
         color: str = "White",
         indent: int = 10,
         has_vertical_indent: bool = True,
-        font: pygame.Font | None = None
+        font: pygame.Font | None = None,
     ) -> None:
         if not self.text_font and not font:
             raise TextFontMissingError
-        
-        usable_font = self.text_font if not font else font
-        
+
+        # Выше есть проверка на существовании хотя-бы одного шрифта. Но mypy не видит её
+        usable_font: pygame.Font = self.text_font if not font else font # type: ignore
+
         if has_vertical_indent:
             self.text_coord += usable_font.get_height()
 
