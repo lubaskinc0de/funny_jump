@@ -19,12 +19,10 @@ class ScoreWriteError(BaseError):
 
 class ScoreStorage(Protocol):
     @abstractmethod
-    def save_best_score(self, level: Level, score: int) -> None:
-        ...
+    def save_best_score(self, level: Level, score: int) -> None: ...
 
     @abstractmethod
-    def get_best_score(self, level: Level) -> int:
-        ...
+    def get_best_score(self, level: Level) -> int: ...
 
 
 @dataclass(slots=True, frozen=True)

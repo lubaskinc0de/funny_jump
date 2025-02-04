@@ -1,3 +1,4 @@
+import logging
 import sys
 from importlib.resources import files
 
@@ -16,6 +17,8 @@ HEIGHT = sys_height - 100
 CAPTION = "Весёлые Прыжки"
 FPS = 60
 VSYNC = True
+
+logging.basicConfig(level=0)
 
 
 def pygame_main(_argv: list[str]) -> None:
@@ -37,8 +40,10 @@ def pygame_main(_argv: list[str]) -> None:
         vsync=VSYNC,
         resource_loader=resource_loader,
         asset_manager=asset_manager,
+        score_storage=score_storage,
     )
 
+    logging.info("Startup..")
     director.run_game()
 
 

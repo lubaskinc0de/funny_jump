@@ -17,16 +17,16 @@ class LevelManager:
         first_level = Level(
             name="Trial",
             difficulty_parameters=DifficultyParameters(platform_x_moving_chance=0.0),
-            )
+        )
         second_level = Level(
             name="Base",
             difficulty_parameters=DifficultyParameters(),
-            )
+        )
         third_level = Level(
             name="Max",
             difficulty_parameters=DifficultyParameters(
                 all_platforms_y_moving_speed=0.75,
-                ),
+            ),
         )
 
         self.levels = [first_level, second_level, third_level]

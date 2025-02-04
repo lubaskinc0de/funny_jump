@@ -27,7 +27,7 @@ class ButtonManager:
         self,
         buttons: list[Button],
         size: float = 1.0,
-        ) -> dict[UIButton, str]:
+    ) -> dict[UIButton, str]:
         menu_buttons: dict[UIButton, str] = {}
 
         centered_button_index: int | None = None
@@ -63,18 +63,18 @@ class ButtonManager:
     def create_button(self, button: Button) -> tuple[UIButton, str]:
         ui_button = UIButton(
             relative_rect=pygame.Rect(
-                (button.left_top_x , button.left_top_y),
+                (button.left_top_x, button.left_top_y),
                 (button.width, button.height),
-                ),
+            ),
             text=button.text,
             manager=self.ui_manager,
-            )
+        )
 
         ui_button.colours["normal_bg"] = pygame.Color(button.color)
         ui_button.colours["hovered_bg"] = pygame.Color(button.hovered_color)
         ui_button.colours["active_bg"] = pygame.Color(button.active_color)
         ui_button.colours["hovered_text"] = pygame.Color("Black")
         # Библиотека содержит неаннотированную функцию, на что ругается mypy
-        ui_button.rebuild() # type: ignore
+        ui_button.rebuild()  # type: ignore
 
         return (ui_button, button.name)
