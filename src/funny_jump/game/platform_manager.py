@@ -21,12 +21,11 @@ PLATFROM_Y_MOVE_MULTIPLIER = 1.5
 PLATFORMS_COUNT_MULTIPLIER = 2
 PLATFORM_SPAWN_DISTANCE_MULTIPLIER = 3
 MINIMAL_SCREEN_DISTANCE = 0.9
-PLATFORM_Y_MAX_SPAWN_INTERVAL = -100
+PLATFORM_Y_MAX_SPAWN_INTERVAL = -72
 PLATFORM_Y_MIN_SPAWN_INTERVAL = -10
 FIRST_PLATFORM_SPAWN_Y = 200
 Y_OFFSET_COEFFICIENT = 0.9
 ADDITIONAL_Y_OFFSET = 0.03
-MAX_LAST_PLATFORMS_LENGTH = 3
 
 
 class PlatformManager:
@@ -50,7 +49,6 @@ class PlatformManager:
         self.difficulty_params = difficulty_params
         self.delta: float = 0.0
         self.removed_platforms: int = 0
-        self.last_platforms: list[BasicPlatformSprite | MobilePlatformSprite] = []
         self.spawn_initial_platforms()
 
     def get_highest_platform(self) -> BasicPlatformSprite:
@@ -99,11 +97,6 @@ class PlatformManager:
         platform_sprite.set_position(center_x, center_y)
         self.platforms.add(platform_sprite)
 
-        if len(self.last_platforms) >= MAX_LAST_PLATFORMS_LENGTH:
-            self.last_platforms.pop()
-
-        self.last_platforms.insert(0, platform_sprite)
-
     def is_overlapping(self, center_x: int, center_y: int) -> bool:
         """Проверяет не соприкасается ли платформа с уже существующими."""
         new_bounds = Bounds(center_x, center_y)
@@ -121,12 +114,6 @@ class PlatformManager:
 
         return False
 
-    def is_platform_pillar(self, center_x: int) -> bool:
-        for platform_sprite in self.last_platforms:
-            if center_x == platform_sprite.platform.bounds.center_x:
-                return True
-        return False
-
     def calculate_new_platform_position(self) -> tuple[int, int]:
         """Вычисляет подходящую позицию для спавга платформы."""
         highest_platform = self.get_highest_platform()
@@ -138,9 +125,6 @@ class PlatformManager:
                 * randint(-PLATFORM_SPAWN_DISTANCE_MULTIPLIER, PLATFORM_SPAWN_DISTANCE_MULTIPLIER)
 
             center_x = highest_platform.platform.bounds.center_x + next_platform_interval_x
-
-            if self.is_platform_pillar(center_x):
-                continue
 
             if (
                 next_platform_interval_x != 0
