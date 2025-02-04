@@ -1,7 +1,7 @@
 from collections.abc import Callable
 
-from pygame import Event
 import pygame
+from pygame import Event
 
 from funny_jump.engine.asset_manager import AssetManager
 from funny_jump.engine.resource_loader.base import ResourceLoader
