@@ -73,7 +73,7 @@ class GameDirector:
 
         self.ui_manager = pygame_gui.UIManager(
             (self.height, self.width),
-            theme_path="src/funny_jump/game/assets/gui_theme.json",
+            theme_path=self.asset_manager.get_asset_path(Asset.GUI_TEMPLATE),
             )
 
         self.main_game_screen = MainGameScreen(

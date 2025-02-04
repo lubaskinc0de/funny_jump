@@ -10,6 +10,7 @@ class Asset(Enum):
     MOBILE_PLATFORM_SPRITE = auto()
     PLAYER_JUMP_FRAMES = auto()
     PLAYER_JUMP_SOUND = auto()
+    GUI_TEMPLATE = auto()
 
 
 ASSET_PATH = {
@@ -20,4 +21,5 @@ ASSET_PATH = {
     Asset.PLAYER_STATIC_SPRITE: Path("sprites/frog/idle/00.png"),
     Asset.PLAYER_JUMP_FRAMES: Path("sprites/frog/hop/"),
     Asset.PLAYER_JUMP_SOUND: Path("sounds/jump.wav"),
+    Asset.GUI_TEMPLATE: Path("gui_theme.json")
 }

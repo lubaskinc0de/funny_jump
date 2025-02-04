@@ -56,14 +56,17 @@ class TextManager:
         color: str = "White",
         indent: int = 10,
         has_vertical_indent: bool = True,
+        font: pygame.Font | None = None
     ) -> None:
-        if not self.text_font:
+        if not self.text_font and not font:
             raise TextFontMissingError
-
+        
+        usable_font = self.text_font if not font else font
+        
         if has_vertical_indent:
-            self.text_coord += self.text_font.get_height()
+            self.text_coord += usable_font.get_height()
 
-        space_width = self.text_font.render(
+        space_width = usable_font.render(
             " ",
             antialias=True,
             color=pygame.Color(color),
@@ -73,7 +76,7 @@ class TextManager:
 
         for _word in text.split():
             word = " " + _word
-            string_rendered = self.text_font.render(
+            string_rendered = usable_font.render(
                 word,
                 antialias=True,
                 color=pygame.Color(color),
@@ -94,7 +97,7 @@ class TextManager:
         splited_text = [txt[0] for txt in splited_text_with_length]
 
         for text_line in splited_text:
-            string_rendered = self.text_font.render(
+            string_rendered = usable_font.render(
                 text_line,
                 antialias=True,
                 color=pygame.Color(color),
