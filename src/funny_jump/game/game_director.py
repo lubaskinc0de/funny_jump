@@ -1,14 +1,16 @@
 import sys
 
 import pygame
+import pygame_gui
 from pygame import Surface
 
 from funny_jump.engine.asset_manager import AssetManager
 from funny_jump.engine.resource_loader.base import ResourceLoader
+from funny_jump.game.level_manager import LevelManager
 from funny_jump.game.path_to_assets import Asset
 from funny_jump.game.screen.end import EndScreen
+from funny_jump.game.screen.level_choice import LevelChoiceScreen
 from funny_jump.game.screen.main_game import MainGameScreen
-from funny_jump.game.screen.start import StartScreen
 
 
 class GameDirector:
@@ -20,10 +22,13 @@ class GameDirector:
         "fps",
         "height",
         "is_running",
+        "level_choice_screen",
+        "level_manager",
         "main_game_screen",
         "resource_loader",
         "screen",
         "start_screen",
+        "ui_manager",
         "vsync",
         "width",
     )
@@ -48,6 +53,7 @@ class GameDirector:
         self.vsync = vsync
         self.clock = pygame.time.Clock()
         self.is_running = False
+        self.level_manager = LevelManager()
 
     def _init_pygame(self) -> Surface:
         pygame.init()
@@ -65,16 +71,10 @@ class GameDirector:
     def run_game(self) -> None:
         self.screen = self._init_pygame()
 
-        self.start_screen = StartScreen(
-            resource_loader=self.resource_loader,
-            asset_manager=self.asset_manager,
-            screen=self.screen,
-            width=self.width,
-            height=self.height,
-            terminate=self.terminate,
-            fps=self.fps,
-            clock=self.clock,
-        )
+        self.ui_manager = pygame_gui.UIManager(
+            (self.height, self.width),
+            theme_path=self.asset_manager.get_asset_path(Asset.GUI_TEMPLATE),
+            )
 
         self.main_game_screen = MainGameScreen(
             resource_loader=self.resource_loader,
@@ -85,9 +85,10 @@ class GameDirector:
             terminate=self.terminate,
             fps=self.fps,
             clock=self.clock,
+            level_manager=self.level_manager,
         )
 
-        self.main_game_screen = MainGameScreen(
+        self.level_choice_screen = LevelChoiceScreen(
             resource_loader=self.resource_loader,
             asset_manager=self.asset_manager,
             screen=self.screen,
@@ -96,6 +97,8 @@ class GameDirector:
             terminate=self.terminate,
             fps=self.fps,
             clock=self.clock,
+            ui_manager=self.ui_manager,
+            level_manager=self.level_manager,
         )
 
         self.end_screen = EndScreen(
@@ -121,8 +124,7 @@ class GameDirector:
         if not self.screen:
             raise RuntimeError("Invoke run_game() first.")
 
-        self.start_screen.run()
-        self.main_game_screen.run()
-        self.end_screen.run()
-
-        self.terminate()
+        while True:
+            self.level_choice_screen.run()
+            self.main_game_screen.run()
+            self.end_screen.run()

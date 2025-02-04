@@ -12,6 +12,7 @@ readme = 'README.md'
 requires-python = '>=3.11'
 dependencies = [
     'pygame==2.6.1',
+    'pygame_gui==0.6.10',
 ]
 
 [project.optional-dependencies]
@@ -70,6 +71,9 @@ ignore = [
   'TC003',
   'PLR0912',
   'C901',
+  'SIM21',
+  'RUF003',
+  'SIM110',
   # Does not work correctly
   'TC002',
   'TC001',

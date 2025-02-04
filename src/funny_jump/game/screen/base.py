@@ -3,6 +3,7 @@ from functools import partial
 from pathlib import Path
 
 import pygame
+import pygame_gui
 from pygame import Surface
 from pygame.event import Event
 
@@ -78,3 +79,55 @@ class BaseScreen:
         self.screen.blit(bg_img, (0, 0))
 
     def render_all(self) -> None: ...
+
+
+class ButtonScreen(BaseScreen):
+    __slots__ = (
+        "asset_manager",
+        "clock",
+        "fps",
+        "get_bg",
+        "height",
+        "is_running",
+        "resource_loader",
+        "screen",
+        "terminate",
+        "ui_manager",
+        "width",
+    )
+
+    def __init__(
+        self,
+        *,
+        resource_loader: ResourceLoader,
+        asset_manager: AssetManager[Asset],
+        screen: pygame.Surface,
+        width: int,
+        height: int,
+        terminate: Callable[[], None],
+        fps: int,
+        clock: pygame.time.Clock,
+        ui_manager: pygame_gui.UIManager,
+    ) -> None:
+        super().__init__(
+            resource_loader=resource_loader,
+            asset_manager=asset_manager,
+            screen=screen,
+            width=width,
+            height=height,
+            terminate=terminate,
+            fps=fps,
+            clock=clock,
+        )
+        self.ui_manager = ui_manager
+
+    def _run_main_loop(self) -> None:
+        self.load_bg()
+        self.render_all()
+        while self.is_running:
+            self._dispatch_events(pygame.event.get())
+            pygame.display.flip()
+            delta = self.clock.tick(self.fps) / 1000
+
+            self.ui_manager.update(delta)
+            self.ui_manager.draw_ui(self.screen)

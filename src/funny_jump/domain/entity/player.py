@@ -5,7 +5,7 @@ from funny_jump.domain.value_object.bounds import Bounds
 from funny_jump.domain.value_object.velocity import Velocity
 
 SPEED = 8 * 60
-JUMP_STRENGTH = 16 * 60
+JUMP_STRENGTH = 14 * 60
 GRAVITY = 42 * 60
 
 
@@ -34,12 +34,13 @@ class Player:
     def move_right(self) -> None:
         self.velocity.direction_x = 1
 
-    def jump(self) -> None:
-        if self.is_jumping:
-            return
+    def jump(self) -> bool:
+        if self.is_jumping or not self.on_ground:
+            return False
 
         self.velocity.y = -self.jump_strength
         self.is_jumping = True
+        return True
 
     def _process_gravity(self) -> None:
         self.velocity.y += self.gravity * self.delta
@@ -57,7 +58,6 @@ class Player:
         self.velocity.direction_x = 0
 
     def death(self) -> None:
-        self.bounds.center_y = self.screen_h
         self.health = 0
 
     def get_on_ground(self, platform: Platform) -> None:
@@ -73,6 +73,13 @@ class Player:
     def max_jump_height(self) -> int:
         return round((self.jump_strength**2) / (2 * GRAVITY))
 
+    @property
+    def max_horizontal_jump(self) -> int:
+        jump_time = (2 * self.jump_strength) / self.gravity
+        max_distance = self.speed * jump_time
+
+        return round(max_distance)
+
     def update(self) -> None:
         self.process_physics()
 
@@ -80,5 +87,6 @@ class Player:
 
         if self.bounds.bottom >= self.screen_h:
             self.bounds.center_y = self.screen_h - self.bounds.height // 2
+            self.death()
         if self.bounds.top <= 0:
             self.bounds.center_y = self.bounds.height // 2

@@ -9,8 +9,8 @@ from funny_jump.game.game_director import GameDirector
 from funny_jump.game.path_to_assets import ASSET_PATH
 
 sys_width, sys_height = get_screen_size()
-WIDTH = int(sys_width * 0.3)
-HEIGHT = sys_height - 200
+WIDTH = int(sys_width * 0.5)
+HEIGHT = sys_height - 100
 CAPTION = "Весёлые Прыжки"
 FPS = 60
 VSYNC = True
@@ -20,8 +20,13 @@ def pygame_main(_argv: list[str]) -> None:
     resource_loader = ImportLibResourceLoader(files(funny_jump.game.assets))
     asset_manager = AssetManager(loader=resource_loader, path_to_assets=ASSET_PATH)
 
+    game_fps = FPS
+
+    if _argv and _argv[0] and _argv[0].isdigit():
+        game_fps = int(_argv[0])
+
     director = GameDirector(
-        fps=FPS,
+        fps=game_fps,
         width=WIDTH,
         height=HEIGHT,
         caption=CAPTION,

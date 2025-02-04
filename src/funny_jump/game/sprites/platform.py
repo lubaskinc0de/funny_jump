@@ -1,10 +1,6 @@
-from typing import Protocol
-
-from pygame.rect import Rect, RectType
-
 from funny_jump.domain.entity.platform import Platform
+from funny_jump.engine.sprite import BoundedSprite
 
 
-class PlatformSprite(Protocol):
-    rect: Rect | RectType
+class PlatformSprite(BoundedSprite):
     platform: Platform

@@ -50,14 +50,13 @@ class CollisionManager:
             return
 
         for platform_sprite in collide:
-            if self.player.velocity.y < 0:
-                continue
-
             platform_rect = platform_sprite.rect
-            if (self.player_sprite.prev_pos.bottom - 10 <= platform_rect.top) and (platform_rect.top < player_rect.bottom):
+            if (self.player_sprite.prev_pos.bottom <= platform_rect.top) and (
+                platform_rect.top < player_rect.bottom
+            ):
                 self.player_sprite.set_position(
                     player_rect.centerx,
-                    (platform_rect.top - player_rect.height // 2),
+                    (platform_rect.top - player_rect.height // 2) + 2,
                 )
                 on_player_collide_platform(platform_sprite.platform, self.player)
                 return

@@ -1,15 +1,20 @@
 from collections.abc import Callable
 
 import pygame
+import pygame_gui
+from pygame.event import Event
 
 from funny_jump.engine.asset_manager import AssetManager
 from funny_jump.engine.resource_loader.base import ResourceLoader
+from funny_jump.game.button import Button
+from funny_jump.game.button_manager import ButtonManager
+from funny_jump.game.level_manager import LevelManager
 from funny_jump.game.path_to_assets import Asset
-from funny_jump.game.screen.base import BaseScreen
+from funny_jump.game.screen.base import ButtonScreen
 from funny_jump.game.text_manager import TextManager
 
 
-class EndScreen(BaseScreen):
+class LevelChoiceScreen(ButtonScreen):
     __slots__ = (
         "asset_manager",
         "clock",
@@ -17,6 +22,9 @@ class EndScreen(BaseScreen):
         "get_bg",
         "height",
         "is_running",
+        "launch_maingame",
+        "level_buttons",
+        "level_manager",
         "logo_font_size",
         "resource_loader",
         "score",
@@ -25,6 +33,7 @@ class EndScreen(BaseScreen):
         "text_coord",
         "text_font_size",
         "text_render_manager",
+        "ui_manager",
         "width",
     )
 
@@ -40,6 +49,8 @@ class EndScreen(BaseScreen):
         fps: int,
         clock: pygame.time.Clock,
         score: int = 0,
+        ui_manager: pygame_gui.UIManager,
+        level_manager: LevelManager,
     ) -> None:
         super().__init__(
             resource_loader=resource_loader,
@@ -50,55 +61,50 @@ class EndScreen(BaseScreen):
             terminate=terminate,
             fps=fps,
             clock=clock,
+            ui_manager=ui_manager,
         )
         self.score = score
+        self.level_manager = level_manager
+
+        buttons = [
+            Button(str(level_id), f"Уровень {level.name}")
+            for level_id, level in enumerate(self.level_manager.levels)
+        ]
+
+        button_manager = ButtonManager(
+            width=self.width,
+            height=self.height,
+            ui_manager=self.ui_manager,
+        )
+
+        self.level_buttons = button_manager.create_button_menu(
+            buttons=buttons, size=1.5,
+            )
 
     def render_all(self) -> None:
-        logo_text = "КОНЕЦ"
-        logo_font = pygame.font.Font(None, self.width // 3)
+        logo_text = "Выбор уровня"
+        logo_font = pygame.font.Font(None, self.width // 6)
         logo_font.bold = True
 
-        escape_text = "Нажмите Escape для выхода"
-
-        score_text = f"Ваш результат - {self.score} очков"
-        if self.score == 0:
-            final_text = "Не все получается с первого раза"
-        elif self.score < 50:
-            final_text = "Ваш результат очень неплох!"
-        else:
-            final_text = "Вы достигли отличного результата!"
         text_font = pygame.font.Font(None, self.width // 11)
-
-        offer_text = "Сыграйте еще раз, чтобы изменить свой результат!"
 
         text_render_manager = TextManager(
             text_font=text_font,
             logo_font=logo_font,
             screen_width=self.width,
             screen=self.screen,
-            text_coord=0,
         )
 
-        text_render_manager.render_as_text(
-            escape_text,
-            color="Gray10",
-            has_vertical_indent=False,
-            font=pygame.font.Font(None, self.width // 50),
-            )
+        text_render_manager.render_as_logo(logo_text)
 
-        text_render_manager.render_as_logo(logo_text, color="RED")
-
-        text_render_manager.render_as_text(score_text)
-        text_render_manager.render_as_text(final_text)
-        text_render_manager.render_as_text(offer_text)
-
-    def _dispatch_events(self, events: list[pygame.Event]) -> None:
+    def _dispatch_events(self, events: list[Event]) -> None:
         for event in events:
             match event.type:
                 case pygame.QUIT:
                     self.is_running = False
-                    # След блок кода нужно будет изменить после добавления механики прохождения уровня
                     self.terminate()
-                case pygame.KEYDOWN:
-                    if event.key == pygame.K_ESCAPE:
-                        self.is_running = False
+                case pygame_gui.UI_BUTTON_PRESSED:
+                    self.render_all()
+                    self.level_manager.change_level(int(self.level_buttons[event.ui_element]))
+                    self.is_running = False
+            self.ui_manager.process_events(event)

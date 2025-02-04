@@ -3,10 +3,10 @@ from pathlib import Path
 
 import pygame
 from pygame.key import ScancodeWrapper
-from pygame.sprite import Sprite
 
 from funny_jump.domain.entity.player import Player
 from funny_jump.engine.animation.animation_manager import AnimationId, AnimationManager
+from funny_jump.engine.sprite import BoundedSprite
 
 HOP_ANIMATION_ID = AnimationId("PLAYER_HOP")
 
@@ -16,7 +16,7 @@ class PlayerSounds:
     jump: pygame.mixer.Sound
 
 
-class PlayerSprite(Sprite):
+class PlayerSprite(BoundedSprite):
     def __init__(
         self,
         player: Player,
@@ -83,6 +83,7 @@ class PlayerSprite(Sprite):
         keys_pressed = pygame.key.get_pressed()
         self.handle_keys_down(keys_pressed)
 
+        self.jump()
         self.player.set_delta(delta)
         self.player.update()
         self.set_position_by_player()
@@ -105,15 +106,12 @@ class PlayerSprite(Sprite):
         self.player.move_right()
 
     def jump(self) -> None:
-        self.player.jump()
-        self.animation_manager.apply(self, HOP_ANIMATION_ID)
-        self.sounds.jump.play()
+        if self.player.jump():
+            self.animation_manager.apply(self, HOP_ANIMATION_ID)
+            self.sounds.jump.play()
 
     def handle_keys_down(self, keys_pressed: ScancodeWrapper) -> None:
         if keys_pressed[pygame.K_LEFT]:
             self.move_left()
         elif keys_pressed[pygame.K_RIGHT]:
             self.move_right()
-
-        if keys_pressed[pygame.K_SPACE]:
-            self.jump()
