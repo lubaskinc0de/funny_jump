@@ -112,7 +112,7 @@ class TextManager:
 
     def render_as_score(
         self,
-        score: int | float | str,
+        score: float | str,
         color: str = "White",
         horizontal_indent: int = 10,
         vertical_indent: int = 10,
@@ -129,7 +129,7 @@ class TextManager:
             antialias=True,
             color=pygame.Color(color),
             )
-        
+
         intro_rect = rendered_score.get_rect()
         intro_rect.top = vertical_indent
         intro_rect.x = self.screen_width - rendered_score.get_width() - horizontal_indent
