@@ -113,7 +113,7 @@ class PlatformManager:
         center_x = highest_platform.platform.bounds.center_x
 
         while True:
-            next_platform_interval_x = BASIC_PLATFORM_SIZE[0] * randint(-3, 3)
+            next_platform_interval_x = self.player_sprite.player.max_horizontal_jump # BASIC_PLATFORM_SIZE[0] * randint(-3, 3)
             center_x = highest_platform.platform.bounds.center_x + next_platform_interval_x
             if (
                 next_platform_interval_x != 0
