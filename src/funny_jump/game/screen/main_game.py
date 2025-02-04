@@ -92,7 +92,8 @@ class MainGameScreen(BaseScreen):
         text_render_manager.render_as_text(
             escape_text,
             color="Gray10",
-            has_vertical_indent=False)
+            has_vertical_indent=False
+            )
 
     def _run_main_loop(self) -> None:
         pygame.mixer.music.load(self.asset_manager.get_asset_path(Asset.GAME_BG_MUSIC))
@@ -106,8 +107,6 @@ class MainGameScreen(BaseScreen):
             self._dispatch_events(pygame.event.get())
             self.sprite_manager.update(delta)
 
-            print(self.player.health)
-            
             if self.player.health <= 0:
                 break
             
