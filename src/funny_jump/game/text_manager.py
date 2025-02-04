@@ -56,7 +56,7 @@ class TextManager:
         color: str = "White",
         indent: int = 10,
         has_vertical_indent: bool = True,
-        font: pygame.Font | None = None,
+        font: pygame.font.Font | None = None,
     ) -> None:
         if not self.text_font and not font:
             raise TextFontMissingError

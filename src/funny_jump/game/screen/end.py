@@ -1,5 +1,6 @@
 from collections.abc import Callable
 
+from pygame import Event
 import pygame
 
 from funny_jump.engine.asset_manager import AssetManager
@@ -92,7 +93,7 @@ class EndScreen(BaseScreen):
         text_render_manager.render_as_text(final_text)
         text_render_manager.render_as_text(offer_text)
 
-    def _dispatch_events(self, events: list[pygame.Event]) -> None:
+    def _dispatch_events(self, events: list[Event]) -> None:
         for event in events:
             match event.type:
                 case pygame.QUIT:
