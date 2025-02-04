@@ -74,6 +74,13 @@ class Player:
     def max_jump_height(self) -> int:
         return round((self.jump_strength**2) / (2 * GRAVITY))
 
+    @property
+    def max_horizontal_jump(self) -> int:
+        jump_time = (2 * self.jump_strength) / self.gravity
+        max_distance = self.speed * jump_time
+
+        return round(max_distance)
+
     def update(self) -> None:
         self.process_physics()
 
