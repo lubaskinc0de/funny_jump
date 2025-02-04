@@ -14,6 +14,7 @@ class EndScreen(BaseScreen):
     __slots__ = (
         "asset_manager",
         "clock",
+        "error_text",
         "fps",
         "get_bg",
         "height",
@@ -41,6 +42,7 @@ class EndScreen(BaseScreen):
         fps: int,
         clock: pygame.time.Clock,
         score: int = 0,
+        error_text: str | None = None,
     ) -> None:
         super().__init__(
             resource_loader=resource_loader,
@@ -53,6 +55,7 @@ class EndScreen(BaseScreen):
             clock=clock,
         )
         self.score = score
+        self.error_text = error_text
 
     def render_all(self) -> None:
         logo_text = "КОНЕЦ"
@@ -80,12 +83,21 @@ class EndScreen(BaseScreen):
             text_coord=0,
         )
 
+        small_font = pygame.font.Font(None, self.width // 50)
+
         text_render_manager.render_as_text(
             escape_text,
             color="Gray10",
             has_vertical_indent=False,
-            font=pygame.font.Font(None, self.width // 50),
+            font=small_font,
             )
+        if self.error_text:
+            text_render_manager.render_as_text(
+                self.error_text,
+                color="Red",
+                has_vertical_indent=True,
+                font=small_font,
+                )
 
         text_render_manager.render_as_logo(logo_text, color="RED")
 

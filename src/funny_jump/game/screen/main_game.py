@@ -27,6 +27,7 @@ class MainGameScreen(BaseScreen):
         "level_manager",
         "player",
         "resource_loader",
+        "score",
         "screen",
         "sprite_manager",
         "terminate",
@@ -45,6 +46,7 @@ class MainGameScreen(BaseScreen):
         clock: pygame.time.Clock,
         terminate: Callable[[], None],
         level_manager: LevelManager,
+        score: int = 0,
     ) -> None:
         super().__init__(
             resource_loader=resource_loader,
@@ -60,6 +62,7 @@ class MainGameScreen(BaseScreen):
         self.level_manager = level_manager
         self.is_running = False
         self.player: Player
+        self.score = score
 
     def refresh_all_sprites(self) -> None:
         self.player = Player(
@@ -93,6 +96,11 @@ class MainGameScreen(BaseScreen):
             escape_text,
             color="Gray10",
             has_vertical_indent=False,
+            )
+
+        text_render_manager.render_as_score(
+            self.score,
+            font=pygame.font.Font(None, self.width // 10),
             )
 
     def _run_main_loop(self) -> None:
