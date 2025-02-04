@@ -97,9 +97,9 @@ class PlatformManager:
             existing_bounds = platform_sprite.platform.bounds
 
             if (
-                new_bounds.center_x < existing_bounds.center_x + existing_bounds.width + randint(50, 200)
+                new_bounds.center_x < existing_bounds.center_x + existing_bounds.width
                 and new_bounds.center_x + BASIC_PLATFORM_SIZE[0] > existing_bounds.center_x
-                and new_bounds.center_y < existing_bounds.center_y + existing_bounds.height + randint(30, 70)
+                and new_bounds.center_y < existing_bounds.center_y + existing_bounds.height
                 and new_bounds.center_y + BASIC_PLATFORM_SIZE[1] > existing_bounds.center_y
             ):
                 return True
