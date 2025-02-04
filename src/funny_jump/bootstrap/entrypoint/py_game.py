@@ -5,8 +5,10 @@ import funny_jump.game.assets
 from funny_jump.engine.asset_manager import AssetManager
 from funny_jump.engine.resource_loader.importlib_loader import ImportLibResourceLoader
 from funny_jump.engine.screen import get_screen_size
+from funny_jump.game.config import load_from_file
 from funny_jump.game.game_director import GameDirector
 from funny_jump.game.path_to_assets import ASSET_PATH
+from funny_jump.game.score.score_storage import JsonScoreStorage
 
 sys_width, sys_height = get_screen_size()
 WIDTH = int(sys_width * 0.5)
@@ -19,6 +21,8 @@ VSYNC = True
 def pygame_main(_argv: list[str]) -> None:
     resource_loader = ImportLibResourceLoader(files(funny_jump.game.assets))
     asset_manager = AssetManager(loader=resource_loader, path_to_assets=ASSET_PATH)
+    config = load_from_file()
+    score_storage = JsonScoreStorage(config)
 
     game_fps = FPS
 
