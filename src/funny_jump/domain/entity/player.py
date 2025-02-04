@@ -58,7 +58,6 @@ class Player:
         self.velocity.direction_x = 0
 
     def death(self) -> None:
-        self.bounds.center_y = self.screen_h
         self.health = 0
 
     def get_on_ground(self, platform: Platform) -> None:
@@ -88,5 +87,6 @@ class Player:
 
         if self.bounds.bottom >= self.screen_h:
             self.bounds.center_y = self.screen_h - self.bounds.height // 2
+            self.death()
         if self.bounds.top <= 0:
             self.bounds.center_y = self.bounds.height // 2
