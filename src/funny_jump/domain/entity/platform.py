@@ -1,5 +1,6 @@
-from abc import abstractmethod
-from dataclasses import dataclass
+from abc import ABC, abstractmethod
+from dataclasses import dataclass, field
+from enum import Enum, auto
 from typing import Protocol
 
 from funny_jump.domain.value_object.bounds import Bounds
@@ -21,12 +22,10 @@ class Platform(Protocol):
     def death(self) -> None: ...
 
 
-@dataclass(slots=True)
-class BasicPlatform(Platform):
-    screen_h: int
-    velocity: Velocity
+class BasePlatform(ABC, Platform):
+    is_alive: bool
     bounds: Bounds
-    is_alive: bool = True
+    screen_h: int
 
     def on_collide(self) -> None:
         return None
@@ -39,7 +38,15 @@ class BasicPlatform(Platform):
             self.death()
 
 
-class MobilePlatform(Platform):
+@dataclass(slots=True)
+class BasicPlatform(BasePlatform):
+    screen_h: int
+    velocity: Velocity
+    bounds: Bounds
+    is_alive: bool = True
+
+
+class MobilePlatform(BasePlatform):
     slots = (
         "screen_h",
         "screen_w",
@@ -78,17 +85,34 @@ class MobilePlatform(Platform):
 
         self.bounds.center_x += platform_shift
 
-    def on_collide(self) -> None:
-        return None
-
-    def death(self) -> None:
-        self.is_alive = False
-
     def set_delta(self, delta: float) -> None:
         self.delta = delta
 
     def update(self) -> None:
         self.side_move()
+        super().update()
 
-        if self.bounds.center_y > (self.screen_h + 100):
+
+@dataclass
+class OnetimePlatform(BasicPlatform):
+    collision_counter: int = field(init=False, default=0)
+
+    @property
+    def is_last_hit(self) -> bool:
+        return self.collision_counter >= 1
+
+    def on_collide(self) -> None:
+        super().on_collide()
+        self.collision_counter += 1
+
+    def update(self) -> None:
+        super().update()
+
+        if self.collision_counter >= 2:
             self.death()
+
+
+class PlatformType(Enum):
+    BASIC = auto()
+    MOBILE = auto()
+    ONETIME = auto()
