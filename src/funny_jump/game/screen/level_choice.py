@@ -14,7 +14,7 @@ from funny_jump.game.screen.base import ButtonScreen
 from funny_jump.game.text_manager import TextManager
 
 SCREEN_WIDTH_FONT_SIZE_DIVISOR = 11
-SCREEN_WIDTH_LOGO_FONT_SIZE_DIVISOR = 3
+SCREEN_WIDTH_LOGO_FONT_SIZE_DIVISOR = 6
 
 
 class LevelChoiceScreen(ButtonScreen):
