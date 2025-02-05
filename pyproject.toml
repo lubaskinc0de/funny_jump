@@ -11,7 +11,19 @@ description = 'A Funny Jump game!'
 readme = 'README.md'
 requires-python = '>=3.11'
 dependencies = [
-    'pygame-ce==2.5.2',
+    'pygame-ce==2.5.2',  # Community Edition версия пайгейма, 
+                         # это то же самое что и обычный пайгейм, просто его форк с более открытой лицензией
+                         # его разрабатывают те же разработчики
+                         # короче это просто пайгейм с более частыми багфиксами и с открытой лицензией
+                         # It is a fork of the upstream pygame project by its former core developers, 
+                         # and was created after impossible challenges prevented them from continuing development upstream. 
+                         # The new distribution aims to offer more frequent releases, continuous bugfixes and enhancements, 
+                         # and a more democratic governance model.
+                         # пришлось использовать именно его, так как pygame-gui его требует
+                         # и если использовать обычный pygame и CE вместе - игра будет крашится
+                         # в игре не используются никаких спец. возможностей именно CE (если они вообще есть)
+                         # и игра может быть спокойно запущена на обычном pygame
+                         # надеюсь, проблем с этим не возникнет :)
     'pygame_gui==0.6.10',
 ]
 
