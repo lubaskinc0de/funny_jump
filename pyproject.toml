@@ -11,7 +11,7 @@ description = 'A Funny Jump game!'
 readme = 'README.md'
 requires-python = '>=3.11'
 dependencies = [
-    'pygame==2.6.1',
+    'pygame-ce==2.5.2',
     'pygame_gui==0.6.10',
 ]
 
