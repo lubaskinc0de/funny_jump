@@ -13,6 +13,9 @@ from funny_jump.game.path_to_assets import Asset
 from funny_jump.game.screen.base import ButtonScreen
 from funny_jump.game.text_manager import TextManager
 
+SCREEN_WIDTH_FONT_SIZE_DIVISOR = 11
+SCREEN_WIDTH_LOGO_FONT_SIZE_DIVISOR = 3
+
 
 class LevelChoiceScreen(ButtonScreen):
     __slots__ = (
@@ -78,10 +81,16 @@ class LevelChoiceScreen(ButtonScreen):
 
     def render_all(self) -> None:
         logo_text = "Выбор уровня"
-        logo_font = pygame.font.Font(None, self.width // 6)
+        logo_font = pygame.font.Font(
+            None, 
+            self.width // SCREEN_WIDTH_LOGO_FONT_SIZE_DIVISOR
+            )
         logo_font.bold = True
 
-        text_font = pygame.font.Font(None, self.width // 11)
+        text_font = pygame.font.Font(
+            None, 
+            self.width // SCREEN_WIDTH_FONT_SIZE_DIVISOR
+            )
 
         text_render_manager = TextManager(
             text_font=text_font,
