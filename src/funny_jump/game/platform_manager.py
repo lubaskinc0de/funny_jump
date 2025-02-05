@@ -13,6 +13,7 @@ from funny_jump.game.path_to_assets import Asset
 from funny_jump.game.sprites.basic_platform import BasicPlatformSprite
 from funny_jump.game.sprites.mobile_platform import MobilePlatformSprite
 from funny_jump.game.sprites.onetime_platform import OnetimePlatformSprite
+from funny_jump.game.sprites.platform import PlatformSprite
 from funny_jump.game.sprites.player import PlayerSprite
 
 BASIC_PLATFORM_SIZE = (100, 30)
@@ -55,8 +56,8 @@ class PlatformManager:
 
         self.spawn_initial_platforms()
 
-    def get_highest_platform(self) -> BasicPlatformSprite:
-        sprites: list[BasicPlatformSprite] = self.platforms.sprites()
+    def get_highest_platform(self) -> PlatformSprite:
+        sprites: list[PlatformSprite] = self.platforms.sprites()
         highest_platform_sprite = sprites[0]
 
         for platform_sprite in sprites[1:]:
@@ -226,7 +227,7 @@ class PlatformManager:
 
                 new_position = (
                     platform_sprite.rect.centerx,
-                    platform_sprite.rect.centery + offset_y,
+                    round(platform_sprite.rect.centery + offset_y),
                 )
 
                 platform_sprite.set_position(*new_position)

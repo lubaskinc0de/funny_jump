@@ -39,7 +39,7 @@ class TextManager:
         rendered_text: pygame.Surface,
         x_pos: int | None = None,
         y_pos: int | None = None,
-        ) -> None:
+    ) -> None:
         intro_rect = rendered_text.get_rect()
 
         if x_pos is not None:
@@ -81,15 +81,15 @@ class TextManager:
         self,
         text: str,
         color: str = "White",
+        *,
         indent: int = 10,
         has_vertical_indent: bool = True,
         font: pygame.font.Font | None = None,
     ) -> None:
-        if not self.text_font and not font:
+        if self.text_font is None:
             raise TextFontMissingError
 
-        # Выше есть проверка на существовании хотя-бы одного шрифта. Но mypy не видит её
-        usable_font: pygame.Font = self.text_font if not font else font  # type: ignore
+        usable_font: pygame.Font = self.text_font if not font else font
 
         if has_vertical_indent:
             self.text_coord += usable_font.get_height()

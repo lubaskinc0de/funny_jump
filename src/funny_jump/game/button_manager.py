@@ -75,6 +75,6 @@ class ButtonManager:
         ui_button.colours["active_bg"] = pygame.Color(button.active_color)
         ui_button.colours["hovered_text"] = pygame.Color("Black")
         # Библиотека содержит неаннотированную функцию, на что ругается mypy
-        ui_button.rebuild()  # type: ignore
+        ui_button.rebuild()  # type: ignore[no-untyped-call]
 
         return (ui_button, button.name)

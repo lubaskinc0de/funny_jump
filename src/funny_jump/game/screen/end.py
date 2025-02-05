@@ -14,6 +14,10 @@ SCREEN_WIDTH_FONT_SIZE_DIVISOR = 11
 SCREEN_WIDTH_LOGO_FONT_SIZE_DIVISOR = 3
 SCREEN_WIDTH_SMALL_FONT_SIZE_DIVISOR = 50
 
+MID_RESULT = 50
+HIGH_RESULT = 200
+SUPER_RESULT = 1000
+
 
 class EndScreen(BaseScreen):
     __slots__ = (
@@ -66,20 +70,19 @@ class EndScreen(BaseScreen):
 
         escape_text = "Нажмите Escape для выхода"
 
-        score_text = f"Ваш результат - {self.score} очков"
-        best_score_text = f"Ваш лучший результат для этого уровня - {self.best_score} очков"
-        if self.score == 0:
+        score_text = f"Ваш счёт - {self.score}"
+        best_score_text = f"Ваш лучший счёт для этого уровня: {self.best_score}"
+
+        if self.score < MID_RESULT:
             final_text = "Не все получается с первого раза"
-        elif self.score < 50:
-            final_text = "Ваш результат очень неплох!"
+        elif self.score in range(MID_RESULT, HIGH_RESULT):
+            final_text = "Ваш результат довольно неплох!"
         else:
-            final_text = "Вы достигли отличного результата!"
+            final_text = "Вы невероятно крутой!"
 
         font_size = int(
-            self.width // SCREEN_WIDTH_FONT_SIZE_DIVISOR * (
-                self.height * SCREEN_HEIGHT_FONT_SIZE_MULTIPLIER
-                ),
-            )
+            self.width // SCREEN_WIDTH_FONT_SIZE_DIVISOR * (self.height * SCREEN_HEIGHT_FONT_SIZE_MULTIPLIER),
+        )
 
         text_font = pygame.font.Font(None, font_size)
 
@@ -96,7 +99,7 @@ class EndScreen(BaseScreen):
         small_font = pygame.font.Font(
             None,
             self.width // SCREEN_WIDTH_SMALL_FONT_SIZE_DIVISOR,
-            )
+        )
 
         text_render_manager.render_as_text(
             escape_text,
@@ -124,7 +127,6 @@ class EndScreen(BaseScreen):
             match event.type:
                 case pygame.QUIT:
                     self.is_running = False
-                    # След блок кода нужно будет изменить после добавления механики прохождения уровня
                     self.terminate()
                 case pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:

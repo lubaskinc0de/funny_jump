@@ -77,6 +77,8 @@ ignore = [
   # Does not work correctly
   'TC002',
   'TC001',
+  'S311',
+  'PGH003',
 ]
 
 [[project.authors]]

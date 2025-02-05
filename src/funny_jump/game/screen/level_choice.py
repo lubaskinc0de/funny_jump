@@ -84,13 +84,13 @@ class LevelChoiceScreen(ButtonScreen):
         logo_font = pygame.font.Font(
             None,
             self.width // SCREEN_WIDTH_LOGO_FONT_SIZE_DIVISOR,
-            )
+        )
         logo_font.bold = True
 
         text_font = pygame.font.Font(
             None,
             self.width // SCREEN_WIDTH_FONT_SIZE_DIVISOR,
-            )
+        )
 
         text_render_manager = TextManager(
             text_font=text_font,

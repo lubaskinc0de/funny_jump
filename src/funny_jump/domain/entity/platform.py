@@ -6,6 +6,8 @@ from typing import Protocol
 from funny_jump.domain.value_object.bounds import Bounds
 from funny_jump.domain.value_object.velocity import Velocity
 
+MAX_TOUCHES = 2
+
 
 class Platform(Protocol):
     velocity: Velocity
@@ -62,6 +64,7 @@ class MobilePlatform(BasePlatform):
         screen_w: int,
         velocity: Velocity,
         bounds: Bounds,
+        *,
         is_alive: bool = True,
     ) -> None:
         self.screen_h = screen_h
@@ -108,7 +111,7 @@ class OnetimePlatform(BasicPlatform):
     def update(self) -> None:
         super().update()
 
-        if self.collision_counter >= 2:
+        if self.collision_counter >= MAX_TOUCHES:
             self.death()
 
 
