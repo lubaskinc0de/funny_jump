@@ -100,8 +100,8 @@ class TextManager:
             color=pygame.Color(color),
         ).get_width()
 
-        splited_text_with_length: list[list[str, int]] = [["", 0]]
-        counter = 0
+        splited_text_with_length: list[tuple[str, int]] = [("", 0)]
+        line_number = 0
 
         for _word in text.split():
             word = " " + _word
@@ -112,16 +112,21 @@ class TextManager:
             )
             word_width = string_rendered.get_width()
 
-            if splited_text_with_length[counter][1] + word_width < self.screen_width - indent * 2:
-                splited_text_with_length[counter][0] += word
-                splited_text_with_length[counter][1] += word_width
+            text_line = splited_text_with_length[line_number][0]
+            text_length = splited_text_with_length[line_number][1]
 
-                if splited_text_with_length[counter][1] == word_width:
-                    splited_text_with_length[counter][1] = word_width - space_width
-                    splited_text_with_length[counter][0] = splited_text_with_length[counter][0].lstrip(" ")
+            if text_length + word_width < self.screen_width - indent * 2:
+                text_line += word
+                text_length += word_width
+                if text_length == word_width:
+                    text_line = text_line.lstrip(" ")
+                    text_length = word_width - space_width
+
+                splited_text_with_length[line_number] = (text_line, text_length)
+
             else:
-                counter += 1
-                splited_text_with_length.append([word.lstrip(" "), word_width - space_width])
+                line_number += 1
+                splited_text_with_length.append((word.lstrip(" "), word_width - space_width))
 
         splited_text = [txt[0] for txt in splited_text_with_length]
 
