@@ -15,7 +15,7 @@ from funny_jump.game.screen.base import BaseScreen
 from funny_jump.game.sprite_manager import SpriteManager
 from funny_jump.game.text_manager import TextManager
 
-SCREEN_WIDTH_SMALL_FONT_SIZE_DIVISOR = 50
+SCREEN_WIDTH_SMALL_FONT_SIZE_DIVISOR = 30
 SCREEN_WIDTH_SCORE_FONT_DIVISOR = 15
 
 

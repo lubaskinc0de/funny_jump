@@ -4,7 +4,7 @@ from typing import Literal
 
 import pygame.sprite
 
-from funny_jump.domain.entity.platform import BasicPlatform, MobilePlatform, OnetimePlatform, PlatformType
+from funny_jump.domain.entity.platform_entity import BasicPlatform, MobilePlatform, OnetimePlatform, PlatformType
 from funny_jump.domain.value_object.bounds import Bounds
 from funny_jump.domain.value_object.velocity import Velocity
 from funny_jump.engine.asset_manager import AssetManager
@@ -13,7 +13,7 @@ from funny_jump.game.path_to_assets import Asset
 from funny_jump.game.sprites.basic_platform import BasicPlatformSprite
 from funny_jump.game.sprites.mobile_platform import MobilePlatformSprite
 from funny_jump.game.sprites.onetime_platform import OnetimePlatformSprite
-from funny_jump.game.sprites.platform import PlatformSprite
+from funny_jump.game.sprites.platform_sprite import PlatformSprite
 from funny_jump.game.sprites.player import PlayerSprite
 
 BASIC_PLATFORM_SIZE = (100, 30)
@@ -148,8 +148,8 @@ class PlatformManager:
 
             if (
                 next_platform_interval_x != 0
-                and BASIC_PLATFORM_SIZE[0] < center_x
-                and center_x < self.screen_w * MINIMAL_SCREEN_DISTANCE - BASIC_PLATFORM_SIZE[0] // 2
+                and BASIC_PLATFORM_SIZE[0] < center_x < self.screen_w *
+                MINIMAL_SCREEN_DISTANCE - BASIC_PLATFORM_SIZE[0] // 2
             ):
                 break
         next_platform_interval_y = self.player_sprite.player.max_jump_height

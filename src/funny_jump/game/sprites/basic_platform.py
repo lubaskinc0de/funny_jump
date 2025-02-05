@@ -4,8 +4,8 @@ from pathlib import Path
 
 import pygame
 
-from funny_jump.domain.entity.platform import Platform
-from funny_jump.game.sprites.platform import PlatformSprite
+from funny_jump.domain.entity.platform_entity import Platform
+from funny_jump.game.sprites.platform_sprite import PlatformSprite
 
 
 class BasicPlatformSprite(PlatformSprite):

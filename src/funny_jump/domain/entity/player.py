@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 
-from funny_jump.domain.entity.platform import Platform
+from funny_jump.domain.entity.platform_entity import Platform
 from funny_jump.domain.value_object.bounds import Bounds
 from funny_jump.domain.value_object.velocity import Velocity
 

@@ -12,7 +12,7 @@ from funny_jump.game.text_manager import TextManager
 SCREEN_HEIGHT_FONT_SIZE_MULTIPLIER = 0.0007
 SCREEN_WIDTH_FONT_SIZE_DIVISOR = 11
 SCREEN_WIDTH_LOGO_FONT_SIZE_DIVISOR = 3
-SCREEN_WIDTH_SMALL_FONT_SIZE_DIVISOR = 50
+SCREEN_WIDTH_SMALL_FONT_SIZE_DIVISOR = 30
 
 MID_RESULT = 50
 HIGH_RESULT = 200
@@ -103,7 +103,7 @@ class EndScreen(BaseScreen):
 
         text_render_manager.render_as_text(
             escape_text,
-            color="Gray10",
+            color="White",
             has_vertical_indent=False,
             font=small_font,
         )

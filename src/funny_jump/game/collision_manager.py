@@ -5,7 +5,7 @@ import pygame
 from funny_jump.domain.entity.player import Player
 from funny_jump.domain.service.platform_collide import on_player_collide_platform
 from funny_jump.engine.collider import collider_top
-from funny_jump.game.sprites.platform import PlatformSprite
+from funny_jump.game.sprites.platform_sprite import PlatformSprite
 from funny_jump.game.sprites.player import PlayerSprite
 
 

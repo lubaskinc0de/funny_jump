@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from funny_jump.domain.entity.platform import Platform
+from funny_jump.domain.entity.platform_entity import Platform
 from funny_jump.engine.sprite import BoundedSprite
 
 
