@@ -11,6 +11,8 @@ class Asset(Enum):
     PLAYER_JUMP_FRAMES = auto()
     PLAYER_JUMP_SOUND = auto()
     GUI_TEMPLATE = auto()
+    ONETIME_PLATFORM = auto()
+    ONETIME_PLATFORM_RED = auto()
 
 
 ASSET_PATH = {
@@ -22,4 +24,6 @@ ASSET_PATH = {
     Asset.PLAYER_JUMP_FRAMES: Path("sprites/frog/hop/"),
     Asset.PLAYER_JUMP_SOUND: Path("sounds/jump.wav"),
     Asset.GUI_TEMPLATE: Path("gui_theme.json"),
+    Asset.ONETIME_PLATFORM: Path("sprites/onetime_platform.png"),
+    Asset.ONETIME_PLATFORM_RED: Path("sprites/onetime_platform_red.png"),
 }
