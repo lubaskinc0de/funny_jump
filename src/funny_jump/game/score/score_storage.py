@@ -36,30 +36,39 @@ class JsonScoreStorage(ScoreStorage):
         if not os.access(self.config.score_path, os.W_OK):
             raise ScoreWriteError
 
-        with self.config.score_path.open("r", encoding="utf-8") as fd:
-            scores = json.load(fd)
+        if not self.config.score_path.is_file():
+            raise ScoreWriteError
 
-            if not isinstance(scores, dict):
-                raise ScoreWriteError
+        try:
+            with self.config.score_path.open("r", encoding="utf-8") as fd:
+                scores = json.load(fd)
 
-        with self.config.score_path.open("w", encoding="utf-8") as fd:
-            scores[level.name.upper()] = score
-            json.dump(scores, fd)
+                if not isinstance(scores, dict):
+                    raise ScoreWriteError
+
+            with self.config.score_path.open("w", encoding="utf-8") as fd:
+                scores[level.name.upper()] = score
+                json.dump(scores, fd)
+        except (PermissionError, FileNotFoundError) as exc:
+            raise ScoreWriteError from exc
 
     def get_best_score(self, level: Level) -> int:
         if not os.access(self.config.score_path, os.R_OK):
             raise ScoreReadError
 
-        with self.config.score_path.open("r", encoding="utf-8") as fd:
-            scores: dict[str, int] = json.load(fd)
+        try:
+            with self.config.score_path.open("r", encoding="utf-8") as fd:
+                scores: dict[str, int] = json.load(fd)
 
-            if not isinstance(scores, dict):
-                raise ScoreReadError
+                if not isinstance(scores, dict):
+                    raise ScoreReadError
 
-            level_name = level.name.upper()
-            score = scores.get(level_name, 0)
+                level_name = level.name.upper()
+                score = scores.get(level_name, 0)
 
-            if isinstance(score, int) is False:
-                raise ScoreReadError
+                if isinstance(score, int) is False:
+                    raise ScoreReadError
 
-            return score
+                return score
+        except (FileNotFoundError, PermissionError) as exc:
+            raise ScoreReadError from exc

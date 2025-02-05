@@ -146,11 +146,10 @@ class TextManager:
         vertical_indent: int = 10,
         font: pygame.font.Font | None = None,
     ) -> None:
-        if not self.text_font and not font:
+        if self.text_font is None:
             raise TextFontMissingError
 
-        # Выше есть проверка на существовании хотя-бы одного шрифта. Но mypy не видит её
-        usable_font: pygame.Font = self.text_font if not font else font  # type: ignore
+        usable_font: pygame.Font = self.text_font if font is None else font
 
         rendered_score = usable_font.render(
             str(score),

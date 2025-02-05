@@ -1,27 +1,19 @@
+from dataclasses import dataclass
+
 import pygame
 
 from funny_jump.domain.entity.player import Player
 from funny_jump.domain.service.platform_collide import on_player_collide_platform
+from funny_jump.engine.collider import collider_top
 from funny_jump.game.sprites.platform import PlatformSprite
 from funny_jump.game.sprites.player import PlayerSprite
 
 
+@dataclass(slots=True, frozen=True)
 class CollisionManager:
-    __slots__ = (
-        "platforms",
-        "player",
-        "player_sprite",
-    )
-
-    def __init__(
-        self,
-        player_sprite: PlayerSprite,
-        platforms: pygame.sprite.Group,  # type: ignore
-        player: Player,
-    ) -> None:
-        self.player_sprite = player_sprite
-        self.platforms = platforms
-        self.player = player
+    player_sprite: PlayerSprite
+    platforms: pygame.sprite.Group  # type: ignore
+    player: Player
 
     def check_collisions(self) -> None:
         self._check_player_collides_platforms()
@@ -51,7 +43,8 @@ class CollisionManager:
 
         for platform_sprite in collide:
             platform_rect = platform_sprite.rect
-            if (self.player_sprite.prev_pos.bottom <= platform_rect.top) and (platform_rect.top < player_rect.bottom):
+
+            if collider_top(platform_rect, self.player_sprite.prev_pos, player_rect):
                 self.player_sprite.set_position(
                     player_rect.centerx,
                     (platform_rect.top - player_rect.height // 2) + 2,
