@@ -114,16 +114,16 @@ class TextManager:
 
             text_line = splited_text_with_length[line_number][0]
             text_length = splited_text_with_length[line_number][1]
-            
+
             if text_length + word_width < self.screen_width - indent * 2:
                 text_line += word
                 text_length += word_width
                 if text_length == word_width:
                     text_line = text_line.lstrip(" ")
                     text_length = word_width - space_width
-                        
+
                 splited_text_with_length[line_number] = (text_line, text_length)
-                
+
             else:
                 line_number += 1
                 splited_text_with_length.append((word.lstrip(" "), word_width - space_width))
