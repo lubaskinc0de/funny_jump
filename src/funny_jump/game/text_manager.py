@@ -89,7 +89,7 @@ class TextManager:
         if self.text_font is None:
             raise TextFontMissingError
 
-        usable_font: pygame.Font = self.text_font if not font else font
+        usable_font: pygame.font.Font = self.text_font if not font else font
 
         if has_vertical_indent:
             self.text_coord += usable_font.get_height()
@@ -149,7 +149,7 @@ class TextManager:
         if self.text_font is None:
             raise TextFontMissingError
 
-        usable_font: pygame.Font = self.text_font if font is None else font
+        usable_font: pygame.font.Font = self.text_font if font is None else font
 
         rendered_score = usable_font.render(
             str(score),
