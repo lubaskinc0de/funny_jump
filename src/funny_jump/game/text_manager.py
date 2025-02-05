@@ -34,6 +34,28 @@ class TextManager:
         self.screen = screen
         self.text_coord = text_coord
 
+    def _render_text(
+        self,
+        rendered_text: pygame.Surface, 
+        x_pos: int | None = None,
+        y_pos: int | None = None,
+        ) -> None:
+        intro_rect = rendered_text.get_rect()
+        
+        if x_pos is not None:
+            intro_rect.x = x_pos
+        else:
+            intro_rect.x = 0
+            
+        if y_pos is not None:
+            intro_rect.top = y_pos
+        else:
+            self.text_coord += 10
+            intro_rect.top = self.text_coord
+
+        self.text_coord += intro_rect.height
+        self.screen.blit(rendered_text, intro_rect)
+    
     def render_as_logo(
         self,
         text: str,
@@ -41,18 +63,19 @@ class TextManager:
     ) -> None:
         if not self.logo_font:
             raise LogoFontMissingError
-
+        
         string_rendered = self.logo_font.render(
             text,
             antialias=True,
             color=pygame.Color(color),
         )
-        intro_rect = string_rendered.get_rect()
-        self.text_coord += 10
-        intro_rect.top = self.text_coord
-        intro_rect.x = (self.screen_width - string_rendered.get_width()) // 2
-        self.text_coord += intro_rect.height
-        self.screen.blit(string_rendered, intro_rect)
+        
+        x_pos = (self.screen_width - string_rendered.get_width()) // 2
+        
+        self._render_text(
+            rendered_text=string_rendered,
+            x_pos=x_pos,
+        )
 
     def render_as_text(
         self,
@@ -76,6 +99,7 @@ class TextManager:
             antialias=True,
             color=pygame.Color(color),
         ).get_width()
+        
         splited_text_with_length: list[list[str, int]] = [["", 0]]  # type: ignore
         counter = 0
 
@@ -102,17 +126,12 @@ class TextManager:
         splited_text = [txt[0] for txt in splited_text_with_length]
 
         for text_line in splited_text:
-            string_rendered = usable_font.render(
+            string_rendered = self.text_font.render(
                 text_line,
                 antialias=True,
                 color=pygame.Color(color),
             )
-            intro_rect = string_rendered.get_rect()
-            self.text_coord += 10
-            intro_rect.top = self.text_coord
-            intro_rect.x = indent
-            self.text_coord += intro_rect.height
-            self.screen.blit(string_rendered, intro_rect)
+            self._render_text(string_rendered)
 
     def render_as_score(
         self,
@@ -133,9 +152,9 @@ class TextManager:
             antialias=True,
             color=pygame.Color(color),
         )
-
-        intro_rect = rendered_score.get_rect()
-        intro_rect.top = vertical_indent
-        intro_rect.x = self.screen_width - rendered_score.get_width() - horizontal_indent
-        self.text_coord += intro_rect.height
-        self.screen.blit(rendered_score, intro_rect)
+        
+        self._render_text(
+            rendered_score,
+            x_pos=self.screen_width - rendered_score.get_width() - horizontal_indent,
+            y_pos=vertical_indent
+        )

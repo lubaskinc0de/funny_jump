@@ -20,14 +20,10 @@ class EndScreen(BaseScreen):
         "get_bg",
         "height",
         "is_running",
-        "logo_font_size",
         "resource_loader",
         "score",
         "screen",
         "terminate",
-        "text_coord",
-        "text_font_size",
-        "text_render_manager",
         "width",
     )
 

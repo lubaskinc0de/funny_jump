@@ -101,10 +101,15 @@ class MainGameScreen(BaseScreen):
             has_vertical_indent=False,
         )
 
-        text_render_manager.render_as_score(
-            score=f"Счёт: {self.score}",
+        text_render_manager.render_as_text(
+            text=f"Счёт: {self.score}",
+            color="green",
             font=pygame.font.Font(None, self.width // 15),
         )
+        # text_render_manager.render_as_score(
+        #     score=f"Счёт: {self.score}",
+        #     font=pygame.font.Font(None, self.width // 15),
+        # )
 
     def _run_main_loop(self) -> None:
         pygame.mixer.music.load(self.asset_manager.get_asset_path(Asset.GAME_BG_MUSIC))
