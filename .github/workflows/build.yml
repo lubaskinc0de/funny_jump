@@ -27,7 +27,7 @@ jobs:
           pyinstaller build.spec
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: linux-executable
           path: binary/
@@ -53,7 +53,7 @@ jobs:
           pyinstaller build.spec
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: windows-executable
           path: binary/
