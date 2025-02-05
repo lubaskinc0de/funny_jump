@@ -70,7 +70,7 @@ class EndScreen(BaseScreen):
 
         escape_text = "Нажмите Escape для выхода"
 
-        score_text = f"Ваш счёт - {self.score}"
+        score_text = f"Ваш счёт: {self.score}"
         best_score_text = f"Ваш лучший счёт для этого уровня: {self.best_score}"
 
         if self.score < MID_RESULT:
