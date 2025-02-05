@@ -15,6 +15,9 @@ from funny_jump.game.screen.base import BaseScreen
 from funny_jump.game.sprite_manager import SpriteManager
 from funny_jump.game.text_manager import TextManager
 
+SCREEN_WIDTH_SMALL_FONT_SIZE_DIVISOR = 50
+SCREEN_WIDTH_SCORE_FONT_DIVISOR = 15
+
 
 class MainGameScreen(BaseScreen):
     __slots__ = (
@@ -86,7 +89,7 @@ class MainGameScreen(BaseScreen):
 
     def render_all(self) -> None:
         escape_text = "Нажмите Escape для выхода"
-        text_font = pygame.font.Font(None, self.width // 50)
+        text_font = pygame.font.Font(None, self.width // SCREEN_WIDTH_SMALL_FONT_SIZE_DIVISOR)
 
         text_render_manager = TextManager(
             text_font=text_font,
@@ -103,7 +106,7 @@ class MainGameScreen(BaseScreen):
 
         text_render_manager.render_as_score(
             score=f"Счёт: {self.score}",
-            font=pygame.font.Font(None, self.width // 15),
+            font=pygame.font.Font(None, self.width // SCREEN_WIDTH_SCORE_FONT_DIVISOR),
         )
 
     def _run_main_loop(self) -> None:
