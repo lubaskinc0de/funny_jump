@@ -36,17 +36,17 @@ class TextManager:
 
     def _render_text(
         self,
-        rendered_text: pygame.Surface, 
+        rendered_text: pygame.Surface,
         x_pos: int | None = None,
         y_pos: int | None = None,
         ) -> None:
         intro_rect = rendered_text.get_rect()
-        
+
         if x_pos is not None:
             intro_rect.x = x_pos
         else:
             intro_rect.x = 0
-            
+
         if y_pos is not None:
             intro_rect.top = y_pos
         else:
@@ -55,7 +55,7 @@ class TextManager:
 
         self.text_coord += intro_rect.height
         self.screen.blit(rendered_text, intro_rect)
-    
+
     def render_as_logo(
         self,
         text: str,
@@ -63,15 +63,15 @@ class TextManager:
     ) -> None:
         if not self.logo_font:
             raise LogoFontMissingError
-        
+
         string_rendered = self.logo_font.render(
             text,
             antialias=True,
             color=pygame.Color(color),
         )
-        
+
         x_pos = (self.screen_width - string_rendered.get_width()) // 2
-        
+
         self._render_text(
             rendered_text=string_rendered,
             x_pos=x_pos,
@@ -99,7 +99,7 @@ class TextManager:
             antialias=True,
             color=pygame.Color(color),
         ).get_width()
-        
+
         splited_text_with_length: list[list[str, int]] = [["", 0]]  # type: ignore
         counter = 0
 
@@ -126,7 +126,7 @@ class TextManager:
         splited_text = [txt[0] for txt in splited_text_with_length]
 
         for text_line in splited_text:
-            string_rendered = self.text_font.render(
+            string_rendered = usable_font.render(
                 text_line,
                 antialias=True,
                 color=pygame.Color(color),
@@ -152,9 +152,9 @@ class TextManager:
             antialias=True,
             color=pygame.Color(color),
         )
-        
+
         self._render_text(
             rendered_score,
             x_pos=self.screen_width - rendered_score.get_width() - horizontal_indent,
-            y_pos=vertical_indent
+            y_pos=vertical_indent,
         )
