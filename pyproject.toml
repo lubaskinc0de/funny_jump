@@ -6,7 +6,7 @@ build-backend = 'setuptools.build_meta'
 
 [project]
 name = 'funny_jump'
-version = '0.0.1'
+version = '1.0.0'
 description = 'A Funny Jump game!'
 readme = 'README.md'
 requires-python = '>=3.11'
