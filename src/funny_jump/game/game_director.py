@@ -78,7 +78,7 @@ class GameDirector:
         self.screen = self._init_pygame()
 
         self.ui_manager = pygame_gui.UIManager(
-            (self.height, self.width),
+            (self.width, self.height),
             theme_path=self.asset_manager.get_asset_path(Asset.GUI_TEMPLATE),
         )
 
