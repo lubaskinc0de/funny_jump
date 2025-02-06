@@ -81,7 +81,7 @@ class LevelChoiceScreen(ButtonScreen):
         logo_text = "FUNNY JUMP"
         logo_font = pygame.font.Font(
             None,
-            get_font_size(self.width, self.height, 150),
+            get_font_size(self.width, self.height, 190, max_size=300),
         )
         logo_font.bold = True
 

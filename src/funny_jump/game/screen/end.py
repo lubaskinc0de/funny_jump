@@ -60,7 +60,7 @@ class EndScreen(BaseScreen):
 
     def render_all(self) -> None:
         logo_text = "КОНЕЦ"
-        logo_font_size = get_font_size(self.width, self.height, 100)
+        logo_font_size = get_font_size(self.width, self.height, 210, max_size=400)
         logo_font = pygame.font.Font(None, logo_font_size)
         logo_font.bold = True
 
