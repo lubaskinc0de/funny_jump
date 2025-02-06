@@ -1,4 +1,4 @@
-from funny_jump.domain.entity.platform_entity import Platform
+from funny_jump.domain.entity.platforms import Platform
 from funny_jump.domain.entity.player import Player
 
 

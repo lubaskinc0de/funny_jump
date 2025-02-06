@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from funny_jump.domain.entity.platform_entity import MobilePlatform
+from funny_jump.domain.entity.platforms import MobilePlatform
 from funny_jump.game.sprites.basic_platform import BasicPlatformSprite
 
 
