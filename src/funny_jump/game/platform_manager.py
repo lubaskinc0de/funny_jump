@@ -4,7 +4,7 @@ from typing import Literal
 
 import pygame.sprite
 
-from funny_jump.domain.entity.platform_entity import BasicPlatform, MobilePlatform, OnetimePlatform, PlatformType
+from funny_jump.domain.entity.platforms import BasicPlatform, MobilePlatform, OnetimePlatform, PlatformType
 from funny_jump.domain.value_object.bounds import Bounds
 from funny_jump.domain.value_object.velocity import Velocity
 from funny_jump.engine.asset_manager import AssetManager
