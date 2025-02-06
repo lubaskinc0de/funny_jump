@@ -32,7 +32,7 @@ class ButtonManager:
 
         centered_button_index: int | None = None
 
-        button_width = int((self.width // 3) * size)
+        button_width = min(int((self.width // 3) * size), self.width // 2)
         button_height = int((self.height // 10) * size)
 
         if len(buttons) % 2 != 0:
@@ -74,7 +74,6 @@ class ButtonManager:
         ui_button.colours["hovered_bg"] = pygame.Color(button.hovered_color)
         ui_button.colours["active_bg"] = pygame.Color(button.active_color)
         ui_button.colours["hovered_text"] = pygame.Color("Black")
-        # Библиотека содержит неаннотированную функцию, на что ругается mypy
-        ui_button.rebuild()  # type: ignore[no-untyped-call]
+        ui_button.rebuild()  # type: ignore
 
         return (ui_button, button.name)

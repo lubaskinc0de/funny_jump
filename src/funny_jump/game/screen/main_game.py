@@ -7,6 +7,7 @@ from funny_jump.domain.entity.player import Player
 from funny_jump.domain.value_object.bounds import Bounds
 from funny_jump.domain.value_object.velocity import Velocity
 from funny_jump.engine.asset_manager import AssetManager
+from funny_jump.engine.font import get_font_size
 from funny_jump.engine.resource_loader.base import ResourceLoader
 from funny_jump.game.level_manager import LevelManager
 from funny_jump.game.path_to_assets import Asset
@@ -14,9 +15,6 @@ from funny_jump.game.score.score_storage import ScoreStorage
 from funny_jump.game.screen.base import BaseScreen
 from funny_jump.game.sprite_manager import SpriteManager
 from funny_jump.game.text_manager import TextManager
-
-SCREEN_WIDTH_SMALL_FONT_SIZE_DIVISOR = 30
-SCREEN_WIDTH_SCORE_FONT_DIVISOR = 15
 
 
 class MainGameScreen(BaseScreen):
@@ -89,7 +87,7 @@ class MainGameScreen(BaseScreen):
 
     def render_all(self) -> None:
         escape_text = "Нажмите Escape для выхода"
-        text_font = pygame.font.Font(None, self.width // SCREEN_WIDTH_SMALL_FONT_SIZE_DIVISOR)
+        text_font = pygame.font.Font(None, get_font_size(self.width, self.height, 25))
 
         text_render_manager = TextManager(
             text_font=text_font,
@@ -106,7 +104,7 @@ class MainGameScreen(BaseScreen):
 
         text_render_manager.render_as_score(
             score=f"Счёт: {self.score}",
-            font=pygame.font.Font(None, self.width // SCREEN_WIDTH_SCORE_FONT_DIVISOR),
+            font=pygame.font.Font(None, get_font_size(self.width, self.height, 50)),
         )
 
     def _run_main_loop(self) -> None:

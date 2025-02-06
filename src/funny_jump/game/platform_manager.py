@@ -148,8 +148,9 @@ class PlatformManager:
 
             if (
                 next_platform_interval_x != 0
-                and BASIC_PLATFORM_SIZE[0] < center_x < self.screen_w *
-                MINIMAL_SCREEN_DISTANCE - BASIC_PLATFORM_SIZE[0] // 2
+                and BASIC_PLATFORM_SIZE[0]
+                < center_x
+                < self.screen_w * MINIMAL_SCREEN_DISTANCE - BASIC_PLATFORM_SIZE[0] // 2
             ):
                 break
         next_platform_interval_y = self.player_sprite.player.max_jump_height

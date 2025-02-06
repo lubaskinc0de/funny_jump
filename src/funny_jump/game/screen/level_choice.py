@@ -5,6 +5,7 @@ import pygame_gui
 from pygame.event import Event
 
 from funny_jump.engine.asset_manager import AssetManager
+from funny_jump.engine.font import get_font_size
 from funny_jump.engine.resource_loader.base import ResourceLoader
 from funny_jump.game.button import Button
 from funny_jump.game.button_manager import ButtonManager
@@ -12,9 +13,6 @@ from funny_jump.game.level_manager import LevelManager
 from funny_jump.game.path_to_assets import Asset
 from funny_jump.game.screen.base import ButtonScreen
 from funny_jump.game.text_manager import TextManager
-
-SCREEN_WIDTH_FONT_SIZE_DIVISOR = 11
-SCREEN_WIDTH_LOGO_FONT_SIZE_DIVISOR = 6
 
 
 class LevelChoiceScreen(ButtonScreen):
@@ -83,13 +81,13 @@ class LevelChoiceScreen(ButtonScreen):
         logo_text = "Выбор уровня"
         logo_font = pygame.font.Font(
             None,
-            self.width // SCREEN_WIDTH_LOGO_FONT_SIZE_DIVISOR,
+            get_font_size(self.width, self.height, 150),
         )
         logo_font.bold = True
 
         text_font = pygame.font.Font(
             None,
-            self.width // SCREEN_WIDTH_FONT_SIZE_DIVISOR,
+            get_font_size(self.width, self.height, 50),
         )
 
         text_render_manager = TextManager(
